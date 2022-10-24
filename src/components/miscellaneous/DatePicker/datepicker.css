@@ -1,0 +1,23 @@
+.rdp {
+  background: #edeff2;
+  --rdp-cell-size: 40px;
+  --rdp-accent-color: #e34b31;
+  --rdp-background-color: #fbf2f0;
+  --rdp-accent-color-dark: #e34b31;
+  --rdp-background-color-dark: #fbf2f0;
+}
+
+.rdp-caption_label {
+  font-size: 125%;
+  font-weight: 600;
+}
+
+.rdp-cell button {
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.rdp-head_cell {
+  font-weight: 600;
+}
