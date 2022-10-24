@@ -15,6 +15,7 @@ module.exports = {
         'black-100': 'rgba(0, 0, 0, 0.6)',
         'pumpkin': '#FA9200',
         'pumpkin-light': '#FFF2E0',
+        'error': '#EF9AA8'
       },
       // fontSize: {
       // sm: '0.8rem',
