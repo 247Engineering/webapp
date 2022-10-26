@@ -1,12 +1,12 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import AuthedLayout from './components/layouts/AuthedLayout'
 import UnauthedLayout from './components/layouts/UnauthedLayout'
-import SignIn from './pages/SignIn'
-import SignUp from './pages/SignUp'
-import ForgotPassword from './pages/ForgotPassword'
-import AccountSelect from './pages/AccountSelect'
-import VerifyMail from './pages/VerifyMail'
-import AccountProgress from './pages/AccountProgress'
+import SignIn from './pages/Auth/SignIn'
+import SignUp from './pages/Auth/SignUp'
+import ForgotPassword from './pages/Onboarding/ForgotPassword'
+import AccountSelect from './pages/Onboarding/AccountSelect'
+import VerifyMail from './pages/Onboarding/VerifyMail'
+import AccountProgress from './pages/Onboarding/AccountProgress'
 import BusinessInfoForm from './pages/BusinessInfoForm'
 import BusinessOwner from './pages/BusinessOwner'
 import BusinessOwnerForm from './pages/BusinessOwnerForm'
@@ -15,7 +15,8 @@ import WarehouseLocations from './pages/WarehouseLocations'
 import WarehouseForm from './pages/WarehouseForm'
 import Orders from './pages/Orders'
 import OrderDetails from './pages/OrderDetails';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard/Dashboard';
+import ResetPassword from './pages/Onboarding/ResetPassword';
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="*" element={<Navigate to="/signin" replace />} />
       </Route>
 

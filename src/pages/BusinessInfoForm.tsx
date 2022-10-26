@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { Country, State } from 'country-state-city'
+
 import AppLayout from '../components/layouts/AppLayout'
 import Input from '../components/forms/Input'
 import DragAndDrop from '../components/forms/DragAndDrop'
@@ -10,14 +12,14 @@ const BusinessInfo = () => {
   const [city, setCity] = useState('')
   const [country, setCountry] = useState('')
   const [state, setState] = useState('')
-  const [file, setFile] = useState<string | ArrayBuffer | null>('')
+  const [cac, setCac] = useState<string | ArrayBuffer | null>('')
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
   }
 
   const canSubmit = () =>
-    [business, address, city, country, state, file].every((data) => !!data)
+    [business, address, city, country, state, cac].every((data) => !!data)
 
   return (
     <>
@@ -55,7 +57,10 @@ const BusinessInfo = () => {
               <div>
                 <Input
                   label="Country"
-                  options={['Nigeria']}
+                  options={Country.getAllCountries().map((country) => ({
+                    value: country.isoCode,
+                    label: country.name,
+                  }))}
                   onChange={setCountry}
                   value={country}
                 />
@@ -63,7 +68,10 @@ const BusinessInfo = () => {
               <div>
                 <Input
                   label="State"
-                  options={['FCT', 'Lagos']}
+                  options={State.getStatesOfCountry(country).map((state) => ({
+                    value: state.name,
+                    label: state.name,
+                  }))}
                   onChange={setState}
                   value={state}
                 />
@@ -71,7 +79,7 @@ const BusinessInfo = () => {
             </div>
             <DragAndDrop
               label="Company verification document (CAC)"
-              setData={setFile}
+              setData={setCac}
             />
             <ButtonSubmit
               text="Save and continue"

@@ -1,17 +1,31 @@
 import React, { useState } from 'react'
-import ButtonSubmit from '../components/forms/ButtonSubmit'
-import ButtonText from '../components/forms/ButtonText'
-import Checkbox from '../components/forms/Checkbox'
-import Input from '../components/forms/Input'
-import LandingLayout from '../components/layouts/LandingLayout'
+import { useDispatch, useSelector } from 'react-redux'
+
+import ButtonSubmit from '../../components/forms/ButtonSubmit'
+import ButtonText from '../../components/forms/ButtonText'
+import Checkbox from '../../components/forms/Checkbox'
+import Input from '../../components/forms/Input'
+import LandingLayout from '../../components/layouts/LandingLayout'
+
+import { useAuth } from '../../hooks/useAuth'
+import { signup } from '../../store/features/auth'
+import { AppDispatch, RootState } from '../../store'
+import { AuthContextType } from '../../types'
 
 const SignUp = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const loading = useSelector<RootState>(({ auth }) => auth.loading) as boolean
+  const { login } = useAuth() as AuthContextType
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [checked, setChecked] = useState(false)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    dispatch(signup({ email, password })).then((x) =>
+      login({ firstName: '', lastName: '', id: '' }),
+    )
   }
 
   return (
@@ -57,6 +71,8 @@ const SignUp = () => {
             text="Sign up"
             onClick={handleSubmit}
             className="mb-4"
+            disabled={loading || !checked}
+            loading={loading}
           />
           <p className="p text-center">
             Already on 24Seven?{' '}

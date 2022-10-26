@@ -1,22 +1,23 @@
 import React, { useState } from 'react'
 import { InputProps } from '../../types'
 import eye from '../../assets/images/eye.svg'
+import caution from '../../assets/images/caution.svg'
 
 const Input = ({
   label,
   options,
   type: initialType,
-  value: initialValue,
+  value,
   image,
   onChange,
+  error,
+  errorText,
 }: InputProps) => {
-  const [value, setValue] = useState(initialValue)
   const [type, setType] = useState(initialType)
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    setValue(e.target.value)
     onChange(e.target.value)
   }
 
@@ -25,17 +26,21 @@ const Input = ({
       <label className="label">{label}</label>
       <div className="relative">
         {options ? (
-          <select className="select mt-2" value={value} onChange={handleChange}>
+          <select
+            className={`select mt-2 ${error ? 'error' : ''}`}
+            value={value}
+            onChange={handleChange}
+          >
             <option disabled></option>
             {options.map((option) => (
-              <option key={option} value={option}>
-                {option}
+              <option key={option.value} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>
         ) : (
           <input
-            className="input mt-2"
+            className={`input mt-2 ${error ? 'error' : ''}`}
             type={initialType === 'password' ? type : initialType}
             value={value}
             onChange={handleChange}
@@ -55,6 +60,16 @@ const Input = ({
             alt="icon"
             className="absolute top-[0.7rem] right-[0.625rem]"
           />
+        ) : null}
+        {error ? (
+          <span className="mt-2 text-[0.75rem] leading-[1rem] flex items-center text-black-100">
+            <img
+              className="w-[0.917rem] h-[0.792rem] mr-[0.542rem]"
+              alt="error"
+              src={caution}
+            />
+            {errorText}
+          </span>
         ) : null}
       </div>
     </>

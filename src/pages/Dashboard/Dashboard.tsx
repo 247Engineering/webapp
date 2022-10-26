@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { addDays } from 'date-fns'
-import AppLayout from '../components/layouts/AppLayout'
-import DatePicker from '../components/miscellaneous/DatePicker/DatePicker'
-import location from '../assets/images/location.svg'
+import AppLayout from '../../components/layouts/AppLayout'
+import DatePicker from '../../components/miscellaneous/DatePicker/DatePicker'
+import location from '../../assets/images/location.svg'
 
 const Dashboard = () => {
   const [start, setStart] = useState(addDays(new Date(), -30))

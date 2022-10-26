@@ -49,6 +49,11 @@ body,
   line-height: 1.25rem;
 }
 
+.input.error,
+.select.error {
+  border: 1px solid #ef9aa8;
+}
+
 select {
   background: url(../images/arrow-down.svg) 92% center no-repeat;
   -webkit-appearance: none;

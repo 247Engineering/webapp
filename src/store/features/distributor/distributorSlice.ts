@@ -22,7 +22,7 @@ export const signup = createAsyncThunk(
   },
 )
 
-export const authSlice = createSlice({
+export const distributorSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
@@ -42,6 +42,6 @@ export const authSlice = createSlice({
   },
 })
 
-export const { logout } = authSlice.actions
+export const { logout } = distributorSlice.actions
 
-export default authSlice.reducer
+export default distributorSlice.reducer

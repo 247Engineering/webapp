@@ -1,8 +1,8 @@
 import React from 'react'
-import OnboardingLayout from '../components/layouts/OnboardingLayout'
-import ButtonSubmit from '../components/forms/ButtonSubmit'
-import mail from '../assets/images/mail.svg'
-import ButtonText from '../components/forms/ButtonText'
+import OnboardingLayout from '../../components/layouts/OnboardingLayout'
+import ButtonSubmit from '../../components/forms/ButtonSubmit'
+import ButtonText from '../../components/forms/ButtonText'
+import mail from '../../assets/images/mail.svg'
 
 const VerifyMail = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

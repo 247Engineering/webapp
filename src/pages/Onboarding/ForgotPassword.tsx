@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ButtonSubmit from '../components/forms/ButtonSubmit'
-import ButtonText from '../components/forms/ButtonText'
-import Input from '../components/forms/Input'
-import LandingLayout from '../components/layouts/LandingLayout'
+import ButtonSubmit from '../../components/forms/ButtonSubmit'
+import ButtonText from '../../components/forms/ButtonText'
+import Input from '../../components/forms/Input'
+import LandingLayout from '../../components/layouts/LandingLayout'
 
 const ForgotPassword = () => {
   const navigate = useNavigate()

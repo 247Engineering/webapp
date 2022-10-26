@@ -20,11 +20,13 @@ export interface AuthState {
 
 export interface InputProps {
   label: string
-  options?: string[]
+  options?: { value: string; label: string }[]
   type?: string
   value: string
   image?: any
   onChange: (value: string) => void
+  error?: boolean
+  errorText?: string
 }
 
 export interface ButtonProps {
@@ -33,6 +35,7 @@ export interface ButtonProps {
   onClick: (e: any) => void
   disabled?: boolean
   style?: {}
+  loading?: boolean
 }
 
 export interface OnboardingRadioProps {
@@ -71,6 +74,8 @@ export interface BusinessOwnerItemProps {
 }
 
 export interface PhoneNumberInputProps {
+  code: string
+  mobile: string
   setCode: (value: string) => void
   setMobile: (value: string) => void
 }
@@ -115,4 +120,27 @@ export interface DatePickerProps {
   end: Date
   showCalendar: boolean
   setShowCalendar: (value: boolean) => void
+}
+
+export interface RequestArgs {
+  method: 'post' | 'get' | 'delete' | 'put'
+  url: string
+  body?: any
+  type?: 'form-data' | 'json'
+}
+
+export interface DistributorState {
+  businessName: string
+  address: string
+  city: string
+  country: string
+  state: string
+  cac: string
+  owners: {
+    firstName: string
+    lastName: string
+    phoneNumber: string
+    email: string
+    idImage: string
+  }[]
 }

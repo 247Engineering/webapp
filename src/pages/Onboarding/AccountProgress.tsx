@@ -1,7 +1,7 @@
 import React from 'react'
-import AppLayout from '../components/layouts/AppLayout'
-import AccountProgressStep from '../components/miscellaneous/AccountProgressStep'
-import ProgressBar from '../components/miscellaneous/ProgressBar'
+import AppLayout from '../../components/layouts/AppLayout'
+import AccountProgressStep from '../../components/miscellaneous/AccountProgressStep'
+import ProgressBar from '../../components/miscellaneous/ProgressBar'
 
 const AccountProgress = () => {
   return (

@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import OnboardingRadio from '../components/forms/OnboardingRadio'
-import OnboardingLayout from '../components/layouts/OnboardingLayout'
-import ButtonSubmit from '../components/forms/ButtonSubmit'
-import distributorChecked from '../assets/images/distributor-checked.svg'
-import distributor from '../assets/images/distributor.svg'
-import retailer from '../assets/images/retailer.svg'
-import delivery from '../assets/images/delivery.svg'
+import OnboardingRadio from '../../components/forms/OnboardingRadio'
+import OnboardingLayout from '../../components/layouts/OnboardingLayout'
+import ButtonSubmit from '../../components/forms/ButtonSubmit'
+import distributorChecked from '../../assets/images/distributor-checked.svg'
+import distributor from '../../assets/images/distributor.svg'
+import retailerChecked from '../../assets/images/retailer-checked.svg'
+import retailer from '../../assets/images/retailer.svg'
+import deliveryChecked from '../../assets/images/delivery-checked.svg'
+import delivery from '../../assets/images/delivery.svg'
 
 const AccountSelect = () => {
   const [type, setType] = useState('distributor')
@@ -45,7 +47,7 @@ const AccountSelect = () => {
             name="account-select"
             value="retailer"
             img={retailer}
-            imgChecked={retailer}
+            imgChecked={retailerChecked}
             textPrimary="Retailer"
             textSecondary="Shop for items directly from wholesalers"
             checked={type === 'retailer'}
@@ -57,7 +59,7 @@ const AccountSelect = () => {
             name="account-select"
             value="delivery"
             img={delivery}
-            imgChecked={delivery}
+            imgChecked={deliveryChecked}
             textPrimary="Delivery Rider"
             textSecondary="Deliver goods to appropriate destinations"
             checked={type === 'delivery'}

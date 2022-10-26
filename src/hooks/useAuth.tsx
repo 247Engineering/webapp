@@ -12,14 +12,14 @@ export const AuthProvider = ({ children }: any) => {
   const login = useCallback(
     async (data: UserContext) => {
       setUser(data)
-      navigate('/dashboard/profile', { replace: true })
+      navigate('/dashboard', { replace: true })
     },
     [setUser, navigate],
   )
 
   const logout = useCallback(() => {
     setUser(null)
-    navigate('/', { replace: true })
+    navigate('/signin', { replace: true })
   }, [setUser, navigate])
 
   const value = useMemo(

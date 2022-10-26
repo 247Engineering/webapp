@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import ButtonSubmit from '../components/forms/ButtonSubmit'
-import ButtonText from '../components/forms/ButtonText'
-import Input from '../components/forms/Input'
-import LandingLayout from '../components/layouts/LandingLayout'
+import ButtonSubmit from '../../components/forms/ButtonSubmit'
+import ButtonText from '../../components/forms/ButtonText'
+import Input from '../../components/forms/Input'
+import LandingLayout from '../../components/layouts/LandingLayout'
 
 const SignIn = () => {
   const [email, setEmail] = useState('')

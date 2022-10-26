@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import AppLayout from '../components/layouts/AppLayout'
 import Input from '../components/forms/Input'
 import DragAndDrop from '../components/forms/DragAndDrop'
-import PhoneNumberInput from '../components/forms/PhoneNumberInput';
+import PhoneNumberInput from '../components/forms/PhoneNumberInput'
 
 const BusinessInfo = () => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
-  const [callingCode, setCallingCode] = useState('')
+  const [callingCode, setCallingCode] = useState('+234')
   const [mobile, setMobile] = useState('')
   const [email, setEmail] = useState('')
   const [file, setFile] = useState<string | ArrayBuffer | null>('')
@@ -53,7 +53,12 @@ const BusinessInfo = () => {
               </div>
             </div>
             <div className="mb-4">
-              <PhoneNumberInput setCode={setCallingCode} setMobile={setMobile} />
+              <PhoneNumberInput
+                code={callingCode}
+                setCode={setCallingCode}
+                setMobile={setMobile}
+                mobile={mobile}
+              />
             </div>
             <div className="mb-4">
               <Input

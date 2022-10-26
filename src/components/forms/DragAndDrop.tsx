@@ -1,6 +1,9 @@
 import React, { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
+
 import upload from '../../assets/images/upload.svg'
+
+import { request } from '../../helpers/request'
 import { DragAndDropProps } from '../../types'
 
 const DragAndDrop = ({ label, setData }: DragAndDropProps) => {
@@ -17,9 +20,22 @@ const DragAndDrop = ({ label, setData }: DragAndDropProps) => {
       const reader = new FileReader()
       reader.readAsDataURL(files[0])
       reader.onerror = () => setError('Unable to read file')
-      reader.onload = () => {
+      reader.onload = async () => {
+        const formData = new FormData()
+        formData.append('file', files[0])
+
+        try {
+          const data = await request({
+            url: '/onboarding/upload',
+            method: 'post',
+            body: formData,
+            type: 'form-data',
+          })
+          console.log({ data })
+        } catch (err) {}
+
         setFile(files[0].name)
-        setData(reader.result)
+        setData(files[0].name)
       }
     },
     [setData, setFile],
