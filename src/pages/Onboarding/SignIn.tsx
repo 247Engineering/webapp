@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 import ButtonSubmit from '../../components/forms/ButtonSubmit'
 import ButtonText from '../../components/forms/ButtonText'
 import Input from '../../components/forms/Input'
 import LandingLayout from '../../components/layouts/LandingLayout'
 
 const SignIn = () => {
+  const navigate = useNavigate()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -50,7 +54,9 @@ const SignIn = () => {
             Don't have an account?{' '}
             <ButtonText
               text="Sign up"
-              onClick={() => {}}
+              onClick={() => {
+                navigate("/signup")
+              }}
               className="font-[400]"
             />
           </p>

@@ -1,14 +1,35 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+
 import AppLayout from '../components/layouts/AppLayout'
 import Status from '../components/miscellaneous/Status'
 import BusinessOwnerItem from '../components/miscellaneous/BusinessOwnerItem'
 import Checkbox from '../components/forms/Checkbox'
+import ButtonSubmit from '../components/forms/ButtonSubmit'
+
 import image from '../assets/images/image.svg'
 import edit from '../assets/images/edit.svg'
-import ButtonSubmit from '../components/forms/ButtonSubmit';
+
+import { AppDispatch, RootState } from '../store'
+import { DistributorState } from '../types'
+import { submitDistributor } from '../store/features/distributor'
 
 const BusinessOwnerReview = () => {
+  const navigate = useNavigate()
+
+  const dispatch = useDispatch<AppDispatch>()
+
+  const distributor = useSelector<RootState>(
+    ({ distributor }) => distributor,
+  ) as DistributorState
+  const { stepsCompleted, loading } = distributor
+
   const [checked, setChecked] = useState(false)
+
+  useEffect(() => {
+    if (stepsCompleted === 3) navigate('/dashboard')
+  }, [stepsCompleted, navigate])
   return (
     <>
       <AppLayout alternate>
@@ -25,18 +46,21 @@ const BusinessOwnerReview = () => {
             Company information
           </h5>
           <div className="company-info relative mb-8">
-            <Status className="bg-green-light text-green rounded-[6px] px-[0.375rem] py-[0.125rem]" text="Completed" />
+            <Status
+              className="bg-green-light text-green rounded-[6px] px-[0.375rem] py-[0.125rem]"
+              text="Completed"
+            />
             <h6 className="mt-1 font-[700] leading-[1rem] text-[0.75rem] mt-1">
               Business name
             </h6>
             <p className="leading-[1.25rem] text-[0.875rem] mt-1 max-w-[13.563rem]">
-              Director at Femadons
+              {distributor.businessName}
             </p>
             <h6 className="mt-4 font-[700] leading-[1rem] text-[0.75rem]">
               Address
             </h6>
             <p className="leading-[1.25rem] text-[0.875rem] mt-1 max-w-[13.563rem]">
-              635 Akin Adesola, Victoria island Lagos, Nigeria
+              {distributor.address}
             </p>
             <h6 className="font-[700] leading-[1rem] text-[0.75rem] mt-4">
               Company verification document (CAC)
@@ -56,12 +80,18 @@ const BusinessOwnerReview = () => {
           <h5 className="mb-4 font-[700] leading-[1.5rem] text-[1rem]">
             Owner information
           </h5>
-          <BusinessOwnerItem
-            name="David Asiegbunam"
-            title="Director at Femadons"
-          />
-          <BusinessOwnerItem name="Mike Jones" title="Director at Femadons" />
-          <button className="button button-inverted text-orange mb-[2.375rem]">
+          {distributor.owners?.map((owner, i) => (
+            <BusinessOwnerItem
+              key={i}
+              name={`${owner.firstName} ${owner.lastName}`}
+              title="Director at Femadons"
+              id={owner.idImage as string}
+            />
+          ))}
+          <button
+            className="button button-inverted text-orange mb-[2.375rem]"
+            onClick={() => navigate('/business-owner/form')}
+          >
             Add new owner
           </button>
           <Checkbox
@@ -71,7 +101,12 @@ const BusinessOwnerReview = () => {
             onChange={() => setChecked(!checked)}
             label="I confirm that all information provided is truthful and correct"
           />
-          <ButtonSubmit onClick={() => {}} text="Submit" />
+          <ButtonSubmit
+            onClick={() => dispatch(submitDistributor())}
+            text="Submit"
+            disabled={loading || !checked}
+            loading={loading}
+          />
         </section>
       </AppLayout>
     </>

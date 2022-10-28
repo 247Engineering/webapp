@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 import OnboardingRadio from '../../components/forms/OnboardingRadio'
 import OnboardingLayout from '../../components/layouts/OnboardingLayout'
 import ButtonSubmit from '../../components/forms/ButtonSubmit'
+
 import distributorChecked from '../../assets/images/distributor-checked.svg'
 import distributor from '../../assets/images/distributor.svg'
 import retailerChecked from '../../assets/images/retailer-checked.svg'
@@ -10,6 +13,8 @@ import deliveryChecked from '../../assets/images/delivery-checked.svg'
 import delivery from '../../assets/images/delivery.svg'
 
 const AccountSelect = () => {
+  const navigate = useNavigate()
+
   const [type, setType] = useState('distributor')
 
   const handleChange = (value: string) => {
@@ -18,6 +23,7 @@ const AccountSelect = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    navigate('/signup')
   }
 
   return (

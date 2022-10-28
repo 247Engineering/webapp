@@ -1,6 +1,6 @@
 export interface UserContext {
-  firstName: string
-  lastName: string
+  firstName?: string
+  lastName?: string
   id: string
 }
 
@@ -65,12 +65,14 @@ export interface AccountProgressStepProps {
 
 export interface DragAndDropProps {
   label: string
+  data?: string
   setData: React.Dispatch<React.SetStateAction<string | ArrayBuffer | null>>
 }
 
 export interface BusinessOwnerItemProps {
   name: string
   title: string
+  id: string
 }
 
 export interface PhoneNumberInputProps {
@@ -129,18 +131,22 @@ export interface RequestArgs {
   type?: 'form-data' | 'json'
 }
 
+export interface Owner {
+  firstName: string | null
+  lastName: string | null
+  phoneNumber: string | null
+  email: string | null
+  idImage: string | null
+}
+
 export interface DistributorState {
-  businessName: string
-  address: string
-  city: string
-  country: string
-  state: string
-  cac: string
-  owners: {
-    firstName: string
-    lastName: string
-    phoneNumber: string
-    email: string
-    idImage: string
-  }[]
+  businessName: string | null
+  address: string | null
+  city: string | null
+  country: string | null
+  state: string | null
+  cac: string | null
+  owners?: Owner[]
+  stepsCompleted?: number
+  loading?: boolean
 }

@@ -1,10 +1,21 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+
 import AppLayout from '../components/layouts/AppLayout'
 import ButtonSubmit from '../components/forms/ButtonSubmit'
 import BusinessOwnerItem from '../components/miscellaneous/BusinessOwnerItem'
 import ButtonSubmitSmall from '../components/forms/ButtonSubmitSmall'
 
+import { RootState } from '../store'
+import { Owner } from '../types'
+
 const BusinessOwner = () => {
+  const navigate = useNavigate()
+
+  const owners = useSelector<RootState>(
+    ({ distributor }) => distributor.owners,
+  ) as Owner[]
   return (
     <>
       <AppLayout alternate>
@@ -17,22 +28,26 @@ const BusinessOwner = () => {
           </p>
         </header>
         <section className="mt-8 h-full flex flex-col">
-          <BusinessOwnerItem
-            name="David Asiegbunam"
-            title="Director at Femadons"
-          />
-          <BusinessOwnerItem
-            name="David Asiegbunam"
-            title="Director at Femadons"
-          />
+          {owners.map((owner, i) => (
+            <BusinessOwnerItem
+              key={i}
+              name={`${owner.firstName} ${owner.lastName}`}
+              title="Director at Femadons"
+              id={owner.idImage as string}
+            />
+          ))}
           <ButtonSubmitSmall
             text="Add business owner"
-            onClick={() => {}}
+            onClick={() => {
+              navigate('/business-owner/form')
+            }}
             className="mt-4"
           />
           <ButtonSubmit
             text="Save and continue"
-            onClick={() => {}}
+            onClick={() => {
+              navigate('/account-setup')
+            }}
             className="mt-[100%]"
           />
         </section>

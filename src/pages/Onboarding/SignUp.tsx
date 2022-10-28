@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import ButtonSubmit from '../../components/forms/ButtonSubmit'
 import ButtonText from '../../components/forms/ButtonText'
@@ -10,11 +11,15 @@ import LandingLayout from '../../components/layouts/LandingLayout'
 import { useAuth } from '../../hooks/useAuth'
 import { signup } from '../../store/features/auth'
 import { AppDispatch, RootState } from '../../store'
-import { AuthContextType } from '../../types'
+import { AuthContextType, AuthState } from '../../types'
 
 const SignUp = () => {
+  const navigate = useNavigate()
+
   const dispatch = useDispatch<AppDispatch>()
-  const loading = useSelector<RootState>(({ auth }) => auth.loading) as boolean
+  const { loading, id } = useSelector<RootState>(
+    ({ auth }) => auth,
+  ) as AuthState
   const { login } = useAuth() as AuthContextType
 
   const [email, setEmail] = useState('')
@@ -23,10 +28,12 @@ const SignUp = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(signup({ email, password })).then((x) =>
-      login({ firstName: '', lastName: '', id: '' }),
-    )
+    dispatch(signup({ email, password }))
   }
+
+  useEffect(() => {
+    if (id) login({ id })
+  }, [id, login])
 
   return (
     <LandingLayout>
@@ -78,7 +85,9 @@ const SignUp = () => {
             Already on 24Seven?{' '}
             <ButtonText
               text="Log in here"
-              onClick={() => {}}
+              onClick={() => {
+                navigate('/signin')
+              }}
               className="font-[400]"
             />
           </p>

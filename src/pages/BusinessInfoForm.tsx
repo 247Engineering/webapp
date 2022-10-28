@@ -1,25 +1,62 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Country, State } from 'country-state-city'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import AppLayout from '../components/layouts/AppLayout'
 import Input from '../components/forms/Input'
 import DragAndDrop from '../components/forms/DragAndDrop'
 import ButtonSubmit from '../components/forms/ButtonSubmit'
 
+import { AppDispatch, RootState } from '../store'
+import { DistributorState } from '../types'
+import { completeStep, updateDistributor } from '../store/features/distributor'
+
 const BusinessInfo = () => {
-  const [business, setBusiness] = useState('')
-  const [address, setAddress] = useState('')
-  const [city, setCity] = useState('')
-  const [country, setCountry] = useState('')
-  const [state, setState] = useState('')
-  const [cac, setCac] = useState<string | ArrayBuffer | null>('')
+  const navigate = useNavigate()
+
+  const dispatch = useDispatch<AppDispatch>()
+
+  const distributor = useSelector<RootState>(
+    ({ distributor }) => distributor,
+  ) as DistributorState
+
+  const [business, setBusiness] = useState(distributor.businessName || '')
+  const [address, setAddress] = useState(distributor.address || '')
+  const [city, setCity] = useState(distributor.city || '')
+  const [country, setCountry] = useState(distributor.country || '')
+  const [state, setState] = useState(distributor.state || '')
+  const [cac, setCac] = useState<string | ArrayBuffer | null>(
+    distributor.cac || '',
+  )
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    dispatch(completeStep(1))
+    navigate('/account-setup')
   }
 
-  const canSubmit = () =>
-    [business, address, city, country, state, cac].every((data) => !!data)
+  const canSubmit = useMemo(
+    () =>
+      [business, address, city, country, state, cac].every((data) => !!data),
+    [business, address, city, country, state, cac],
+  )
+
+  useEffect(() => {
+    if ([business, address, city, country, state, cac].some((data) => !!data)) {
+      dispatch(
+        updateDistributor({
+          businessName: business,
+          address,
+          city,
+          country,
+          state,
+          cac: cac as string,
+        }),
+      )
+      dispatch(completeStep(0.5))
+    }
+  }, [business, address, city, country, state, cac, dispatch])
 
   return (
     <>
@@ -80,12 +117,13 @@ const BusinessInfo = () => {
             <DragAndDrop
               label="Company verification document (CAC)"
               setData={setCac}
+              data={cac as string}
             />
             <ButtonSubmit
               text="Save and continue"
               onClick={handleSubmit}
               className="mt-12"
-              disabled={!!canSubmit}
+              disabled={!canSubmit}
             />
           </form>
         </section>

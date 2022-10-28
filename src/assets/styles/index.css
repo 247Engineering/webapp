@@ -238,15 +238,12 @@ td:not(.rdp-cell) {
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-:root {
-  --rdp-cell-size: 40px;
-  --rdp-accent-color: red;
-  --rdp-background-color: red;
-  /* Switch to dark colors for dark themes */
-  --rdp-accent-color-dark: red;
-  --rdp-background-color-dark: red;
-  /* Outline border for focused elements */
-  --rdp-outline: 2px solid var(--rdp-accent-color);
-  /* Outline border for focused and selected elements */
-  --rdp-outline-selected: 2px solid red;
+/* react-toastify */
+.Toastify__toast--error {
+  background-color: #E34B31 !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+  color: white !important;
+  font-family: "Inter", sans-serif !important;
 }

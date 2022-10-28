@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+
 import { AuthState } from '../../../types'
 import { request } from '../../../helpers/request'
 
@@ -13,12 +14,11 @@ const initialState: AuthState = {
 export const signup = createAsyncThunk(
   'signup',
   async (body: { email: string; password: string }) => {
-    const data = await request({
+    return await request({
       url: '/onboarding/signup',
       method: 'post',
       body,
     })
-    console.log({ data })
   },
 )
 
@@ -36,8 +36,9 @@ export const authSlice = createSlice({
       .addCase(signup.rejected, (state, action) => {
         state.loading = false
       })
-      .addCase(signup.fulfilled, (state, action) => {
+      .addCase(signup.fulfilled, (state, { payload }) => {
         state.loading = false
+        state.id = payload.userId
       })
   },
 })

@@ -7,7 +7,7 @@ const AuthedLayout = () => {
   const outlet = useOutlet()
 
   if (!user) {
-    // return <Navigate to="/" />
+    return <Navigate to="/signin" />
   }
 
   return <>{outlet}</>

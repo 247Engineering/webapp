@@ -1,47 +1,94 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { AuthState } from '../../../types'
-import { request } from '../../../helpers/request'
 
-const initialState: AuthState = {
-  firstName: null,
-  lastName: null,
-  type: null,
-  id: null,
+import { DistributorState, Owner } from '../../../types'
+import { request } from '../../../helpers/request'
+import { RootState } from '../..'
+
+const initialState: DistributorState = {
+  businessName: null,
+  address: null,
+  city: null,
+  country: null,
+  state: null,
+  cac: null,
+  owners: [],
+  stepsCompleted: 0,
   loading: false,
 }
 
-export const signup = createAsyncThunk(
-  'signup',
-  async (body: { email: string; password: string }) => {
-    const data = await request({
-      url: '/onboarding/signup',
+export const submitDistributor = createAsyncThunk(
+  'submitDistributor',
+  async (_, { getState }) => {
+    const {
+      auth: { id },
+      distributor,
+    } = getState() as RootState
+    
+    await request({
+      url: '/onboarding/setup',
       method: 'post',
-      body,
+      body: {
+        user_id: id,
+        business_name: distributor.businessName,
+        address: distributor.address,
+        city: distributor.city,
+        country: distributor.country,
+        state: distributor.state,
+        cac: distributor.cac,
+        owners: distributor.owners?.map((owner) => ({
+          first_name: owner.firstName,
+          last_name: owner.lastName,
+          phone_number: owner.phoneNumber,
+          email: owner.email,
+          image: owner.idImage,
+        })),
+      },
     })
-    console.log({ data })
   },
 )
 
 export const distributorSlice = createSlice({
-  name: 'auth',
+  name: 'distributor',
   initialState,
   reducers: {
-    logout: () => initialState,
+    completeStep: (state, { payload }) => {
+      state.stepsCompleted = payload
+    },
+    updateDistributor: (state, { payload }: { payload: DistributorState }) => {
+      for (const item in payload) {
+        // @ts-ignore
+        state[item] = payload[item]
+      }
+      state.businessName = payload.businessName
+    },
+    addOwner: (state, { payload }: { payload: Owner }) => {
+      state.owners?.push(payload)
+    },
+    removeOwner: (state, { payload }: { payload: string }) => {
+      let owners = state.owners?.filter((owner) => owner.idImage !== payload)
+      state.owners = owners
+    },
   },
   extraReducers(builder) {
     builder
-      .addCase(signup.pending, (state, action) => {
+      .addCase(submitDistributor.pending, (state, action) => {
         state.loading = true
       })
-      .addCase(signup.rejected, (state, action) => {
+      .addCase(submitDistributor.rejected, (state, action) => {
         state.loading = false
       })
-      .addCase(signup.fulfilled, (state, action) => {
+      .addCase(submitDistributor.fulfilled, (state, action) => {
+        state.stepsCompleted = 3
         state.loading = false
       })
   },
 })
 
-export const { logout } = distributorSlice.actions
+export const {
+  completeStep,
+  updateDistributor,
+  addOwner,
+  removeOwner,
+} = distributorSlice.actions
 
 export default distributorSlice.reducer

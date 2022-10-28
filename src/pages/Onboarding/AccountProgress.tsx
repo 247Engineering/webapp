@@ -1,9 +1,20 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+
 import AppLayout from '../../components/layouts/AppLayout'
 import AccountProgressStep from '../../components/miscellaneous/AccountProgressStep'
 import ProgressBar from '../../components/miscellaneous/ProgressBar'
 
+import { RootState } from '../../store'
+
 const AccountProgress = () => {
+  const navigate = useNavigate()
+
+  const stepsCompleted = useSelector<RootState>(
+    ({ distributor }) => distributor.stepsCompleted,
+  ) as number
+
   return (
     <>
       <AppLayout>
@@ -14,24 +25,48 @@ const AccountProgress = () => {
           </p>
         </header>
         <section className="mt-8">
-          <ProgressBar step={1} totalSteps={3} />
+          <ProgressBar step={Math.round(stepsCompleted)} totalSteps={3} />
           <AccountProgressStep
-            progress="done"
+            progress={
+              stepsCompleted < 1
+                ? stepsCompleted < 0.5
+                  ? 'none'
+                  : 'started'
+                : 'done'
+            }
             title="Company information"
             text="Company Information"
-            onClick={() => {}}
+            onClick={() => {
+              navigate('/business-info/form')
+            }}
           />
           <AccountProgressStep
-            progress="started"
+            progress={
+              stepsCompleted < 2
+                ? stepsCompleted < 1.5
+                  ? 'none'
+                  : 'started'
+                : 'done'
+            }
             title="Owner information"
             text="Company Information"
-            onClick={() => {}}
+            onClick={() => {
+              navigate('/business-owner')
+            }}
           />
           <AccountProgressStep
-            progress="none"
+            progress={
+              stepsCompleted < 3
+                ? stepsCompleted < 2.5
+                  ? 'none'
+                  : 'started'
+                : 'done'
+            }
             title="Review and submit"
             text="Company Information"
-            onClick={() => {}}
+            onClick={() => {
+              navigate('/business-owner/review')
+            }}
           />
         </section>
       </AppLayout>
