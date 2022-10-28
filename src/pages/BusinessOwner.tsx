@@ -8,14 +8,16 @@ import BusinessOwnerItem from '../components/miscellaneous/BusinessOwnerItem'
 import ButtonSubmitSmall from '../components/forms/ButtonSubmitSmall'
 
 import { RootState } from '../store'
-import { Owner } from '../types'
+import { DistributorState } from '../types'
 
 const BusinessOwner = () => {
   const navigate = useNavigate()
 
-  const owners = useSelector<RootState>(
-    ({ distributor }) => distributor.owners,
-  ) as Owner[]
+  const distributor = useSelector<RootState>(
+    ({ distributor }) => distributor,
+  ) as DistributorState
+  const { owners, businessName } = distributor
+
   return (
     <>
       <AppLayout alternate>
@@ -28,11 +30,11 @@ const BusinessOwner = () => {
           </p>
         </header>
         <section className="mt-8 h-full flex flex-col">
-          {owners.map((owner, i) => (
+          {owners?.map((owner, i) => (
             <BusinessOwnerItem
               key={i}
               name={`${owner.firstName} ${owner.lastName}`}
-              title="Director at Femadons"
+              title={`Owner at ${businessName}`}
               id={owner.idImage as string}
             />
           ))}

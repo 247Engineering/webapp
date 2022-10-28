@@ -23,7 +23,7 @@ const BusinessOwnerReview = () => {
   const distributor = useSelector<RootState>(
     ({ distributor }) => distributor,
   ) as DistributorState
-  const { stepsCompleted, loading } = distributor
+  const { stepsCompleted, loading, businessName } = distributor
 
   const [checked, setChecked] = useState(false)
 
@@ -84,7 +84,7 @@ const BusinessOwnerReview = () => {
             <BusinessOwnerItem
               key={i}
               name={`${owner.firstName} ${owner.lastName}`}
-              title="Director at Femadons"
+              title={`Owner at ${businessName}`}
               id={owner.idImage as string}
             />
           ))}
