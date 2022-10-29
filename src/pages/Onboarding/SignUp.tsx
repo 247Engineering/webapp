@@ -22,13 +22,15 @@ const SignUp = () => {
   ) as AuthState
   const { login } = useAuth() as AuthContextType
 
+  const [fname, setFname] = useState('')
+  const [lname, setLname] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [checked, setChecked] = useState(false)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(signup({ email, password }))
+    dispatch(signup({ email, password, fname, lname }))
   }
 
   useEffect(() => {
@@ -43,6 +45,24 @@ const SignUp = () => {
       </header>
       <section className="mt-10">
         <form onSubmit={handleSubmit}>
+          <div className="mb-4 grid grid-cols-2 gap-4">
+            <div>
+              <Input
+                label="First name"
+                value={fname}
+                onChange={setFname}
+                type="text"
+              />
+            </div>
+            <div>
+              <Input
+                label="Last name"
+                value={lname}
+                onChange={setLname}
+                type="text"
+              />
+            </div>
+          </div>
           <div className="mb-4">
             <Input
               label="Email address"

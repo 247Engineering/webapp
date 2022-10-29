@@ -1,20 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
 import ButtonSubmit from '../../components/forms/ButtonSubmit'
 import ButtonText from '../../components/forms/ButtonText'
 import Input from '../../components/forms/Input'
 import LandingLayout from '../../components/layouts/LandingLayout'
 
+import { useAuth } from '../../hooks/useAuth'
+import { signin } from '../../store/features/auth'
+import { AppDispatch, RootState } from '../../store'
+import { AuthContextType, AuthState } from '../../types'
+
 const SignIn = () => {
   const navigate = useNavigate()
+
+  const dispatch = useDispatch<AppDispatch>()
+  const { loading, id } = useSelector<RootState>(
+    ({ auth }) => auth,
+  ) as AuthState
+  const { login } = useAuth() as AuthContextType
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    dispatch(signin({ email, password }))
   }
+
+  useEffect(() => {
+    if (id) login({ id })
+  }, [id, login])
 
   return (
     <LandingLayout>
@@ -42,20 +59,24 @@ const SignIn = () => {
           </div>
           <ButtonText
             text="Forgot Password?"
-            onClick={() => {}}
+            onClick={() => {
+              navigate("/forgot-password")
+            }}
             className="mb-12"
           />
           <ButtonSubmit
             text="Sign in"
             onClick={handleSubmit}
             className="mb-4"
+            disabled={loading}
+            loading={loading}
           />
           <p className="p text-center">
             Don't have an account?{' '}
             <ButtonText
               text="Sign up"
               onClick={() => {
-                navigate("/signup")
+                navigate('/account-select')
               }}
               className="font-[400]"
             />

@@ -1,20 +1,28 @@
 import { createContext, useCallback, useContext, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+
 import { useLocalStorage } from './useLocalStorage'
 import { AuthContextType, UserContext } from '../types'
+import { RootState } from '../store'
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export const AuthProvider = ({ children }: any) => {
-  const [user, setUser] = useLocalStorage('user', null)
   const navigate = useNavigate()
+
+  const step = useSelector<RootState>(
+    ({ distributor }) => distributor.stepsCompleted,
+  ) as number
+
+  const [user, setUser] = useLocalStorage('user', null)
 
   const login = useCallback(
     async (data: UserContext) => {
       setUser(data)
-      navigate('/account-setup', { replace: true })
+      navigate(step === 3 ? 'dashboard' : '/account-setup', { replace: true })
     },
-    [setUser, navigate],
+    [setUser, navigate, step],
   )
 
   const logout = useCallback(() => {

@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import { AuthState } from '../../../types'
 import { request } from '../../../helpers/request'
+import { isRejectedAction, isPendingAction, isFulfilledAction } from '../utils'
 
 const initialState: AuthState = {
   firstName: null,
@@ -13,9 +14,25 @@ const initialState: AuthState = {
 
 export const signup = createAsyncThunk(
   'signup',
-  async (body: { email: string; password: string }) => {
+  async (body: {
+    email: string
+    password: string
+    fname: string
+    lname: string
+  }) => {
     return await request({
       url: '/onboarding/signup',
+      method: 'post',
+      body,
+    })
+  },
+)
+
+export const signin = createAsyncThunk(
+  'signin',
+  async (body: { email: string; password: string }) => {
+    return await request({
+      url: '/auth/login',
       method: 'post',
       body,
     })
@@ -30,15 +47,26 @@ export const authSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(signup.pending, (state, action) => {
+      .addMatcher(isPendingAction, (state, action) => {
         state.loading = true
       })
-      .addCase(signup.rejected, (state, action) => {
+      .addMatcher(isRejectedAction, (state, action) => {
         state.loading = false
       })
-      .addCase(signup.fulfilled, (state, { payload }) => {
+      .addMatcher(isFulfilledAction, (state, action) => {
+        switch (action.type) {
+          case 'signin/fulfilled':
+            state.firstName = action.payload.fname
+            state.lastName = action.payload.lname
+            break
+          case 'signup/fulfilled':
+            state.firstName = action.meta.arg.fname
+            state.lastName = action.meta.arg.lname
+            break
+        }
+
         state.loading = false
-        state.id = payload.userId
+        state.id = action.payload.userId
       })
   },
 })

@@ -150,3 +150,10 @@ export interface DistributorState {
   stepsCompleted?: number
   loading?: boolean
 }
+
+export interface AppLayoutProps {
+  alternate?: boolean
+  full?: boolean
+  children?: any
+  onClose?: () => void
+}

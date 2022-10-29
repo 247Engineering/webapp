@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { DistributorState, Owner } from '../../../types'
 import { request } from '../../../helpers/request'
 import { RootState } from '../..'
+import { signin } from '../auth'
 
 const initialState: DistributorState = {
   businessName: null,
@@ -23,7 +24,7 @@ export const submitDistributor = createAsyncThunk(
       auth: { id },
       distributor,
     } = getState() as RootState
-    
+
     await request({
       url: '/onboarding/setup',
       method: 'post',
@@ -80,6 +81,9 @@ export const distributorSlice = createSlice({
       .addCase(submitDistributor.fulfilled, (state, action) => {
         state.stepsCompleted = 3
         state.loading = false
+      })
+      .addCase(signin.fulfilled, (state, { payload: { step } }) => {
+        if (step > 0) state.stepsCompleted = 3
       })
   },
 })

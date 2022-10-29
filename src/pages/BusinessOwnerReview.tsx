@@ -32,7 +32,12 @@ const BusinessOwnerReview = () => {
   }, [stepsCompleted, navigate])
   return (
     <>
-      <AppLayout alternate>
+      <AppLayout
+        alternate
+        onClose={() => {
+          navigate(-1)
+        }}
+      >
         <header>
           <h1 className="font-[700] leading-[1.75rem] text-[1.25rem] mb-2">
             Tell us about the business owner
