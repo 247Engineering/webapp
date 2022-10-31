@@ -16,8 +16,8 @@ const ForgotPassword = () => {
   return (
     <LandingLayout>
       <header>
-        <h1 className="h1 mb-2">Forgot Password?</h1>
-        <p className="p">
+        <h1 className="h1 mb-2 text-black">Forgot Password?</h1>
+        <p className="p text-black-100">
           We sent an email to pepsibottling@gmail.com with instructions on how
           to reset password
         </p>

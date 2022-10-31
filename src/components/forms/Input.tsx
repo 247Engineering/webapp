@@ -23,7 +23,7 @@ const Input = ({
 
   return (
     <>
-      <label className="label">{label}</label>
+      <label className="label text-black">{label}</label>
       <div className="relative">
         {options ? (
           <select

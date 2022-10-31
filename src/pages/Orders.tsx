@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import AppLayout from '../components/layouts/AppLayout'
 import location from '../assets/images/location.svg'
-import add from '../assets/images/add.svg'
 import search from '../assets/images/search.svg'
 import SortSelect from '../components/forms/SortSelect'
 import TableLayout from '../components/layouts/TableLayout'
@@ -11,10 +10,10 @@ const Orders = () => {
   return (
     <>
       <AppLayout>
-        <header className="flex justify-between">
+        <header>
           <div>
-            <h1 className="h1 mb-2">Orders</h1>
-            <p className="p">
+            <h1 className="h1 mb-2 text-black">Orders</h1>
+            <p className="p text-black-100">
               <img
                 src={location}
                 className="w-[1.563rem] h-[1.25rem] inline"
@@ -23,11 +22,8 @@ const Orders = () => {
               Femadons Warehouse Victoria Island.
             </p>
           </div>
-          <button className="button-add bg-orange text-white w-[3rem] h-[3rem]">
-            <img src={add} alt="add" className="w-[0.75rem] h-[0.75rem]" />
-          </button>
         </header>
-        <section className="mt-6">
+        <section className="mt-6 text-black">
           <div className="flex items-center mb-[1.875rem]">
             <SortSelect
               options={[

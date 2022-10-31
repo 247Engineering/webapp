@@ -67,7 +67,7 @@ const DragAndDrop = ({ label, data, setData }: DragAndDropProps) => {
 
   return (
     <>
-      <label className="label">{label}</label>
+      <label className="label text-black">{label}</label>
       <div
         className={`mt-2 flex flex-col items-center drag-drop ${
           error ? 'error' : ''
@@ -91,7 +91,7 @@ const DragAndDrop = ({ label, data, setData }: DragAndDropProps) => {
           />
         )}
         <p
-          className={`font-[700] leading-[1rem] text-[0.75rem] text-center ${
+          className={`font-[700] leading-[1rem] text-[0.75rem] text-center text-black ${
             error ? 'text-error' : ''
           }`}
         >
@@ -109,7 +109,7 @@ const DragAndDrop = ({ label, data, setData }: DragAndDropProps) => {
             </>
           )}
         </p>
-        <p className="leading-[0.875rem] text-[0.625rem] text-center">
+        <p className="leading-[0.875rem] text-[0.625rem] text-center text-black">
           Supported file types: JPEG, PNG, PDF. Max file size: 2mb
         </p>
       </div>

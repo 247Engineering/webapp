@@ -40,8 +40,8 @@ const SignUp = () => {
   return (
     <LandingLayout>
       <header>
-        <h1 className="h1 mb-2">Create your account</h1>
-        <p className="p">Welcome to 24Seven, create your account</p>
+        <h1 className="h1 mb-2 text-black">Create your account</h1>
+        <p className="p text-black-100">Welcome to 24Seven, create your account</p>
       </header>
       <section className="mt-10">
         <form onSubmit={handleSubmit}>

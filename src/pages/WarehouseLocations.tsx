@@ -13,8 +13,8 @@ const WarehouseLocations = () => {
       <AppLayout>
         <header className="flex justify-between">
           <div>
-            <h1 className="h1 mb-2">Locations</h1>
-            <p className="p">
+            <h1 className="h1 mb-2 text-black">Locations</h1>
+            <p className="p text-black-100">
               <img
                 src={location}
                 className="w-[1.563rem] h-[1.25rem] inline"
@@ -27,7 +27,7 @@ const WarehouseLocations = () => {
             <img src={add} alt="add" className="w-[0.75rem] h-[0.75rem]" />
           </button>
         </header>
-        <section className="mt-6">
+        <section className="mt-6 text-black">
           <div className="flex items-center mb-8">
             <SortSelect
               options={[

@@ -19,10 +19,10 @@ const BusinessOwnerItem = ({ name, title, id }: BusinessOwnerItemProps) => {
           className="bg-green-light text-green rounded-[6px] px-[0.375rem] py-[0.125rem]"
           text="Completed"
         />
-        <h6 className="mt-1 font-[700] leading-[1rem] text-[0.75rem]">
+        <h6 className="mt-1 font-[700] leading-[1rem] text-[0.75rem] text-black">
           {name}
         </h6>
-        <p className="leading-[1rem] text-[0.75rem]">{title}</p>
+        <p className="leading-[1rem] text-[0.75rem] text-black">{title}</p>
       </div>
       <img
         src={close}

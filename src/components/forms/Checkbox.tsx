@@ -22,7 +22,7 @@ const Checkbox = ({
         }}
         className="h-[20px] w-[20px]"
       />
-      <label htmlFor={id} className="p ml-3">
+      <label htmlFor={id} className="p ml-3 text-black">
         {label}
       </label>
     </div>

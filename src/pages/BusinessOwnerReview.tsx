@@ -39,15 +39,15 @@ const BusinessOwnerReview = () => {
         }}
       >
         <header>
-          <h1 className="font-[700] leading-[1.75rem] text-[1.25rem] mb-2">
+          <h1 className="font-[700] leading-[1.75rem] text-[1.25rem] mb-2 text-black">
             Tell us about the business owner
           </h1>
-          <p className="p">
+          <p className="p text-black-100">
             Provide personal information of the business owners
           </p>
         </header>
         <section className="mt-8">
-          <h5 className="mb-4 font-[700] leading-[1.5rem] text-[1rem]">
+          <h5 className="mb-4 font-[700] leading-[1.5rem] text-[1rem] text-black">
             Company information
           </h5>
           <div className="company-info relative mb-8">
@@ -55,19 +55,19 @@ const BusinessOwnerReview = () => {
               className="bg-green-light text-green rounded-[6px] px-[0.375rem] py-[0.125rem]"
               text="Completed"
             />
-            <h6 className="mt-1 font-[700] leading-[1rem] text-[0.75rem] mt-1">
+            <h6 className="mt-1 font-[700] leading-[1rem] text-[0.75rem] mt-1 text-black">
               Business name
             </h6>
-            <p className="leading-[1.25rem] text-[0.875rem] mt-1 max-w-[13.563rem]">
+            <p className="leading-[1.25rem] text-[0.875rem] mt-1 max-w-[13.563rem] text-black">
               {distributor.businessName}
             </p>
-            <h6 className="mt-4 font-[700] leading-[1rem] text-[0.75rem]">
+            <h6 className="mt-4 font-[700] leading-[1rem] text-[0.75rem] text-black">
               Address
             </h6>
-            <p className="leading-[1.25rem] text-[0.875rem] mt-1 max-w-[13.563rem]">
+            <p className="leading-[1.25rem] text-[0.875rem] mt-1 max-w-[13.563rem] text-black">
               {distributor.address}
             </p>
-            <h6 className="font-[700] leading-[1rem] text-[0.75rem] mt-4">
+            <h6 className="font-[700] leading-[1rem] text-[0.75rem] mt-4 text-black">
               Company verification document (CAC)
             </h6>
             <img
@@ -82,7 +82,7 @@ const BusinessOwnerReview = () => {
               onClick={() => {}}
             />
           </div>
-          <h5 className="mb-4 font-[700] leading-[1.5rem] text-[1rem]">
+          <h5 className="mb-4 font-[700] leading-[1.5rem] text-[1rem] text-black">
             Owner information
           </h5>
           {distributor.owners?.map((owner, i) => (

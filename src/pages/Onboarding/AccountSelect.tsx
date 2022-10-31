@@ -29,10 +29,10 @@ const AccountSelect = () => {
   return (
     <OnboardingLayout>
       <header className="bg-orange-light px-4 pb-[3.313rem]">
-        <h1 className="h1 mb-2 max-w-[15.313rem]">
+        <h1 className="h1 mb-2 max-w-[15.313rem] text-black">
           How do you want to use 24Seven
         </h1>
-        <p className="p">Welcome to 24Seven, create your account</p>
+        <p className="p text-black-100">Welcome to 24Seven, create your account</p>
       </header>
       <section className="px-4 py-[2.375rem]">
         <form onSubmit={handleSubmit}>

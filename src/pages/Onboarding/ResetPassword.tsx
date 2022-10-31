@@ -15,8 +15,8 @@ const ResetPassword = () => {
   return (
     <LandingLayout>
       <header>
-        <h1 className="h1 mb-2">Reset Password?</h1>
-        <p className="p">Create a new password and confirm it.</p>
+        <h1 className="h1 mb-2 text-black">Reset Password?</h1>
+        <p className="p text-black-100">Create a new password and confirm it.</p>
       </header>
       <section className="mt-10">
         <form onSubmit={handleSubmit}>

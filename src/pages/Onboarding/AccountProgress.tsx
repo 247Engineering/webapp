@@ -19,8 +19,8 @@ const AccountProgress = () => {
     <>
       <AppLayout>
         <header>
-          <h1 className="h1 mb-2">Welcome!</h1>
-          <p className="p">
+          <h1 className="h1 mb-2 text-black">Welcome!</h1>
+          <p className="p text-black-100">
             Setting up your 24Seven account, it will only take 10 minutes
           </p>
         </header>

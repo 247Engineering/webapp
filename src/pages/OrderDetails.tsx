@@ -20,10 +20,10 @@ const OrderDetails = () => {
             />
             Orders
           </button>
-          <h1 className="font-[700] text-[1.25rem] leading-[1.75rem] my-2">
+          <h1 className="font-[700] text-[1.25rem] leading-[1.75rem] my-2 text-black">
             Order #FD089345
           </h1>
-          <p className="p mb-2">10/10/2022 at 13:00PM</p>
+          <p className="p mb-2 text-black-100">10/10/2022 at 13:00PM</p>
           <div className="flex">
             <Status
               className="bg-green-light text-green rounded-[10px] mr-2 py-1 px-2"
@@ -35,7 +35,7 @@ const OrderDetails = () => {
             />
           </div>
         </header>
-        <section className="mt-6">
+        <section className="mt-6 text-black">
           <TableLayout>
             <thead>
               <tr>

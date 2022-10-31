@@ -27,10 +27,10 @@ const BusinessOwner = () => {
         }}
       >
         <header>
-          <h1 className="font-[700] leading-[1.75rem] text-[1.25rem] mb-2">
+          <h1 className="font-[700] leading-[1.75rem] text-[1.25rem] mb-2 text-black">
             Tell us about the business owner
           </h1>
-          <p className="p">
+          <p className="p text-black-100">
             Provide personal information of the business owners
           </p>
         </header>

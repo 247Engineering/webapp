@@ -12,6 +12,10 @@ const Dashboard = () => {
     ({ auth }) => auth.firstName,
   ) as string
 
+  const businessName = useSelector<RootState>(
+    ({distributor}) => distributor.businessName
+  ) as string
+
   const [start, setStart] = useState(addDays(new Date(), -30))
   const [end, setEnd] = useState(new Date())
   const [showCalendar, setShowCalendar] = useState(false)
@@ -26,14 +30,14 @@ const Dashboard = () => {
     <div onClick={() => setShowCalendar(false)}>
       <AppLayout>
         <header>
-          <h1 className="h1 mb-2 capitalize">Hi {firstName}!</h1>
-          <p className="p">
+          <h1 className="h1 mb-2 capitalize text-black">Hi {firstName}!</h1>
+          <p className="p text-black-100">
             <img
               src={location}
               className="w-[1.563rem] h-[1.25rem] inline"
               alt="location icon"
             />{' '}
-            Femadons HQ.
+            {businessName} HQ.
           </p>
         </header>
         <section className="mt-6">

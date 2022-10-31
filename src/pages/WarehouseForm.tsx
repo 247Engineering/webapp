@@ -19,12 +19,12 @@ const WarehouseForm = () => {
     <>
       <AppLayout alternate>
         <header>
-          <h1 className="font-[700] leading-[1.75rem] text-[1.25rem] mb-2">
+          <h1 className="font-[700] leading-[1.75rem] text-[1.25rem] mb-2 text-black">
             Add a warehouse location
           </h1>
-          <p className="p">Setup a new warehouse location for your business</p>
+          <p className="p text-black-100">Setup a new warehouse location for your business</p>
         </header>
-        <section className="mt-8 h-full flex flex-col">
+        <section className="mt-8 h-full flex flex-col text-black">
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <Input

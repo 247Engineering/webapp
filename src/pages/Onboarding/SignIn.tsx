@@ -36,8 +36,8 @@ const SignIn = () => {
   return (
     <LandingLayout>
       <header>
-        <h1 className="h1 mb-2">Sign In</h1>
-        <p className="p">Welcome back</p>
+        <h1 className="h1 mb-2 text-black">Sign In</h1>
+        <p className="p text-black-100">Welcome back</p>
       </header>
       <section className="mt-10">
         <form onSubmit={handleSubmit}>

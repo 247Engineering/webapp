@@ -4,7 +4,7 @@ import { WarehouseItemProp } from '../../types'
 
 const WarehouseItem = ({ textPrimary, textSecondary }: WarehouseItemProp) => {
   return (
-    <div className="warehouse-item mr-[-1rem]">
+    <div className="warehouse-item mr-[-1rem] text-black">
       <img
         src={distributor}
         alt="warehouse icon"

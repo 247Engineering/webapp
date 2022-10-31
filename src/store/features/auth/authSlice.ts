@@ -58,15 +58,16 @@ export const authSlice = createSlice({
           case 'signin/fulfilled':
             state.firstName = action.payload.fname
             state.lastName = action.payload.lname
+            state.id = action.payload.userId
             break
           case 'signup/fulfilled':
             state.firstName = action.meta.arg.fname
             state.lastName = action.meta.arg.lname
+            state.id = action.payload.userId
             break
         }
 
         state.loading = false
-        state.id = action.payload.userId
       })
   },
 })

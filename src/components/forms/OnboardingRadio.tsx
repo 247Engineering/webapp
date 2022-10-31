@@ -39,10 +39,10 @@ const OnboardingRadio = ({
               alt={name}
             />
             <div className="flex flex-col h-full justify-between">
-              <p className="font-[700] leading-[1.25rem] text-[0.875rem]">
+              <p className="font-[700] leading-[1.25rem] text-[0.875rem] text-black">
                 {textPrimary}
               </p>
-              <p className="font-[400] leading-[0.875rem] text-[0.625rem]">
+              <p className="font-[400] leading-[0.875rem] text-[0.625rem] text-black">
                 {textSecondary}
               </p>
             </div>
