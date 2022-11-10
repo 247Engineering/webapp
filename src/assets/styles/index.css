@@ -39,7 +39,8 @@ body,
 }
 
 .input,
-.select {
+.select,
+.textarea {
   display: block;
   width: 100%;
   padding: 0.625rem;
@@ -49,9 +50,37 @@ body,
   line-height: 1.25rem;
 }
 
+.input.location {
+  padding-right: 1.8rem;
+}
+
 .input.error,
-.select.error {
+.select.error,
+.textarea.error {
   border: 1px solid #ef9aa8;
+}
+
+input:hover,
+select:hover,
+textarea:hover,
+input:focus,
+select:focus,
+textarea:focus,
+input:active,
+select:active,
+textarea:active,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  border: 1px solid #e34b31 !important;
+}
+
+.select {
+  padding-right: 2.4rem;
+}
+
+.select.alternate {
+  background: url(../images/arrow-down3.svg) 97% center no-repeat !important;
 }
 
 select {
@@ -61,11 +90,23 @@ select {
   appearance: none;
 }
 
+input,
+select {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+input[type="checkbox"] {
+  accent-color: #e34b31;
+}
+
 .sort-select {
   display: block;
   font-size: 0.875rem;
   line-height: 1.25rem;
   padding: 0.375rem 0.875rem;
+  padding-right: 1.5rem;
   border-radius: 50px;
   background: url(../images/arrow-down2.svg) 89% center no-repeat;
   background-color: #edeff2;
@@ -73,6 +114,19 @@ select {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.product-select {
+  background: url(../images/arrow-down3.svg) 90% center no-repeat !important;
+  width: 7.25rem !important;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  padding: 0.375rem 1.759rem 0.375rem 0.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .phone-number-select {
@@ -83,12 +137,35 @@ select {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 
 .phone-number-input {
   padding: 0.625rem 0.5rem;
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 0px 8px 8px 0px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.weight-select {
+  background: url(../images/arrow-down3.svg) 88% center no-repeat !important;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 0px 8px 8px 0px;
+  padding: 0.625rem 0.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.weight-input {
+  padding: 0.625rem 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px 0px 0px 8px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 
 .button {
@@ -136,7 +213,6 @@ select {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 12px;
 }
 
 button:disabled {
@@ -190,10 +266,9 @@ nav.main.alt {
 }
 
 .drag-drop {
-  padding: 1.563rem;
   background: #f8f9fc;
   border: 1px dashed rgba(0, 0, 0, 0.12);
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .drag-drop.error {
@@ -230,7 +305,11 @@ th {
   font-size: 0.75rem;
   line-height: 1rem;
   text-align: start;
-  /* color: rgba(0, 0, 0, 0.87); */
+}
+
+th.checkbox {
+  padding-right: 0.656rem !important;
+  padding-left: 0.656rem !important;
 }
 
 thead:not(.rdp-head),
@@ -239,8 +318,17 @@ td:not(.rdp-cell) {
 }
 
 /* react-toastify */
+.Toastify__toast--success {
+  background-color: #e34b31 !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+  color: white !important;
+  font-family: "Inter", sans-serif !important;
+}
+
 .Toastify__toast--error {
-  background-color: #E34B31 !important;
+  background-color: #ef9aa8 !important;
   font-weight: 700 !important;
   font-size: 0.75rem !important;
   line-height: 1rem !important;

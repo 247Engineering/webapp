@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { useLocalStorage } from './useLocalStorage'
 import { AuthContextType, UserContext } from '../types'
 import { RootState } from '../store'
+import * as ROUTES from '../routes'
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
@@ -20,14 +21,27 @@ export const AuthProvider = ({ children }: any) => {
   const login = useCallback(
     async (data: UserContext) => {
       setUser(data)
-      navigate(step === 3 ? 'dashboard' : '/account-setup', { replace: true })
+      switch (data.type) {
+        case 'distributor':
+          navigate(
+            step === 3
+              ? ROUTES.DISTRIBUTOR.DASHBOARD
+              : ROUTES.DISTRIBUTOR.ACCOUNT_SETUP,
+            { replace: true },
+          )
+          break
+        case 'warehouse':
+          navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS_FOR(data.id))
+      }
     },
     [setUser, navigate, step],
   )
 
   const logout = useCallback(() => {
     setUser(null)
-    navigate('/signin', { replace: true })
+    localStorage.clear()
+    navigate(ROUTES.AUTH.ACCOUNT_SELECT, { replace: true })
+    window.location.reload()
   }, [setUser, navigate])
 
   const value = useMemo(

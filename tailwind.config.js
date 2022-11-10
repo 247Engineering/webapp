@@ -7,6 +7,7 @@ module.exports = {
         'purple': '#6F3289',
         'orange': '#E34B31',
         'orange-light': '#FBF2F0',
+        'orange-light-100': '#F4D9D3',
         'green': '#008a45',
         'green-light': '#dff1e8',
         'grey': '#EDEFF2',
@@ -17,6 +18,10 @@ module.exports = {
         'pumpkin-light': '#FFF2E0',
         'error': '#EF9AA8'
       },
+      boxShadow: {
+        'sm': '0px 8px 16px rgba(0, 0, 0, 0.12)',
+        'md': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
+      }
       // fontSize: {
       // sm: '0.8rem',
       // base: '1rem',

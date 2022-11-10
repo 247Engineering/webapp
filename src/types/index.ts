@@ -1,7 +1,10 @@
+export type UserType = 'distributor' | 'warehouse' | 'retailer'
+
 export interface UserContext {
   firstName?: string
   lastName?: string
   id: string
+  type: UserType
 }
 
 export interface AuthContextType {
@@ -14,19 +17,26 @@ export interface AuthState {
   firstName: string | null
   lastName: string | null
   id: string | null
-  type: string | null
+  type: UserType | null
   loading: boolean
+  resetPasswordStamp: number | null
 }
 
 export interface InputProps {
   label: string
   options?: { value: string; label: string }[]
   type?: string
-  value: string
+  value: any
   image?: any
-  onChange: (value: string) => void
+  onChange: (value: any) => void
   error?: boolean
   errorText?: string
+  placeholder?: string
+  alternate?: boolean
+  default?: string
+  prefix?: string
+  suffix?: string
+  disabled?: boolean
 }
 
 export interface ButtonProps {
@@ -36,6 +46,7 @@ export interface ButtonProps {
   disabled?: boolean
   style?: {}
   loading?: boolean
+  type?: 'submit' | 'button'
 }
 
 export interface OnboardingRadioProps {
@@ -64,9 +75,12 @@ export interface AccountProgressStepProps {
 }
 
 export interface DragAndDropProps {
-  label: string
+  label?: string
   data?: string
   setData: React.Dispatch<React.SetStateAction<string | ArrayBuffer | null>>
+  color?: string
+  small?: boolean
+  className?: string
 }
 
 export interface BusinessOwnerItemProps {
@@ -149,11 +163,96 @@ export interface DistributorState {
   owners?: Owner[]
   stepsCompleted?: number
   loading?: boolean
+  warehouseStamp?: number | null
+  warehouses?: any[]
 }
 
 export interface AppLayoutProps {
   alternate?: boolean
+  hideLogo?: boolean
   full?: boolean
+  location?: string
+  search?: boolean
+  cart?: boolean
+  cartItems?: number
+  hideName?: boolean
   children?: any
   onClose?: () => void
+  setShowSideBar?: (value: boolean) => void
+}
+
+export interface WeightInputProps {
+  value: number
+  setValue: (value: any) => void
+  unit: string
+  setUnit: (value: string) => void
+}
+
+export interface ProductState {
+  name: string | null
+  description: string | null
+  price: number | null
+  discountedPrice: number | null
+  costPerItem: number | null
+  sku: string | null
+  trackQuantity: boolean | null
+  quantity: number | null
+  weightValue: number | null
+  weightUnit: string | null
+  category: string | null
+  categories: any[]
+  subCategory: string | null
+  subCategories: any[]
+  manufacturer: string | null
+  manufacturers: any[]
+  images: string[]
+  products: any[]
+  searchResult: any[]
+  loading: boolean
+  productStamp: number | null
+}
+
+export interface WarehouseProductProps {
+  isEdit?: boolean
+  header: string
+  subHeader: string
+}
+
+export interface SearchSelectProps extends InputProps {
+  addNew?: boolean
+  itemImage?: boolean
+  dropdown: boolean
+  setDropdown: (value: boolean) => void
+  options: any[]
+  onSearch: (value: string) => void
+  onBlur: () => void
+  loading: boolean
+}
+
+export interface Address {
+  latitude: number
+  longitude: number
+}
+
+export interface LocationInputProps {
+  label: string
+  setLocation: (value: Address) => void
+  placeholder?: string
+  dropdown: boolean
+  setDropdown: (value: boolean) => void
+}
+
+export interface ProductItemProps {
+  discount?: number
+  image: string
+  name: string
+  price: number
+  minOrder: number
+  unit?: string
+}
+
+export interface OrderCounterProps {
+  className?: string
+  canReduce?: boolean
+  minOrder?: number
 }

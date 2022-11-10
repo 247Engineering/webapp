@@ -17,28 +17,31 @@ const PhoneNumberInput = ({
   }
 
   return (
-    <div className="flex w-full">
-      <select
-        className="w-1/3 phone-number-select"
-        onChange={handleCountryCodeChange}
-        value={code}
-      >
-        {Country.getAllCountries().map(
-          (country) =>
-            country.phonecode && (
-              <option value={`+${country.phonecode}`} key={country.isoCode}>
-                {country.flag} {`+${country.phonecode}`}
-              </option>
-            ),
-        )}
-      </select>
-      <input
-        className="w-2/3 phone-number-input"
-        type="text"
-        onChange={handlePhoneNumberChange}
-        value={mobile}
-      />
-    </div>
+    <>
+      <label className="label text-black">Phone number</label>
+      <div className="flex w-full mt-2">
+        <select
+          className="w-1/3 phone-number-select"
+          onChange={handleCountryCodeChange}
+          value={code}
+        >
+          {Country.getAllCountries().map(
+            (country) =>
+              country.phonecode && (
+                <option value={`+${country.phonecode}`} key={country.isoCode}>
+                  {country.flag} {`+${country.phonecode}`}
+                </option>
+              ),
+          )}
+        </select>
+        <input
+          className="w-2/3 phone-number-input"
+          type="text"
+          onChange={handlePhoneNumberChange}
+          value={mobile}
+        />
+      </div>
+    </>
   )
 }
 

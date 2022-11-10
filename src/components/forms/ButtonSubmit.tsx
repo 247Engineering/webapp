@@ -9,6 +9,7 @@ const ButtonSubmit = ({
   disabled,
   style,
   loading,
+  type
 }: ButtonProps) => {
   const override: CSSProperties = {
     borderColor: '#E34B31',
@@ -23,6 +24,7 @@ const ButtonSubmit = ({
       onClick={onClick}
       disabled={disabled}
       style={style}
+      type={type}
     >
       {loading ? (
         <MoonLoader cssOverride={override} size={15.6} color="#E34B31" />

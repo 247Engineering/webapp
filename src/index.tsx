@@ -8,7 +8,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import './assets/styles/index.css'
 import 'react-toastify/dist/ReactToastify.css'
 
-import App from './App'
+import App from './app/index'
 import { AuthProvider } from './hooks/useAuth'
 import reportWebVitals from './reportWebVitals'
 import { store, persistor } from './store'

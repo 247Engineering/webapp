@@ -4,10 +4,12 @@ import storage from 'redux-persist/lib/storage'
 
 import authReducer from './features/auth/authSlice'
 import distributorReducer from './features/distributor/distributorSlice'
+import productReducer from './features/product/productSlice'
 
 const reducer = combineReducers({
   auth: authReducer,
   distributor: distributorReducer,
+  product: productReducer,
 })
 
 const persistConfig = {

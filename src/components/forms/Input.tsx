@@ -12,26 +12,56 @@ const Input = ({
   onChange,
   error,
   errorText,
+  placeholder,
+  alternate,
+  default: selectDefault,
+  prefix,
+  suffix,
+  disabled,
 }: InputProps) => {
   const [type, setType] = useState(initialType)
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
-    onChange(e.target.value)
+    let value = e.target.value
+
+    if (initialType === 'number') {
+      value = value.replaceAll(/[^0-9.]/g, '')
+      value =
+        value.startsWith('0') ? value.replace('0', '') : value
+    }
+    if (prefix) value = value.replace(prefix, '')
+    if (suffix) value = value.replace(suffix, '')
+
+    onChange(value)
   }
 
   return (
     <>
       <label className="label text-black">{label}</label>
       <div className="relative">
-        {options ? (
+        {initialType === 'textarea' ? (
+          <textarea
+            value={value}
+            onChange={handleChange}
+            className={`textarea mt-2 ${error ? 'error' : ''}`}
+            placeholder={placeholder}
+            rows={3}
+          ></textarea>
+        ) : options ? (
           <select
-            className={`select mt-2 ${error ? 'error' : ''}`}
+            className={`select mt-2 ${error ? 'error' : ''} ${
+              alternate ? 'alternate' : ''
+            }`}
             value={value}
             onChange={handleChange}
           >
-            <option disabled></option>
+            <option value="" disabled>
+              {selectDefault || ''}
+            </option>
             {options.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -41,9 +71,11 @@ const Input = ({
         ) : (
           <input
             className={`input mt-2 ${error ? 'error' : ''}`}
-            type={initialType === 'password' ? type : initialType}
-            value={value}
+            type={initialType === 'password' ? type : 'text'}
+            value={prefix ? prefix + value : suffix ? value + suffix : value}
             onChange={handleChange}
+            placeholder={placeholder}
+            disabled={disabled}
           />
         )}
         {initialType === 'password' ? (

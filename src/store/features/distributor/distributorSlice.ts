@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-import { DistributorState, Owner } from '../../../types'
-import { request } from '../../../helpers/request'
+import { DistributorState, Address, Owner } from '../../../types'
+import request from '../../../helpers/request'
 import { RootState } from '../..'
 import { signin } from '../auth'
+import { isRejectedAction, isPendingAction, isFulfilledAction } from '../utils'
 
 const initialState: DistributorState = {
   businessName: null,
@@ -15,10 +16,12 @@ const initialState: DistributorState = {
   owners: [],
   stepsCompleted: 0,
   loading: false,
+  warehouseStamp: null,
+  warehouses: [],
 }
 
 export const submitDistributor = createAsyncThunk(
-  'submitDistributor',
+  'distributor/submitDistributor',
   async (_, { getState }) => {
     const {
       auth: { id },
@@ -48,6 +51,45 @@ export const submitDistributor = createAsyncThunk(
   },
 )
 
+export const addWarehouse = createAsyncThunk(
+  'distributor/addWarehouse',
+  async (
+    body: {
+      name: string
+      location: Address
+      email: string
+    },
+    { getState },
+  ) => {
+    const {
+      auth: { id },
+    } = getState() as RootState
+
+    return await request({
+      url: '/warehouse/add',
+      method: 'post',
+      body: {
+        distributor_id: id,
+        ...body,
+      },
+    })
+  },
+)
+
+export const fetchWarehouses = createAsyncThunk(
+  'distributor/fetchWarehouses',
+  async (_, { getState }) => {
+    const {
+      auth: { id },
+    } = getState() as RootState
+
+    return await request({
+      url: `/warehouse/get-warehouses/${id}`,
+      method: 'get',
+    })
+  },
+)
+
 export const distributorSlice = createSlice({
   name: 'distributor',
   initialState,
@@ -69,21 +111,36 @@ export const distributorSlice = createSlice({
       let owners = state.owners?.filter((owner) => owner.idImage !== payload)
       state.owners = owners
     },
+    resetWarehouseStamp: (state) => {
+      state.warehouseStamp = null
+    },
   },
   extraReducers(builder) {
     builder
-      .addCase(submitDistributor.pending, (state, action) => {
-        state.loading = true
-      })
-      .addCase(submitDistributor.rejected, (state, action) => {
-        state.loading = false
-      })
-      .addCase(submitDistributor.fulfilled, (state, action) => {
-        state.stepsCompleted = 3
-        state.loading = false
-      })
+      // @ts-ignore
       .addCase(signin.fulfilled, (state, { payload: { step } }) => {
         if (step > 0) state.stepsCompleted = 3
+      })
+      .addMatcher(isPendingAction('distributor'), (state, action) => {
+        state.loading = true
+      })
+      .addMatcher(isRejectedAction('distributor'), (state, action) => {
+        state.loading = false
+      })
+      .addMatcher(isFulfilledAction('distributor'), (state, action) => {
+        switch (action.type) {
+          case 'distributor/submitDistributor/fulfilled':
+            state.stepsCompleted = 3
+            break
+          case 'distributor/addWarehouse/fulfilled':
+            state.warehouseStamp = action.payload.warehouse_id
+            break
+          case 'distributor/fetchWarehouses/fulfilled':
+            state.warehouses = action.payload.data
+            break
+        }
+
+        state.loading = false
       })
   },
 })
@@ -93,6 +150,7 @@ export const {
   updateDistributor,
   addOwner,
   removeOwner,
+  resetWarehouseStamp,
 } = distributorSlice.actions
 
 export default distributorSlice.reducer

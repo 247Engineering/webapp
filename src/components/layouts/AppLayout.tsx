@@ -1,13 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import NavBar from '../navigation/NavBar'
+import SideBar from '../navigation/SideBar'
+
 import { AppLayoutProps } from '../../types'
 
-const AppLayout = ({ children, alternate, full, onClose }: AppLayoutProps) => {
+const AppLayout = ({ children, ...props }: AppLayoutProps) => {
+  const [showSidebar, setShowSidebar] = useState(false)
+
   return (
-    <div className="h-full">
-      <NavBar alternate={alternate} full={full} onClose={onClose} />
-      <main className={`pt-8 pb-12 px-4 ${full ? 'h-full' : ''}`}>
+    <div className="h-full text-black relative">
+      <SideBar show={showSidebar} />
+      <NavBar {...props} setShowSideBar={setShowSidebar} />
+      <main
+        className="pt-8 pb-12 px-4 h-full"
+        onClick={() => setShowSidebar(false)}
+      >
         {children}
       </main>
     </div>
