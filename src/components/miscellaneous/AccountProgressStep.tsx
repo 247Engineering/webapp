@@ -23,7 +23,10 @@ const AccountProgressStep = ({
   }, [progress])
 
   return (
-    <div className="mt-4 progress-step flex justify-between items-center">
+    <div
+      className="mt-4 progress-step flex justify-between items-center"
+      onClick={onClick}
+    >
       <div className="flex items-center">
         <img
           src={progressImg}
@@ -31,18 +34,13 @@ const AccountProgressStep = ({
           className="mr-2 h-[1.5rem] w-[1.5rem]"
         />
         <div className="flex flex-col justify-between">
-          <p className="font-[700] leading-[1.25rem] text-[0.875rem] mb-1">
+          <p className="font-[700] leading-[1.25rem] text-[0.875rem] mb-1 text-black">
             {title}
           </p>
-          <p className="leading-[1rem] text-[0.75rem]">{text}</p>
+          <p className="leading-[1rem] text-[0.75rem] text-black">{text}</p>
         </div>
       </div>
-      <img
-        src={arrow}
-        className="w-[0.714rem] h-[1.25rem]"
-        alt="arrow"
-        onClick={onClick}
-      />
+      <img src={arrow} className="w-[0.714rem] h-[1.25rem]" alt="arrow" />
     </div>
   )
 }

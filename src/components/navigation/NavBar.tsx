@@ -1,35 +1,93 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
+
 import hamburger from '../../assets/images/hamburger.svg'
 import close from '../../assets/images/close.svg'
 import logo from '../../assets/images/24Seven.svg'
+import locationIcon from '../../assets/images/location.svg'
+import navbarSearch from '../../assets/images/navbar-search.svg'
+import cartIcon from '../../assets/images/cart.svg'
 
-const NavBar = ({ alternate }: any) => {
+import { AppLayoutProps, AuthState } from '../../types'
+import { RootState } from '../../store'
+
+const NavBar = ({
+  alternate,
+  onClose,
+  hideLogo,
+  hideName,
+  location,
+  search,
+  cart,
+  cartItems = 0,
+  setShowSideBar,
+}: AppLayoutProps) => {
+  const { firstName, lastName } = useSelector<RootState>(
+    ({ auth }) => auth,
+  ) as AuthState
+
   return (
     <nav
-      className={`flex justify-between items-center p-4 main ${
+      className={`flex justify-between items-center p-4 main text-black overflow-y-auto ${
         alternate ? 'alt' : ''
       }`}
     >
       <div className="flex items-center">
         {alternate ? (
-          <img src={close} alt="close icon" className="w-[1rem] h-[1rem]" />
+          <img
+            src={close}
+            alt="close icon"
+            className="w-[1rem] h-[1rem]"
+            onClick={onClose}
+          />
         ) : (
           <>
             <img
               src={hamburger}
               alt="hamburger icon"
-              className="w-[1.313rem] h-[1.125rem] mr-1"
+              className="w-[1.313rem] h-[1.125rem]"
+              onClick={() => {
+                if (setShowSideBar) setShowSideBar(true)
+              }}
             />
-            <img
-              src={logo}
-              alt="logo"
-              className="max-h=[1.5rem] max-w-[6.563rem]"
-            />
+            {!hideLogo ? (
+              <img
+                src={logo}
+                alt="logo"
+                className="max-h=[1.5rem] max-w-[6.563rem] ml-1"
+              />
+            ) : null}
+            {location ? (
+              <div className="p flex items-center bg-grey rounded-[50px] py-[0.375rem] pr-[0.875rem] pl-[0.532rem] ml-[0.594rem]">
+                <img
+                  src={locationIcon}
+                  className="w-[0.936rem] h-[1.248rem] mr-[0.657rem]"
+                  alt="location"
+                />
+                {location}
+              </div>
+            ) : null}
           </>
         )}
       </div>
-      <div className="bg-orange-light text-orange text-[1rem] leading-[1.5rem] flex items-center justify-center rounded-full w-[2rem] h-[2rem]">
-        AB
+      <div className="flex items-center">
+        {search ? (
+          <img src={navbarSearch} className="w-[2rem] h-[2rem]" alt="search" />
+        ) : null}
+        {cart ? (
+          <div className="flex items-center justify-center rounded-full w-[2rem] h-[2rem] ml-2 mr-[0.75rem] bg-orange-light-100 relative">
+            <img src={cartIcon} alt="cart" />
+            <span className="absolute left-[23px] top-[-9px] text-white bg-orange font-[700] text-[0.625rem] leading-[0.875rem] rounded-[100px] px-1 py-[2px]">
+              {cartItems}
+            </span>
+          </div>
+        ) : null}
+        {!hideName ? (
+          <div className="bg-orange-light text-orange text-[1rem] leading-[1.5rem] flex items-center justify-center rounded-full w-[2rem] h-[2rem] uppercase">
+            {firstName ? firstName[0] : 'A'}
+            {lastName ? lastName[0] : 'B'}
+          </div>
+        ) : null}
       </div>
     </nav>
   )

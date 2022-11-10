@@ -20,9 +20,9 @@ const Checkbox = ({
           setChecked(!checked)
           onChange()
         }}
-        className="h-[20px] w-[20px]"
+        className="h-[1.25rem] w-[1.25rem]"
       />
-      <label htmlFor={id} className="p ml-3">
+      <label htmlFor={id} className="p ml-3 text-black">
         {label}
       </label>
     </div>

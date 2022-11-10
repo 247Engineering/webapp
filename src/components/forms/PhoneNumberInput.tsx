@@ -1,58 +1,47 @@
-import React, { useState, useMemo } from 'react'
-// @ts-ignore
-import countryFlagEmoji from 'country-flag-emoji'
-import countryTelData from 'country-telephone-data'
+import React from 'react'
+import { Country } from 'country-state-city'
 import { PhoneNumberInputProps } from '../../types'
 
-const PhoneNumberInput = ({ setCode, setMobile }: PhoneNumberInputProps) => {
-  const [country, setCountry] = useState('+234')
-  const [phoneNumber, setPhoneNumber] = useState('')
-
-  const countryData = useMemo(
-    () =>
-      countryFlagEmoji.list.map((country: { code: string; emoji: string }) => ({
-        code: country.code,
-        emoji: country.emoji,
-        callingCode: countryTelData.allCountries.find(
-          (c) => c.iso2 === country.code.toLowerCase(),
-        )?.dialCode,
-      })),
-    [],
-  )
-
+const PhoneNumberInput = ({
+  code,
+  setCode,
+  mobile,
+  setMobile,
+}: PhoneNumberInputProps) => {
   const handleCountryCodeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setCountry(e.target.value)
     setCode(e.target.value)
   }
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhoneNumber(e.target.value)
     setMobile(e.target.value)
   }
 
   return (
-    <div className="flex w-full">
-      <select
-        className="w-1/3 phone-number-select"
-        onChange={handleCountryCodeChange}
-        value={country}
-      >
-        {countryData.map(
-          (country: { code: string; emoji: string; callingCode: string }) =>
-            country.callingCode && (
-              <option value={`+${country.callingCode}`} key={country.code}>
-                {country.emoji} {`+${country.callingCode}`}
-              </option>
-            ),
-        )}
-      </select>
-      <input
-        className="w-2/3 phone-number-input"
-        type="text"
-        onChange={handlePhoneNumberChange}
-        value={phoneNumber}
-      />
-    </div>
+    <>
+      <label className="label text-black">Phone number</label>
+      <div className="flex w-full mt-2">
+        <select
+          className="w-1/3 phone-number-select"
+          onChange={handleCountryCodeChange}
+          value={code}
+        >
+          {Country.getAllCountries().map(
+            (country) =>
+              country.phonecode && (
+                <option value={`+${country.phonecode}`} key={country.isoCode}>
+                  {country.flag} {`+${country.phonecode}`}
+                </option>
+              ),
+          )}
+        </select>
+        <input
+          className="w-2/3 phone-number-input"
+          type="text"
+          onChange={handlePhoneNumberChange}
+          value={mobile}
+        />
+      </div>
+    </>
   )
 }
 
