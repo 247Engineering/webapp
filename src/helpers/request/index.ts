@@ -78,10 +78,14 @@ const api = setupInterceptorsTo(
   }),
 )
 
-const request = async ({ url, method, body, type }: RequestArgs) => {
+const request = async ({ url, method, body, type, user }: RequestArgs) => {
   try {
     const { data } = await api({
-      url: `${process.env.REACT_APP_BASE_URL}${url}`,
+      url: `${
+        user === 'retailer'
+          ? process.env.REACT_APP_BASE_URL_RETAILER
+          : process.env.REACT_APP_BASE_URL
+      }${url}`,
       method,
       ...(body && { data: body }),
       ...(type === 'form-data' && {

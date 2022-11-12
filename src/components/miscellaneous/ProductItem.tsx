@@ -20,10 +20,12 @@ const ProductItem = ({
       </div>
       <div className="w-[71%] flex flex-col pl-4">
         {discount ? (
-          <Status
-            className="bg-green-light text-green rounded-[6px] px-[0.375rem] py-[0.125rem] mb=[0.375rem]"
-            text={`Save ${discount}%`}
-          />
+          <div>
+            <Status
+              className="bg-green-light text-green rounded-[6px] px-[0.375rem] py-[0.125rem] mb-[0.375rem] w-auto"
+              text={`Save ${discount}%`}
+            />
+          </div>
         ) : null}
         <p className="max-w-[13.75rem] font-[700] text-[0.75rem] leading-[1rem] mb-1">
           {name}

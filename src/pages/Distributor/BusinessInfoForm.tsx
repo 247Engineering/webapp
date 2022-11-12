@@ -10,8 +10,11 @@ import ButtonSubmit from '../../components/forms/ButtonSubmit'
 
 import { AppDispatch, RootState } from '../../store'
 import { DistributorState } from '../../types'
-import { completeStep, updateDistributor } from '../../store/features/distributor'
-import * as ROUTES from "../../routes"
+import {
+  completeStep,
+  updateDistributor,
+} from '../../store/features/distributor'
+import * as ROUTES from '../../routes'
 
 const BusinessInfo = () => {
   const navigate = useNavigate()
@@ -55,7 +58,13 @@ const BusinessInfo = () => {
           cac: cac as string,
         }),
       )
-      dispatch(completeStep(0.5))
+      dispatch(
+        completeStep(
+          [business, address, city, country, state, cac].every((data) => !!data)
+            ? 1
+            : 0.5,
+        ),
+      )
     }
   }, [business, address, city, country, state, cac, dispatch])
 

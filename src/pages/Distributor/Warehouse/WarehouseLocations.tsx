@@ -86,12 +86,12 @@ const WarehouseLocations = () => {
           </div>
           <div>
             <h5 className="font-[700] text-[1rem] leading-[1.5rem] mb-6">
-              Closed (1)
+              Closed (0)
             </h5>
-            <WarehouseItem
+            {/* <WarehouseItem
               textPrimary="Femadons Alaba"
               textSecondary="36 Obafemi Martins Street"
-            />
+            /> */}
           </div>
         </section>
       </AppLayout>

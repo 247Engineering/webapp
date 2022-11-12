@@ -16,10 +16,12 @@ export interface AuthContextType {
 export interface AuthState {
   firstName: string | null
   lastName: string | null
+  phone: string | null
   id: string | null
   type: UserType | null
   loading: boolean
   resetPasswordStamp: number | null
+  businessName: string | null
 }
 
 export interface InputProps {
@@ -143,6 +145,7 @@ export interface RequestArgs {
   url: string
   body?: any
   type?: 'form-data' | 'json'
+  user?: 'retailer' | 'distributor'
 }
 
 export interface Owner {
@@ -255,4 +258,9 @@ export interface OrderCounterProps {
   className?: string
   canReduce?: boolean
   minOrder?: number
+}
+
+export interface RetailerState {
+  retailerStamp: number | null
+  loading: boolean
 }

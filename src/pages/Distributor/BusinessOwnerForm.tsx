@@ -53,7 +53,15 @@ const BusinessInfo = () => {
         (data) => !!data,
       )
     )
-      dispatch(completeStep(0.5))
+      dispatch(
+        completeStep(
+          [firstName, lastName, callingCode, mobile, email, file].every(
+            (data) => !!data,
+          )
+            ? 2
+            : 1.5,
+        ),
+      )
   }, [firstName, lastName, callingCode, mobile, email, file, dispatch])
 
   return (

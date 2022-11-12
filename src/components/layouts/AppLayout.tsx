@@ -9,11 +9,11 @@ const AppLayout = ({ children, ...props }: AppLayoutProps) => {
   const [showSidebar, setShowSidebar] = useState(false)
 
   return (
-    <div className="h-full text-black relative">
+    <div className={"h-full text-black relative"}>
       <SideBar show={showSidebar} />
       <NavBar {...props} setShowSideBar={setShowSidebar} />
       <main
-        className="pt-8 pb-12 px-4 h-full"
+        className={`pt-8 pb-12 px-4 ${showSidebar ? "h-full" : ""}`}
         onClick={() => setShowSidebar(false)}
       >
         {children}

@@ -26,7 +26,7 @@ export const RETAILER = {
   FORGOT_PASSWORD: '/retailer/forgot-password',
   VERIFY_OTP: '/retailer/verify-otp',
   BUSINESS_INFO_FORM: '/retailer/business-info/form',
-  SHOP: '/retailer/shop',
+  DASHBOARD: '/retailer/shop',
 }
 
 export const RIDER = {}

@@ -54,7 +54,7 @@ const NavBar = ({
               <img
                 src={logo}
                 alt="logo"
-                className="max-h=[1.5rem] max-w-[6.563rem] ml-1"
+                className="max-h-[1.5rem] max-w-[6.563rem] ml-1"
               />
             ) : null}
             {location ? (

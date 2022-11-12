@@ -72,8 +72,13 @@ const BusinessOwnerReview = () => {
               Company verification document (CAC)
             </h6>
             <img
-              className="mt-1 w-[4.688rem] h-[4.688rem]"
-              src={image}
+              className="mt-2 w-[4.688rem] h-[4.688rem] rounded-[8px]"
+              src={
+                distributor.cac?.endsWith('.jpg') ||
+                distributor.cac?.endsWith('.png')
+                  ? distributor.cac
+                  : image
+              }
               alt="cac document"
             />
             <img

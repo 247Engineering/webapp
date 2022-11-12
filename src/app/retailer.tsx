@@ -3,7 +3,7 @@ import SignUp from '../pages/Retailer/Onboarding/SignUp'
 import ForgotPassword from '../pages/Retailer/Onboarding/ForgotPassword'
 import VerifyOtp from '../pages/Retailer/Onboarding/VerifyOtp'
 import BusinessInfoForm from '../pages/Retailer/BusinessInfoForm'
-import RetailerShop from '../pages/Retailer/Shop/RetailerShop';
+import RetailerShop from '../pages/Retailer/Shop/RetailerShop'
 
 import * as ROUTES from '../routes'
 
@@ -32,7 +32,7 @@ export const authedRetailerRoutes = [
     element: <BusinessInfoForm />,
   },
   {
-    path: ROUTES.RETAILER.SHOP,
+    path: ROUTES.RETAILER.DASHBOARD,
     element: <RetailerShop />,
   },
 ]

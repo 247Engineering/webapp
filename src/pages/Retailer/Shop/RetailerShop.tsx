@@ -32,6 +32,19 @@ const RetailerShop = () => {
             minOrder={10}
             price={5000}
           />
+          <ProductItem
+            discount={10}
+            image={indomie}
+            name="Indomie Chicken Hungry Man Size (200g)"
+            minOrder={10}
+            price={5000}
+          />
+          <ProductItem
+            image={indomie}
+            name="Indomie Chicken Hungry Man Size (200g)"
+            minOrder={10}
+            price={5000}
+          />
         </section>
       </AppLayout>
     </>

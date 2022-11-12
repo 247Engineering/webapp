@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {
-  // useDispatch,
-  useSelector,
-} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import ButtonSubmit from '../../../components/forms/ButtonSubmit'
@@ -12,22 +9,21 @@ import Input from '../../../components/forms/Input'
 import LandingLayout from '../../../components/layouts/LandingLayout'
 import PhoneNumberInput from '../../../components/forms/PhoneNumberInput'
 
-import { useAuth } from '../../../hooks/useAuth'
-// import { signup } from '../../../store/features/auth'
 import {
-  //  AppDispatch,
-  RootState,
-} from '../../../store'
-import { AuthContextType, AuthState } from '../../../types'
+  retailerSignup,
+  passwordStampReset,
+} from '../../../store/features/auth'
+import { AppDispatch, RootState } from '../../../store'
+import { AuthState } from '../../../types'
+import * as ROUTES from '../../../routes'
 
 const SignUp = () => {
   const navigate = useNavigate()
 
-  // const dispatch = useDispatch<AppDispatch>()
-  const { loading, id } = useSelector<RootState>(
+  const dispatch = useDispatch<AppDispatch>()
+  const { loading, resetPasswordStamp } = useSelector<RootState>(
     ({ auth }) => auth,
   ) as AuthState
-  const { login } = useAuth() as AuthContextType
 
   const [callingCode, setCallingCode] = useState('+234')
   const [mobile, setMobile] = useState('')
@@ -36,12 +32,21 @@ const SignUp = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // dispatch(signup({ email, password, fname, lname }))
+    dispatch(
+      retailerSignup({
+        phone: (callingCode + mobile).replace('+', ''),
+        password,
+      }),
+    )
   }
 
   useEffect(() => {
-    if (id) login({ id, type: "retailer" })
-  }, [id, login])
+    if (resetPasswordStamp) navigate(ROUTES.RETAILER.VERIFY_OTP)
+
+    return () => {
+      dispatch(passwordStampReset())
+    }
+  }, [resetPasswordStamp, dispatch, navigate])
 
   return (
     <LandingLayout>

@@ -21,16 +21,16 @@ const SignIn = () => {
   ) as AuthState
   const { login } = useAuth() as AuthContextType
 
-  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(signin({ email, password }))
+    dispatch(signin({ phone, password }))
   }
 
   useEffect(() => {
-    if (id) login({ id, type: "retailer" })
+    if (id) login({ id, type: 'retailer' })
   }, [id, login])
 
   return (
@@ -44,9 +44,9 @@ const SignIn = () => {
           <div className="mb-4">
             <Input
               label="Email address or Phone number"
-              value={email}
-              onChange={setEmail}
-              type="email"
+              value={phone}
+              onChange={setPhone}
+              type="text"
             />
           </div>
           <div className="mb-4">

@@ -1,69 +1,58 @@
-import React, {
-  useState,
-  //  useEffect,
-  useMemo,
-} from 'react'
-import {
-  useDispatch,
-  //  useSelector
-} from 'react-redux'
+import React, { useState, useEffect, useMemo } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import AppLayout from '../../components/layouts/AppLayout'
 import Input from '../../components/forms/Input'
 import ButtonSubmit from '../../components/forms/ButtonSubmit'
 
+import { AppDispatch, RootState } from '../../store'
+import { RetailerState } from '../../types'
 import {
-  AppDispatch,
-  // RootState
-} from '../../store'
-// import { DistributorState } from '../../types'
-import { completeStep } from '../../store/features/distributor'
+  clearRetailerStamp,
+  addBusinessInfo,
+} from '../../store/features/retailer'
+import * as ROUTES from '../../routes'
 
 const BusinessInfo = () => {
   const navigate = useNavigate()
 
   const dispatch = useDispatch<AppDispatch>()
 
-  // const distributor = useSelector<RootState>(
-  //   ({ distributor }) => distributor,
-  // ) as DistributorState
+  const { loading, retailerStamp } = useSelector<RootState>(
+    ({ retailer }) => retailer,
+  ) as RetailerState
 
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
+  const [fname, setFname] = useState('')
+  const [lname, setLname] = useState('')
   const [email, setEmail] = useState('')
   const [businessName, setBusinessName] = useState('')
   const [address, setAddress] = useState('')
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(completeStep(1))
-    navigate('/account-setup')
+    dispatch(
+      addBusinessInfo({
+        fname,
+        lname,
+        email,
+        address,
+        business_name: businessName,
+      }),
+    )
   }
 
   const canSubmit = useMemo(
-    () =>
-      [firstName, lastName, businessName, email, address].every(
-        (data) => !!data,
-      ),
-    [firstName, lastName, businessName, email, address],
+    () => [fname, lname, businessName, email, address].every((data) => !!data),
+    [fname, lname, businessName, email, address],
   )
 
-  // useEffect(() => {
-  //   if ([business, address, city, country, state, cac].some((data) => !!data)) {
-  //     dispatch(
-  //       updateDistributor({
-  //         businessName: business,
-  //         address,
-  //         city,
-  //         country,
-  //         state,
-  //         cac: cac as string,
-  //       }),
-  //     )
-  //     dispatch(completeStep(0.5))
-  //   }
-  // }, [business, address, city, country, state, cac, dispatch])
+  useEffect(() => {
+    if (retailerStamp) navigate(ROUTES.RETAILER.DASHBOARD)
+    return () => {
+      dispatch(clearRetailerStamp())
+    }
+  }, [retailerStamp, dispatch, navigate])
 
   return (
     <>
@@ -87,16 +76,16 @@ const BusinessInfo = () => {
               <div>
                 <Input
                   label="First name"
-                  onChange={setFirstName}
-                  value={firstName}
+                  onChange={setFname}
+                  value={fname}
                   type="text"
                 />
               </div>
               <div>
                 <Input
                   label="Last name"
-                  onChange={setLastName}
-                  value={lastName}
+                  onChange={setLname}
+                  value={lname}
                   type="text"
                 />
               </div>
@@ -129,7 +118,8 @@ const BusinessInfo = () => {
               text="Save and continue"
               onClick={handleSubmit}
               className="mt-12"
-              disabled={!canSubmit}
+              disabled={!canSubmit || loading}
+              loading={loading}
             />
           </form>
         </section>

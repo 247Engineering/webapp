@@ -9,8 +9,10 @@ const initialState: AuthState = {
   lastName: null,
   type: null,
   id: null,
+  phone: null,
   loading: false,
   resetPasswordStamp: null,
+  businessName: null,
 }
 
 export const signup = createAsyncThunk(
@@ -26,6 +28,18 @@ export const signup = createAsyncThunk(
       url: '/auth/signup',
       method: 'post',
       body,
+    })
+  },
+)
+
+export const retailerSignup = createAsyncThunk(
+  'auth/retailerSignup',
+  async (body: { phone: string; password: string }) => {
+    return await request({
+      url: '/auth/register',
+      method: 'post',
+      body,
+      user: 'retailer',
     })
   },
 )
@@ -48,11 +62,29 @@ export const createWarehouseUser = createAsyncThunk(
 
 export const signin = createAsyncThunk(
   'auth/signin',
-  async (body: { email: string; password: string; type?: UserType }) => {
+  async (body: {
+    phone?: string
+    email?: string
+    password: string
+    type?: UserType
+  }) => {
     return await request({
       url: '/auth/login',
       method: 'post',
       body,
+      user: body.phone ? 'retailer' : 'distributor',
+    })
+  },
+)
+
+export const validateOtp = createAsyncThunk(
+  'auth/validateOtp',
+  async (body: { phone: string; otp: string }) => {
+    return await request({
+      url: '/auth/validate-otp',
+      method: 'post',
+      body,
+      user: 'retailer',
     })
   },
 )
@@ -103,6 +135,7 @@ export const authSlice = createSlice({
             state.lastName = action.payload.lname
             state.id = action.payload.user_id
             state.type = action.meta.arg.type
+            state.businessName = action.payload.business_name
 
             localStorage.setItem(
               'tokens',
@@ -114,6 +147,18 @@ export const authSlice = createSlice({
             state.lastName = action.meta.arg.lname
             state.id = action.payload.user_id
             state.type = action.meta.arg.type
+
+            localStorage.setItem(
+              'tokens',
+              JSON.stringify(action.payload.tokens),
+            )
+            break
+          case 'auth/validateOtp/fulfilled':
+            state.id = action.payload.user_id
+            break
+          case 'auth/retailerSignup/fulfilled':
+            state.resetPasswordStamp = new Date().getTime()
+            state.phone = action.meta.arg.phone
 
             localStorage.setItem(
               'tokens',
