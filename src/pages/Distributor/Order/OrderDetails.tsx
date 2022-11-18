@@ -99,7 +99,7 @@ const OrderDetails = () => {
               </tr>
             </tbody>
           </TableLayout>
-          <div className="mt-[1.875rem] rounded-tr-[12px] rounded-tl-[12px] border border-solid border-grey-light w-full h-[8.375rem]">
+          <div className="mt-[1.875rem] rounded-tr-[12px] rounded-tl-[12px] border border-solid border-grey-light w-full h-[8.375rem] overflow-hidden">
             <Map
               center={{ lat: 9.0765, lng: 7.3986 }}
               lat={9.0765}

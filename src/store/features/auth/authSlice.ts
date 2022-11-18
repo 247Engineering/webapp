@@ -13,6 +13,7 @@ const initialState: AuthState = {
   loading: false,
   resetPasswordStamp: null,
   businessName: null,
+  stepsCompleted: 1
 }
 
 export const signup = createAsyncThunk(
@@ -136,6 +137,7 @@ export const authSlice = createSlice({
             state.id = action.payload.user_id
             state.type = action.meta.arg.type
             state.businessName = action.payload.business_name
+            state.stepsCompleted = action.payload.step
 
             localStorage.setItem(
               'tokens',

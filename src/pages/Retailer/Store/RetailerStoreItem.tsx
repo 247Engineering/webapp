@@ -42,13 +42,13 @@ const RetailerShopItem = () => {
           <span className="font-[700] text-[0.75rem] leading-[1rem]">
             Description
           </span>
-          <p className="mt-2 mb-[3.438rem] text-[0.875rem] leading-[1.25rem]">
+          <p className="mt-2 mb-[6.5rem] text-[0.875rem] leading-[1.25rem]">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis tortor
             nunc, in metus, pellentesque est ultricies enim ac. Hac in enim
             nunc, viverra porttitor. Egestas quisque nulla sit augue commodo.
             Commodo vestibulum sit netus risus.
           </p>
-          <div className="p-4 w-full fixed">
+          <div className="p-4 fixed bottom-0 left-0 right-0 bg-white shadow-sm-alt">
             <ButtonSubmit
               text="Add to cart"
               onClick={() => {}}

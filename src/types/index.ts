@@ -22,6 +22,7 @@ export interface AuthState {
   loading: boolean
   resetPasswordStamp: number | null
   businessName: string | null
+  stepsCompleted: number
 }
 
 export interface InputProps {
@@ -60,13 +61,18 @@ export interface OnboardingRadioProps {
   img: any
   imgChecked: any
   checked: boolean
-  onChange: (value: string) => void
+  onChange: (value: any) => void
   className: string
 }
 
 export interface ProgressBarProps {
   step: number
   totalSteps: number
+}
+
+export interface IconProgressBarProps extends ProgressBarProps {
+  images: any[]
+  subtext?: string[]
 }
 
 export interface AccountProgressStepProps {
@@ -83,6 +89,7 @@ export interface DragAndDropProps {
   color?: string
   small?: boolean
   className?: string
+  alt?: boolean
 }
 
 export interface BusinessOwnerItemProps {
@@ -182,6 +189,8 @@ export interface AppLayoutProps {
   children?: any
   onClose?: () => void
   setShowSideBar?: (value: boolean) => void
+  secondaryNav?: string
+  secondaryNavBack?: string
 }
 
 export interface WeightInputProps {
@@ -252,6 +261,7 @@ export interface ProductItemProps {
   price: number
   minOrder: number
   unit?: string
+  orderAmount?: number
 }
 
 export interface OrderCounterProps {
@@ -263,4 +273,18 @@ export interface OrderCounterProps {
 export interface RetailerState {
   retailerStamp: number | null
   loading: boolean
+}
+
+export type DeliveryOptions = 'priority' | 'standard' | 'schedule'
+
+export type PaymentOptions = 'mastercard' | 'visa' | 'cash'
+
+export interface PaymentOptionProps {
+  id: string
+  name: string
+  value: string
+  text: string
+  checked: boolean
+  onChange: (value: any) => void
+  option: PaymentOptions
 }

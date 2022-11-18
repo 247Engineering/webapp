@@ -9,11 +9,17 @@ import * as ROUTES from '../routes'
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
+const distributorStep = {
+  1: ROUTES.DISTRIBUTOR.ACCOUNT_SETUP,
+  2: ROUTES.DISTRIBUTOR.ACCOUNT_SETUP,
+  3: ROUTES.DISTRIBUTOR.DASHBOARD,
+}
+
 export const AuthProvider = ({ children }: any) => {
   const navigate = useNavigate()
 
   const step = useSelector<RootState>(
-    ({ distributor }) => distributor.stepsCompleted,
+    ({ auth }) => auth.stepsCompleted,
   ) as number
 
   const [user, setUser] = useLocalStorage('user', null)
@@ -23,12 +29,7 @@ export const AuthProvider = ({ children }: any) => {
       setUser(data)
       switch (data.type) {
         case 'distributor':
-          navigate(
-            step === 3
-              ? ROUTES.DISTRIBUTOR.DASHBOARD
-              : ROUTES.DISTRIBUTOR.ACCOUNT_SETUP,
-            { replace: true },
-          )
+          navigate(distributorStep[step as 1 | 2 | 3], { replace: true })
           break
         case 'warehouse':
           navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS_FOR(data.id))

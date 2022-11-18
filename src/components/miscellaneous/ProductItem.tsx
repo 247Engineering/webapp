@@ -14,7 +14,7 @@ const ProductItem = ({
   unit = 'carton',
 }: ProductItemProps) => {
   return (
-    <div className="py-4 w-full min-h-[10.625rem] border border-solid border-grey-light border-0 border-b flex">
+    <div className="py-4 w-full min-h-[10.625rem] border border-solid border-grey-light border-0 border-b flex mb-2">
       <div className="w-[29%] py-4 px-3">
         <img src={image} className="w-[4.25rem] h-[4.25rem]" alt="product" />
       </div>

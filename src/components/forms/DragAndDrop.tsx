@@ -14,6 +14,7 @@ const DragAndDrop = ({
   color,
   small,
   className,
+  alt,
 }: DragAndDropProps) => {
   const override: CSSProperties = {
     borderColor: 'rgba(0, 0, 0, 0.6)',
@@ -71,15 +72,26 @@ const DragAndDrop = ({
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      'image/jpeg': ['.jpeg', '.png'],
-      'application/pdf': ['.pdf'],
-    },
+    accept: alt
+      ? {
+          'text/csv': ['.csv'],
+          'application/vnd.ms-excel': ['.xls'],
+          'application/xml': ['.xml'],
+        }
+      : {
+          'image/*': ['.jpeg', '.png'],
+          'application/pdf': ['.pdf'],
+        },
+    maxFiles: 1,
   })
 
   return (
     <>
-      {!small ? <label className="label text-black mb-2">{label}</label> : null}
+      {!small ? (
+        <div className="mb-2">
+          <label className="label">{label}</label>
+        </div>
+      ) : null}
       <div
         className={`flex flex-col items-center drag-drop p-[1.563rem] ${
           error ? 'error' : ''
@@ -127,7 +139,8 @@ const DragAndDrop = ({
               )}
             </p>
             <p className="leading-[0.875rem] text-[0.625rem] text-center text-black">
-              Supported file types: JPEG, PNG, PDF. Max file size: 2mb
+              Supported file types: {alt ? 'CSV, XLS, XML' : 'JPEG, PNG, PDF'}.
+              Max file size: 2mb
             </p>
           </>
         ) : null}

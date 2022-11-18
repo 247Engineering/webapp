@@ -101,7 +101,7 @@ const SignUp = () => {
             <ButtonText
               text="Log in here"
               onClick={() => {
-                navigate('/signin')
+                navigate(ROUTES.RETAILER.SIGNIN)
               }}
               className="font-[400]"
             />

@@ -1,4 +1,5 @@
 import Dashboard from '../pages/Distributor/Dashboard/Dashboard'
+import VerifyMail from '../pages/Distributor/Onboarding/VerifyMail';
 import SignIn from '../pages/Distributor/Onboarding/SignIn'
 import SignUp from '../pages/Distributor/Onboarding/SignUp'
 import ForgotPassword from '../pages/Distributor/Onboarding/ForgotPassword'
@@ -36,6 +37,10 @@ export const unAuthedDistributorRoutes = [
   {
     path: ROUTES.DISTRIBUTOR.FORGOT_PASSWORD,
     element: <ForgotPassword />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.VERIFY_MAIL,
+    element: <VerifyMail />,
   },
 ]
 

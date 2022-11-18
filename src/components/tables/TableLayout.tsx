@@ -1,8 +1,12 @@
 import React from 'react'
 
-const TableLayout = ({ children }: any) => {
+const TableLayout = ({ children, className }: any) => {
   return (
-    <div className="overflow-x-auto mr-[-1rem] text-black">
+    <div
+      className={`overflow-x-auto mr-[-1rem] text-black ${
+        className ? className : ''
+      }`}
+    >
       <table className="w-full table-fixed">{children}</table>
     </div>
   )

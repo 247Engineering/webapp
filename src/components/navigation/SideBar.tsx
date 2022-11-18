@@ -17,7 +17,7 @@ const SideBar = ({ show }: { show: boolean }) => {
   const { logout } = useAuth() as AuthContextType
   return (
     <aside
-      className={`absolute z-50 h-full w-full max-w-[16.875rem] bg-[#461A53] p-4 text-white font-[700] text-[0.875rem] leading-[1.25rem] ease-in-out transition-all duration-300 ${
+      className={`absolute top-0 bottom-0 z-50 min-h-screen w-full max-w-[16.875rem] bg-[#461A53] p-4 text-white font-[700] text-[0.875rem] leading-[1.25rem] ease-in-out transition-all duration-300 ${
         show ? 'translate-x-0' : 'translate-x-[-16.875rem]'
       }`}
     >
