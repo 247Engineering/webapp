@@ -24,6 +24,7 @@ const initialState: ProductState = {
   manufacturers: [],
   images: [],
   products: [],
+  viewedProduct: null,
   searchResult: [],
   loading: false,
   productStamp: null,
@@ -39,6 +40,28 @@ export const fetchProducts = createAsyncThunk(
     return await request({
       url: `/product/get-products/${id}`,
       method: 'get',
+    })
+  },
+)
+
+export const fetchAllProducts = createAsyncThunk(
+  'product/fetchAllProducts',
+  async () => {
+    return await request({
+      url: '/product/get-products',
+      method: 'get',
+      user: "retailer"
+    })
+  },
+)
+
+export const fetchSingleProduct = createAsyncThunk(
+  'product/fetchSingleProduct',
+  async (id: string) => {
+    return await request({
+      url: `/product/get-product/${id}`,
+      method: 'get',
+      user: "retailer"
     })
   },
 )
@@ -132,6 +155,9 @@ export const productSlice = createSlice({
     clearSearchResult: (state) => {
       state.searchResult = []
     },
+    clearViewedProduct: (state) => {
+      state.viewedProduct = null
+    },
   },
   extraReducers(builder) {
     builder
@@ -148,6 +174,12 @@ export const productSlice = createSlice({
             break
           case 'product/fetchProducts/fulfilled':
             state.products = action.payload.products
+            break
+          case 'product/fetchAllProducts/fulfilled':
+            state.products = action.payload.data
+            break
+          case 'product/fetchSingleProduct/fulfilled':
+            state.viewedProduct = action.payload.data
             break
           case 'product/generateSku/fulfilled':
             state.sku = action.payload.sku
@@ -171,6 +203,6 @@ export const productSlice = createSlice({
   },
 })
 
-export const { reset, clearSearchResult } = productSlice.actions
+export const { reset, clearSearchResult, clearViewedProduct } = productSlice.actions
 
 export default productSlice.reducer

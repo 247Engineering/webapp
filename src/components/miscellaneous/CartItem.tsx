@@ -10,6 +10,7 @@ const CartItem = ({
   minOrder,
   unit = 'carton',
   orderAmount,
+  id,
 }: ProductItemProps) => {
   return (
     <div className="py-4 pr-4 border border-solid border-grey-light-100 border-0 border-b flex mb-4 mr-[-1rem]">
@@ -21,7 +22,14 @@ const CartItem = ({
         <p>
           {orderAmount} {unit}
         </p>
-        <OrderCounter className="mt-3" minOrder={minOrder} />
+        <OrderCounter
+          className="mt-3"
+          minOrder={minOrder}
+          id={id}
+          name={name}
+          price={price}
+          image={image}
+        />
       </div>
       <div className="flex items-center justify-end grow font-[700] text-[0.875rem] leading-[1.25rem]">
         N {price.toLocaleString()}

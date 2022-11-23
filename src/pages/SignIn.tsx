@@ -2,18 +2,19 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
-import ButtonSubmit from '../../../../components/forms/ButtonSubmit'
-import ButtonText from '../../../../components/forms/ButtonText'
-import Input from '../../../../components/forms/Input'
-import LandingLayout from '../../../../components/layouts/LandingLayout'
+import ButtonSubmit from '../components/forms/ButtonSubmit'
+import ButtonText from '../components/forms/ButtonText'
+import Input from '../components/forms/Input'
+import LandingLayout from '../components/layouts/LandingLayout'
+import PhoneNumberInput from '../components/forms/PhoneNumberInput'
 
-import { useAuth } from '../../../../hooks/useAuth'
-import { signin } from '../../../../store/features/auth'
-import { AppDispatch, RootState } from '../../../../store'
-import { AuthContextType, AuthState } from '../../../../types'
-import * as ROUTES from '../../../../routes'
+import { useAuth } from '../hooks/useAuth'
+import { signin } from '../store/features/auth'
+import { AppDispatch, RootState } from '../store'
+import { AuthContextType, AuthState, SignInProps } from '../types'
+import * as ROUTES from '../routes'
 
-const SignIn = () => {
+const SignIn = ({ type, forgotPassword }: SignInProps) => {
   const navigate = useNavigate()
 
   const dispatch = useDispatch<AppDispatch>()
@@ -24,15 +25,25 @@ const SignIn = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [mobile, setMobile] = useState('')
+  const [callingCode, setCallingCode] = useState('+234')
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(signin({ email, password, type: 'warehouse' }))
+    dispatch(
+      signin({
+        ...(type === 'retailer'
+          ? { phone: (callingCode + mobile).replace('+', '') }
+          : { email }),
+        password,
+        type,
+      }),
+    )
   }
 
   useEffect(() => {
-    if (id) login({ id, type: 'warehouse' })
-  }, [id, login])
+    if (id) login({ id, type })
+  }, [id, login, type])
 
   return (
     <LandingLayout>
@@ -43,12 +54,21 @@ const SignIn = () => {
       <section className="mt-10">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <Input
-              label="Email address"
-              value={email}
-              onChange={setEmail}
-              type="email"
-            />
+            {type === 'retailer' ? (
+              <PhoneNumberInput
+                code={callingCode}
+                setCode={setCallingCode}
+                setMobile={setMobile}
+                mobile={mobile}
+              />
+            ) : (
+              <Input
+                label="Email address"
+                value={email}
+                onChange={setEmail}
+                type="email"
+              />
+            )}
           </div>
           <div className="mb-4">
             <Input
@@ -61,7 +81,7 @@ const SignIn = () => {
           <ButtonText
             text="Forgot Password?"
             onClick={() => {
-              navigate(ROUTES.DISTRIBUTOR.FORGOT_PASSWORD)
+              navigate(forgotPassword)
             }}
             className="mb-12"
           />
@@ -69,7 +89,7 @@ const SignIn = () => {
             text="Sign in"
             onClick={handleSubmit}
             className="mb-4"
-            disabled={loading}
+            disabled={loading || (!mobile && !email) || !password}
             loading={loading}
           />
           <p className="p text-center">

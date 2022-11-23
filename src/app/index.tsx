@@ -20,7 +20,7 @@ export default function App() {
     <Routes>
       <Route element={<UnauthedLayout />}>
         <Route path="/" element={<Current />} />
-        <Route path="/" element={<AccountSelect />} />
+        {/* <Route path="/" element={<AccountSelect />} /> */}
         <Route path={ROUTES.AUTH.ACCOUNT_SELECT} element={<AccountSelect />} />
         <Route path={ROUTES.AUTH.RESET_PASSWORD} element={<ResetPassword />} />
 

@@ -16,7 +16,6 @@ const RetailerCheckout = () => {
     <>
       <AppLayout
         cart
-        cartItems={255}
         hideLogo
         hideName
         secondaryNav="Order #FD12343544"

@@ -10,7 +10,7 @@ import cartIcon from '../../assets/images/cart.svg'
 
 import BackButton from '../forms/BackButton'
 
-import { AppLayoutProps, AuthState } from '../../types'
+import { AppLayoutProps, AuthState, RetailerState } from '../../types'
 import { RootState } from '../../store'
 
 const NavBar = ({
@@ -21,7 +21,6 @@ const NavBar = ({
   location,
   search,
   cart,
-  cartItems = 0,
   setShowSideBar,
   secondaryNav,
   secondaryNavBack,
@@ -29,6 +28,9 @@ const NavBar = ({
   const { firstName, lastName } = useSelector<RootState>(
     ({ auth }) => auth,
   ) as AuthState
+  const { cartItems } = useSelector<RootState>(
+    ({ retailer }) => retailer,
+  ) as RetailerState
 
   return (
     <section className="sticky top-0 left-0 right-0 bg-white z-40">
@@ -87,7 +89,7 @@ const NavBar = ({
             <div className="flex items-center justify-center rounded-full w-[2rem] h-[2rem] ml-2 mr-[0.75rem] bg-orange-light-100 relative">
               <img src={cartIcon} alt="cart" />
               <span className="absolute left-[23px] top-[-9px] text-white bg-orange font-[700] text-[0.625rem] leading-[0.875rem] rounded-[100px] px-1 py-[2px]">
-                {cartItems}
+                {cartItems.reduce((acc, curr) => acc + curr.quantity, 0)}
               </span>
             </div>
           ) : null}

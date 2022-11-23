@@ -1,6 +1,6 @@
 import Dashboard from '../pages/Distributor/Dashboard/Dashboard'
 import VerifyMail from '../pages/Distributor/Onboarding/VerifyMail';
-import SignIn from '../pages/Distributor/Onboarding/SignIn'
+import SignIn from '../pages/SignIn'
 import SignUp from '../pages/Distributor/Onboarding/SignUp'
 import ForgotPassword from '../pages/Distributor/Onboarding/ForgotPassword'
 import AccountSetup from '../pages/Distributor/Onboarding/AccountSetup'
@@ -11,7 +11,6 @@ import BusinessOwnerReview from '../pages/Distributor/BusinessOwnerReview'
 import WarehouseForm from '../pages/Distributor/Warehouse/WarehouseForm'
 import WarehouseLocations from '../pages/Distributor/Warehouse/WarehouseLocations'
 import WarehouseSignUp from '../pages/Distributor/Onboarding/Warehouse/SignUp'
-import WarehouseLogin from '../pages/Distributor/Onboarding/Warehouse/SignIn'
 import WarehouseProducts from '../pages/Distributor/Warehouse/WarehouseProducts'
 import AddWarehouseProduct from '../pages/Distributor/Warehouse/AddWarehouseProduct'
 
@@ -24,7 +23,7 @@ export const unAuthedDistributorRoutes = [
   },
   {
     path: ROUTES.DISTRIBUTOR.SIGNIN,
-    element: <SignIn />,
+    element: <SignIn type='distributor' forgotPassword={ROUTES.DISTRIBUTOR.FORGOT_PASSWORD} />,
   },
   {
     path: ROUTES.DISTRIBUTOR.WAREHOUSE_SIGNUP,
@@ -32,7 +31,7 @@ export const unAuthedDistributorRoutes = [
   },
   {
     path: ROUTES.DISTRIBUTOR.WAREHOUSE_LOGIN,
-    element: <WarehouseLogin />,
+    element: <SignIn type='warehouse' forgotPassword={ROUTES.DISTRIBUTOR.FORGOT_PASSWORD} />,
   },
   {
     path: ROUTES.DISTRIBUTOR.FORGOT_PASSWORD,

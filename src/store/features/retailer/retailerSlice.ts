@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-import { RetailerState } from '../../../types'
+import { CartItem, RetailerState } from '../../../types'
 import request from '../../../helpers/request'
 import { isRejectedAction, isPendingAction, isFulfilledAction } from '../utils'
 import { RootState } from '../..'
@@ -8,6 +8,7 @@ import { RootState } from '../..'
 const initialState: RetailerState = {
   retailerStamp: null,
   loading: false,
+  cartItems: [],
 }
 
 export const addBusinessInfo = createAsyncThunk(
@@ -46,6 +47,17 @@ export const retailerSlice = createSlice({
     clearRetailerStamp: (state) => {
       state.retailerStamp = null
     },
+    addToCart: (state, { payload }: { payload: CartItem }) => {
+      let itemInCart = state.cartItems.find((item) => item.id === payload.id)
+      state.cartItems = itemInCart
+        ? state.cartItems.map((item) =>
+            item.id === payload.id ? payload : item,
+          )
+        : [...state.cartItems, payload]
+    },
+    removeFromCart: (state, { payload }: { payload: string }) => {
+      state.cartItems = state.cartItems.filter((item) => item.id !== payload)
+    },
   },
   extraReducers(builder) {
     builder
@@ -67,6 +79,11 @@ export const retailerSlice = createSlice({
   },
 })
 
-export const { reset, clearRetailerStamp } = retailerSlice.actions
+export const {
+  reset,
+  clearRetailerStamp,
+  addToCart,
+  removeFromCart,
+} = retailerSlice.actions
 
 export default retailerSlice.reducer

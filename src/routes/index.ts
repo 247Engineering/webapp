@@ -27,7 +27,9 @@ export const RETAILER = {
   FORGOT_PASSWORD: '/retailer/forgot-password',
   VERIFY_OTP: '/retailer/verify-otp',
   BUSINESS_INFO_FORM: '/retailer/business-info/form',
-  DASHBOARD: '/retailer/shop',
+  DASHBOARD: '/retailer/store',
+  STORE_PRODUCT: '/retailer/store/:product',
+  STORE_PRODUCT_FOR: (product: string) => `/retailer/store/${product}`,
 }
 
 export const RIDER = {}
@@ -35,4 +37,5 @@ export const RIDER = {}
 export const AUTH = {
   ACCOUNT_SELECT: 'auth/account-select',
   RESET_PASSWORD: 'auth/reset-password',
+  SIGNIN: 'auth/signin',
 }

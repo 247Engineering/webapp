@@ -12,9 +12,7 @@ const UnauthedLayout = () => {
     return (
       <Navigate
         to={
-          ROUTES[user.type.toUpperCase() as 'RETAILER' | 'DISTRIBUTOR'][
-            user.type === 'retailer' ? 'BUSINESS_INFO_FORM' : 'DASHBOARD'
-          ]
+          ROUTES[user.type.toUpperCase() as 'RETAILER' | 'DISTRIBUTOR'].DASHBOARD
         }
         replace
       />

@@ -1,13 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import searchIcon from '../../../assets/images/input-search.svg'
-import indomie from '../../../assets/images/indomie.svg'
 
 import AppLayout from '../../../components/layouts/AppLayout'
 import ProductItem from '../../../components/miscellaneous/ProductItem'
 
+import { AppDispatch, RootState } from '../../../store'
+import { ProductState } from '../../../types'
+import { fetchAllProducts } from '../../../store/features/product'
+
 const RetailerShop = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { products } = useSelector<RootState>(
+    ({ product }) => product,
+  ) as ProductState
+
   const [search, setSearch] = useState('')
+
+  useEffect(() => {
+    dispatch(fetchAllProducts())
+  }, [dispatch])
 
   return (
     <>
@@ -26,25 +39,25 @@ const RetailerShop = () => {
           />
         </div>
         <section className="mr-[-1rem]">
-          <ProductItem
-            image={indomie}
-            name="Indomie Chicken Hungry Man Size (200g)"
-            minOrder={10}
-            price={5000}
-          />
-          <ProductItem
-            discount={10}
-            image={indomie}
-            name="Indomie Chicken Hungry Man Size (200g)"
-            minOrder={10}
-            price={5000}
-          />
-          <ProductItem
-            image={indomie}
-            name="Indomie Chicken Hungry Man Size (200g)"
-            minOrder={10}
-            price={5000}
-          />
+          {products.map((product) => (
+            <ProductItem
+              key={product._id}
+              id={product._id}
+              image={product.images[0]}
+              name={product.name}
+              minOrder={10}
+              price={product.price}
+              discount={
+                product.discount_price
+                  ? Math.round(
+                      ((product.price - product.discount_price) /
+                        product.price) *
+                        100,
+                    )
+                  : undefined
+              }
+            />
+          ))}
         </section>
       </AppLayout>
     </>

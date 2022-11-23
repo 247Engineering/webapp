@@ -23,6 +23,7 @@ const RetailerCart = () => {
             .fill(1)
             .map((_, i) => (
               <CartItem
+                id={""}
                 key={i}
                 image={indomie}
                 name="Indomie Chicken (40g) Carton..."

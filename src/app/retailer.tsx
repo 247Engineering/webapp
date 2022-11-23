@@ -1,9 +1,10 @@
-import SignIn from '../pages/Retailer/Onboarding/SignIn'
+import SignIn from '../pages/SignIn'
 import SignUp from '../pages/Retailer/Onboarding/SignUp'
 import ForgotPassword from '../pages/Retailer/Onboarding/ForgotPassword'
 import VerifyOtp from '../pages/Retailer/Onboarding/VerifyOtp'
 import BusinessInfoForm from '../pages/Retailer/BusinessInfoForm'
-import RetailerShop from '../pages/Retailer/Store/RetailerStore'
+import RetailerStore from '../pages/Retailer/Store/RetailerStore'
+import RetailerStoreItem from '../pages/Retailer/Store/RetailerStoreItem'
 
 import * as ROUTES from '../routes'
 
@@ -14,7 +15,12 @@ export const unAuthedRetailerRoutes = [
   },
   {
     path: ROUTES.RETAILER.SIGNIN,
-    element: <SignIn />,
+    element: (
+      <SignIn
+        type="retailer"
+        forgotPassword={ROUTES.RETAILER.FORGOT_PASSWORD}
+      />
+    ),
   },
   {
     path: ROUTES.RETAILER.FORGOT_PASSWORD,
@@ -33,6 +39,10 @@ export const authedRetailerRoutes = [
   },
   {
     path: ROUTES.RETAILER.DASHBOARD,
-    element: <RetailerShop />,
+    element: <RetailerStore />,
+  },
+  {
+    path: ROUTES.RETAILER.STORE_PRODUCT,
+    element: <RetailerStoreItem />,
   },
 ]

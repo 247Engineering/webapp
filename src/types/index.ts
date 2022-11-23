@@ -184,7 +184,6 @@ export interface AppLayoutProps {
   location?: string
   search?: boolean
   cart?: boolean
-  cartItems?: number
   hideName?: boolean
   children?: any
   onClose?: () => void
@@ -219,6 +218,7 @@ export interface ProductState {
   manufacturers: any[]
   images: string[]
   products: any[]
+  viewedProduct: any
   searchResult: any[]
   loading: boolean
   productStamp: number | null
@@ -255,6 +255,7 @@ export interface LocationInputProps {
 }
 
 export interface ProductItemProps {
+  id: string
   discount?: number
   image: string
   name: string
@@ -268,11 +269,24 @@ export interface OrderCounterProps {
   className?: string
   canReduce?: boolean
   minOrder?: number
+  id: string
+  price: number
+  name: string
+  image: string
 }
 
 export interface RetailerState {
   retailerStamp: number | null
   loading: boolean
+  cartItems: CartItem[]
+}
+
+export type CartItem = {
+  id: string
+  quantity: number
+  price: number
+  name: string
+  image: string
 }
 
 export type DeliveryOptions = 'priority' | 'standard' | 'schedule'
@@ -287,4 +301,9 @@ export interface PaymentOptionProps {
   checked: boolean
   onChange: (value: any) => void
   option: PaymentOptions
+}
+
+export interface SignInProps {
+  type: UserType
+  forgotPassword: string
 }

@@ -33,6 +33,8 @@ export const AuthProvider = ({ children }: any) => {
           break
         case 'warehouse':
           navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS_FOR(data.id))
+        // case 'retailer':
+        //   navigate()
       }
     },
     [setUser, navigate, step],
