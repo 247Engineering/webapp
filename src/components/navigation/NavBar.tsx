@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import hamburger from '../../assets/images/hamburger.svg'
 import close from '../../assets/images/close.svg'
@@ -12,6 +13,7 @@ import BackButton from '../forms/BackButton'
 
 import { AppLayoutProps, AuthState, RetailerState } from '../../types'
 import { RootState } from '../../store'
+import * as ROUTES from '../../routes'
 
 const NavBar = ({
   alternate,
@@ -25,6 +27,8 @@ const NavBar = ({
   secondaryNav,
   secondaryNavBack,
 }: AppLayoutProps) => {
+  const navigate = useNavigate()
+
   const { firstName, lastName } = useSelector<RootState>(
     ({ auth }) => auth,
   ) as AuthState
@@ -86,7 +90,10 @@ const NavBar = ({
             />
           ) : null}
           {cart ? (
-            <div className="flex items-center justify-center rounded-full w-[2rem] h-[2rem] ml-2 mr-[0.75rem] bg-orange-light-100 relative">
+            <div
+              className="flex items-center justify-center rounded-full w-[2rem] h-[2rem] ml-2 mr-[0.75rem] bg-orange-light-100 relative"
+              onClick={() => navigate(ROUTES.RETAILER.CART)}
+            >
               <img src={cartIcon} alt="cart" />
               <span className="absolute left-[23px] top-[-9px] text-white bg-orange font-[700] text-[0.625rem] leading-[0.875rem] rounded-[100px] px-1 py-[2px]">
                 {cartItems.reduce((acc, curr) => acc + curr.quantity, 0)}

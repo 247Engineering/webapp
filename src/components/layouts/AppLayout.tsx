@@ -9,13 +9,14 @@ const AppLayout = ({ children, ...props }: AppLayoutProps) => {
   const [showSidebar, setShowSidebar] = useState(false)
 
   return (
-    <div className="h-full text-black relative flex flex-col">
+    <div
+      className={`h-full text-black relative flex flex-col ${
+        showSidebar ? 'max-h-[100vh] overflow-hidden' : ''
+      }`}
+    >
       <SideBar show={showSidebar} />
       <NavBar {...props} setShowSideBar={setShowSidebar} />
-      <main
-        className="pt-8 pb-12 px-4"
-        onClick={() => setShowSidebar(false)}
-      >
+      <main className="pt-8 pb-12 px-4" onClick={() => setShowSidebar(false)}>
         {children}
       </main>
     </div>

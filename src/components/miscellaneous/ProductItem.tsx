@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 import defaultImage from '../../assets/images/image.svg'
 
 import Status from './Status'
 import OrderCounter from './OrderCounter'
 
-import { ProductItemProps } from '../../types'
+import { ProductItemProps, RetailerState } from '../../types'
 import * as ROUTES from '../../routes'
+import { RootState } from '../../store'
 
 const ProductItem = ({
   discount,
@@ -19,6 +21,14 @@ const ProductItem = ({
   id,
 }: ProductItemProps) => {
   const navigate = useNavigate()
+
+  const { cartItems } = useSelector<RootState>(
+    ({ retailer }) => retailer,
+  ) as RetailerState
+
+  const itemInCart = cartItems.find((item) => item.id === id)
+
+  const [quantity, setQuantity] = useState(itemInCart?.quantity || 0)
 
   return (
     <div
@@ -60,6 +70,8 @@ const ProductItem = ({
           name={name}
           price={price}
           image={image}
+          quantity={quantity}
+          setQuantity={setQuantity}
         />
       </div>
     </div>

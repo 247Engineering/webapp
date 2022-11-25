@@ -1,4 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { format } from 'date-fns'
 
 import search from '../../../assets/images/search.svg'
 
@@ -6,7 +9,23 @@ import AppLayout from '../../../components/layouts/AppLayout'
 import SortSelect from '../../../components/forms/SortSelect'
 import TableLayout from '../../../components/tables/TableLayout'
 
+import { RootState, AppDispatch } from '../../../store'
+import * as ROUTES from '../../../routes'
+import { RetailerState } from '../../../types'
+import { fetchOrders } from '../../../store/features/retailer'
+
 const RetailerOrders = () => {
+  const navigate = useNavigate()
+
+  const dispatch = useDispatch<AppDispatch>()
+  const { orders } = useSelector<RootState>(
+    ({ retailer }) => retailer,
+  ) as RetailerState
+
+  useEffect(() => {
+    dispatch(fetchOrders())
+  }, [dispatch])
+
   const [sort, setSort] = useState('')
   return (
     <>
@@ -36,7 +55,7 @@ const RetailerOrders = () => {
             </button>
           </div>
           <h4 className="mb-2 font-[700] text-[1rem] leading-[1.5rem]">
-            Ongoing (3)
+            Ongoing ({orders.length})
           </h4>
           <TableLayout>
             <thead>
@@ -44,66 +63,36 @@ const RetailerOrders = () => {
                 <th className="w-[9.5rem]">Order ID</th>
                 <th className="w-[9.5rem]">Date</th>
                 <th className="w-[9.5rem]">Customer Address</th>
-                <th className="w-[9.5rem]">Customer Address</th>
-                <th className="w-[9.5rem]">Customer Address</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="w-[9.5rem] p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple">
-                  FD089345
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  10/10/2022 13:00PM
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Ebeano Supermarket Chevron
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Ebeano Supermarket Chevron
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Ebeano Supermarket Chevron
-                </td>
-              </tr>
-              <tr>
-                <td className="w-[9.5rem] p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple">
-                  FD089345
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  10/10/2022 13:00PM
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Spar Lekki
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Spar Lekki
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Spar Lekki
-                </td>
-              </tr>
-              <tr>
-                <td className="w-[9.5rem] p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple">
-                  FD089345
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  10/10/2022 13:00PM
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Ebeano Supermarket Chevron
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Ebeano Supermarket Chevron
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Ebeano Supermarket Chevron
-                </td>
-              </tr>
+              {orders.map((order) => (
+                <tr key={order.order_id}>
+                  <td
+                    className="w-[9.5rem] p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple uppercase"
+                    onClick={() =>
+                      navigate(ROUTES.RETAILER.ORDER_STATUS_FOR(order.order_id))
+                    }
+                  >
+                    {order.order_id.replace('ORD_', '')}
+                  </td>
+                  <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
+                    {format(
+                      order.date_created
+                        ? new Date(order.date_created)
+                        : new Date(),
+                      'dd/M/yyy h:ma',
+                    )}
+                  </td>
+                  <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
+                    {order.address || 'Ebeano Supermarket Chevron'}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </TableLayout>
           <h4 className="mt-8 mb-2 font-[700] text-[1rem] leading-[1.5rem]">
-            Completed (3)
+            Completed (1)
           </h4>
           <TableLayout className="mb-8">
             <thead>
@@ -111,8 +100,6 @@ const RetailerOrders = () => {
                 <th className="w-[9.5rem]">Order ID</th>
                 <th className="w-[9.5rem]">Date</th>
                 <th className="w-[9.5rem]">Customer Address</th>
-                <th className="w-[9.5rem]">Customer Address</th>
-                <th className="w-[9.5rem]">Customer Address</th>
               </tr>
             </thead>
             <tbody>
@@ -122,46 +109,6 @@ const RetailerOrders = () => {
                 </td>
                 <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
                   10/10/2022 13:00PM
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Ebeano Supermarket Chevron
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Ebeano Supermarket Chevron
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Ebeano Supermarket Chevron
-                </td>
-              </tr>
-              <tr>
-                <td className="w-[9.5rem] p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple">
-                  FD089345
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  10/10/2022 13:00PM
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Spar Lekki
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Spar Lekki
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Spar Lekki
-                </td>
-              </tr>
-              <tr>
-                <td className="w-[9.5rem] p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple">
-                  FD089345
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  10/10/2022 13:00PM
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Ebeano Supermarket Chevron
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Ebeano Supermarket Chevron
                 </td>
                 <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
                   Ebeano Supermarket Chevron

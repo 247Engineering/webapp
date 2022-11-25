@@ -1,9 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import priority from '../../../assets/images/priority.svg'
+import priorityChecked from '../../../assets/images/priority-checked.svg'
+import standard from '../../../assets/images/standard.svg'
 import standardChecked from '../../../assets/images/standard-checked.svg'
 import schedule from '../../../assets/images/schedule.svg'
-import add from '../../../assets/images/add-payment.svg'
+import scheduleChecked from '../../../assets/images/schedule-checked.svg'
 
 import AppLayout from '../../../components/layouts/AppLayout'
 import ButtonSubmit from '../../../components/forms/ButtonSubmit'
@@ -11,27 +15,54 @@ import LocationInput from '../../../components/forms/LocationInput'
 import Input from '../../../components/forms/Input'
 import OnboardingRadio from '../../../components/forms/OnboardingRadio'
 import Map from '../../../components/miscellaneous/Map'
-
-import { Address, DeliveryOptions, PaymentOptions } from '../../../types'
 import OrderSummary from '../../../components/miscellaneous/OrderSummary'
-import PaymentOptionItem from '../../../components/miscellaneous/PaymentOption'
 
-const num = 2000000
+import { Address, DeliveryOptions, RetailerState } from '../../../types'
+import { AppDispatch, RootState } from '../../../store'
+import { placeOrder } from '../../../store/features/retailer'
+import * as ROUTES from '../../../routes'
+
+const deliveryOptionMap = {
+  priority: 1,
+  standard: 2,
+  schedule: 3,
+}
 
 const RetailerCheckout = () => {
+  const navigate = useNavigate()
+
+  const dispatch = useDispatch<AppDispatch>()
+  const { cartItems, loading, orderId } = useSelector<RootState>(
+    ({ retailer }) => retailer,
+  ) as RetailerState
+
   const [location, setLocation] = useState<Address | null>(null)
   const [locationDropdown, setLocationDropdown] = useState(false)
   const [instructions, setInstructions] = useState('')
   const [deliveryOption, setDeliveryOption] = useState<DeliveryOptions>(
     'standard',
   )
-  const [paymentOption, setPaymentOption] = useState<PaymentOptions>('cash')
   const [type, setType] = useState('delivery')
 
   const handleChange = (value: DeliveryOptions) => {
     setDeliveryOption(value)
-    console.log({ location })
   }
+
+  const handleSubmit = () => {
+    dispatch(
+      placeOrder({
+        location: location as Address,
+        delivery_instructions: instructions,
+        ...(type === 'delivery'
+          ? { delivery_options: deliveryOptionMap[deliveryOption] }
+          : { pickup_options: deliveryOptionMap[deliveryOption] }),
+      }),
+    )
+  }
+
+  useEffect(() => {
+    if (orderId) navigate(ROUTES.RETAILER.PAYMENT_FOR(orderId))
+  }, [orderId, navigate])
 
   return (
     <div onClick={() => setLocationDropdown(false)} className="h-full">
@@ -56,7 +87,11 @@ const RetailerCheckout = () => {
               className={`flex items-center justify-center text-black-100 rounded-[8px] p-[0.625rem] w-[9.75rem] ${
                 type === 'pickup' ? 'text-orange bg-orange-light-100' : ''
               }`}
-              onClick={() => setType('pickup')}
+              onClick={() => {
+                if (type === 'delivery' && deliveryOption === 'priority')
+                  setDeliveryOption('standard')
+                setType('pickup')
+              }}
             >
               Pick-up
             </button>
@@ -91,7 +126,7 @@ const RetailerCheckout = () => {
                 name="delivery"
                 value="priority"
                 img={priority}
-                imgChecked={priority}
+                imgChecked={priorityChecked}
                 textPrimary="Priority - N5,000"
                 textSecondary="Same day delivery - Directly to you"
                 checked={deliveryOption === 'priority'}
@@ -102,7 +137,7 @@ const RetailerCheckout = () => {
                 id="standard"
                 name="delivery"
                 value="standard"
-                img={standardChecked}
+                img={standard}
                 imgChecked={standardChecked}
                 textPrimary="Standard"
                 textSecondary="24-48 hour delivery"
@@ -115,7 +150,7 @@ const RetailerCheckout = () => {
                 name="delivery"
                 value="schedule"
                 img={schedule}
-                imgChecked={schedule}
+                imgChecked={scheduleChecked}
                 textPrimary="Schedule"
                 textSecondary="Select a time"
                 checked={deliveryOption === 'schedule'}
@@ -170,55 +205,25 @@ const RetailerCheckout = () => {
               />
             </>
           )}
-          <OrderSummary addItems />
-          <h4 className="font-[700] text-[1rem] leading-[1.5rem] mb-6">
-            Payment options
-          </h4>
-          <PaymentOptionItem
-            id="mastercard"
-            name="payment"
-            value="mastercard"
-            text="...6234"
-            checked={paymentOption === 'mastercard'}
-            onChange={(value) => setPaymentOption(value)}
-            option="mastercard"
-          />
-          <PaymentOptionItem
-            id="visa"
-            name="payment"
-            value="visa"
-            text="...6234"
-            checked={paymentOption === 'visa'}
-            onChange={(value) => setPaymentOption(value)}
-            option="visa"
-          />
-          <PaymentOptionItem
-            id="cash"
-            name="payment"
-            value="cash"
-            text="Cash on Delivery"
-            checked={paymentOption === 'cash'}
-            onChange={(value) => setPaymentOption(value)}
-            option="cash"
-          />
-          <div className="flex items-center py-4 px-3 text-[0.875rem] leading-[1.25rem] border border-solid border-grey-light-100 border-0 border-b mb-[14.375rem]">
-            <img src={add} alt="add payment method" className="mr-2" />
-            <span>Add payment method</span>
-          </div>
+          <OrderSummary cartItems={cartItems} addItems className="mb-28" />
           <div className="p-4 fixed bottom-0 left-0 right-0 bg-white shadow-sm-alt">
             <div className="mb-6 flex items-center justify-between">
               <span className="text-[1rem] leading-[1.5rem]">Total</span>
               <span className="font-[700] text-[1.25rem] leading-[1.75rem]">
                 N{' '}
-                {num.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
+                {cartItems
+                  .reduce((acc, curr) => acc + curr.quantity * curr.price, 0)
+                  .toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
               </span>
             </div>
             <ButtonSubmit
+              disabled={!location || loading}
+              loading={loading}
               text="Place order"
-              onClick={() => {}}
+              onClick={handleSubmit}
               className="text-white bg-orange"
             />
           </div>

@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 import image from '../../../assets/images/image.svg'
+import slideLeft from '../../../assets/images/slide-left.svg'
+import slideRight from '../../../assets/images/slide-right.svg'
 
 import AppLayout from '../../../components/layouts/AppLayout'
 import BackButton from '../../../components/forms/BackButton'
@@ -11,19 +13,28 @@ import OrderCounter from '../../../components/miscellaneous/OrderCounter'
 import ButtonSubmit from '../../../components/forms/ButtonSubmit'
 
 import { AppDispatch, RootState } from '../../../store'
-import { ProductState } from '../../../types'
+import { ProductState, RetailerState } from '../../../types'
 import {
   clearViewedProduct,
   fetchSingleProduct,
 } from '../../../store/features/product'
+import { addToCart } from '../../../store/features/retailer'
 
 const RetailerShopItem = () => {
+  const { product } = useParams()
+
   const dispatch = useDispatch<AppDispatch>()
   const { viewedProduct } = useSelector<RootState>(
     ({ product }) => product,
   ) as ProductState
+  const { cartItems, loading } = useSelector<RootState>(
+    ({ retailer }) => retailer,
+  ) as RetailerState
 
-  const { product } = useParams()
+  const itemInCart = cartItems.find((item) => item.id === product)
+
+  const [imageIndex, setImageIndex] = useState(0)
+  const [quantity, setQuantity] = useState(itemInCart?.quantity || 0)
 
   useEffect(() => {
     dispatch(fetchSingleProduct(product as string))
@@ -37,11 +48,35 @@ const RetailerShopItem = () => {
       <AppLayout cart hideLogo hideName>
         <BackButton text="Back" className="ml-[-1rem]" />
         <section className="mt-8">
-          <div className="h-[15.5rem] py-4 px-6 mb-7">
+          <div className="h-[15.5rem] mb-7 relative">
             <img
               className="h-full w-full"
-              src={viewedProduct?.images[0] || image}
+              src={viewedProduct?.images[imageIndex] || image}
               alt="product"
+            />
+            <img
+              className="absolute top-[45%] left-[1rem]"
+              src={slideLeft}
+              alt="slide left"
+              onClick={() =>
+                setImageIndex(
+                  imageIndex === 0
+                    ? (viewedProduct?.images.length || 1) - 1
+                    : imageIndex - 1,
+                )
+              }
+            />
+            <img
+              className="absolute top-[45%] right-[1rem]"
+              src={slideRight}
+              alt="slide right"
+              onClick={() =>
+                setImageIndex(
+                  imageIndex === viewedProduct?.images.length - 1
+                    ? 0
+                    : imageIndex + 1,
+                )
+              }
             />
           </div>
           <div className="mb-2">
@@ -50,7 +85,7 @@ const RetailerShopItem = () => {
               text={`Save 30%`}
             />
           </div>
-          <p className="font-[700] text-[1.25rem] leading-[1.75rem] mb-2">
+          <p className="font-[700] text-[1.25rem] leading-[1.75rem] mb-2 capitalize">
             {viewedProduct?.name}
           </p>
           <p className="flex items-center text-[1.25rem] leading-[1.75rem] mb-1">
@@ -72,6 +107,8 @@ const RetailerShopItem = () => {
             name={viewedProduct?.name}
             price={viewedProduct?.price}
             image={viewedProduct?.images[0]}
+            quantity={quantity}
+            setQuantity={setQuantity}
           />
           <span className="font-[700] text-[0.75rem] leading-[1rem]">
             Description
@@ -81,8 +118,24 @@ const RetailerShopItem = () => {
           </p>
           <div className="p-4 fixed bottom-0 left-0 right-0 bg-white shadow-sm-alt">
             <ButtonSubmit
+              disabled={loading}
+              loading={loading}
               text="Add to cart"
-              onClick={() => {}}
+              onClick={() =>
+                dispatch(
+                  addToCart({
+                    cartItem: {
+                      id: product as string,
+                      quantity: quantity + 10,
+                      price: viewedProduct?.price,
+                      name: viewedProduct?.name,
+                      image: viewedProduct?.images[0],
+                    },
+                    onSuccess: () =>
+                      setQuantity((quantity: number) => quantity + 10),
+                  }),
+                )
+              }
               className="text-white bg-orange"
             />
           </div>

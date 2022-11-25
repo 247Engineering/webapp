@@ -39,7 +39,13 @@ const onResponseError = async (
         const {
           data: { tokens },
         } = await axios({
-          url: `${process.env.REACT_APP_BASE_URL}/auth/refresh-tokens`,
+          url: `${
+            error.config?.url?.includes(
+              process.env.REACT_APP_BASE_URL_RETAILER as string,
+            )
+              ? process.env.REACT_APP_BASE_URL_RETAILER
+              : process.env.REACT_APP_BASE_URL
+          }/auth/refresh-tokens`,
           method: 'put',
           headers: {
             Authorization: `Bearer ${storedTokens?.refresh_token}`,
@@ -78,7 +84,14 @@ const api = setupInterceptorsTo(
   }),
 )
 
-const request = async ({ url, method, body, type, user }: RequestArgs) => {
+const request = async ({
+  url,
+  method,
+  body,
+  type,
+  user,
+  onSuccess,
+}: RequestArgs) => {
   try {
     const { data } = await api({
       url: `${
@@ -94,6 +107,8 @@ const request = async ({ url, method, body, type, user }: RequestArgs) => {
         },
       }),
     })
+
+    if (onSuccess) onSuccess()
 
     return data
   } catch (err: any) {

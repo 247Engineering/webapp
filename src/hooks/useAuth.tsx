@@ -1,11 +1,12 @@
 import { createContext, useCallback, useContext, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import { useLocalStorage } from './useLocalStorage'
 import { AuthContextType, UserContext } from '../types'
-import { RootState } from '../store'
+import { RootState, AppDispatch } from '../store'
 import * as ROUTES from '../routes'
+import { fetchCart } from '../store/features/retailer'
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
@@ -15,9 +16,15 @@ const distributorStep = {
   3: ROUTES.DISTRIBUTOR.DASHBOARD,
 }
 
+const retailerStep = {
+  1: ROUTES.RETAILER.BUSINESS_INFO_FORM,
+  2: ROUTES.RETAILER.DASHBOARD,
+}
+
 export const AuthProvider = ({ children }: any) => {
   const navigate = useNavigate()
 
+  const dispatch = useDispatch<AppDispatch>()
   const step = useSelector<RootState>(
     ({ auth }) => auth.stepsCompleted,
   ) as number
@@ -33,11 +40,14 @@ export const AuthProvider = ({ children }: any) => {
           break
         case 'warehouse':
           navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS_FOR(data.id))
-        // case 'retailer':
-        //   navigate()
+          break
+        case 'retailer':
+          dispatch(fetchCart())
+          navigate(retailerStep[step as 1 | 2], { replace: true })
+          break
       }
     },
-    [setUser, navigate, step],
+    [setUser, step, dispatch, navigate],
   )
 
   const logout = useCallback(() => {

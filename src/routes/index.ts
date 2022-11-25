@@ -30,6 +30,15 @@ export const RETAILER = {
   DASHBOARD: '/retailer/store',
   STORE_PRODUCT: '/retailer/store/:product',
   STORE_PRODUCT_FOR: (product: string) => `/retailer/store/${product}`,
+  CART: '/retailer/cart',
+  CHECKOUT: '/retailer/checkout',
+  ORDERS: '/retailer/orders',
+  PAYMENT: '/retailer/orders/:order/payment',
+  PAYMENT_FOR: (order: string) => `/retailer/orders/${order}/payment`,
+  ORDER_NOTIFICATION: '/retailer/orders/:order/notification',
+  ORDER_NOTIFICATION_FOR: (order: string) => `/retailer/orders/${order}/notification`,
+  ORDER_STATUS: '/retailer/orders/:order/status',
+  ORDER_STATUS_FOR: (order: string) => `/retailer/orders/${order}/status`,
 }
 
 export const RIDER = {}

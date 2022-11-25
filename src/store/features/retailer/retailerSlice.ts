@@ -9,6 +9,10 @@ const initialState: RetailerState = {
   retailerStamp: null,
   loading: false,
   cartItems: [],
+  cartId: null,
+  orderId: null,
+  orders: [],
+  order: null,
 }
 
 export const addBusinessInfo = createAsyncThunk(
@@ -39,6 +43,129 @@ export const addBusinessInfo = createAsyncThunk(
   },
 )
 
+export const fetchCart = createAsyncThunk('retailer/fetchCart', async () => {
+  return await request({
+    url: '/commerce/get-cart',
+    method: 'get',
+    user: 'retailer',
+  })
+})
+
+export const addToCart = createAsyncThunk(
+  'retailer/addToCart',
+  async (
+    { cartItem, onSuccess }: { cartItem: CartItem; onSuccess: () => void },
+    { getState },
+  ) => {
+    const {
+      retailer: { cartItems },
+    } = getState() as RootState
+
+    let itemInCart = cartItems.find((item) => item.id === cartItem.id)
+
+    const line_items = itemInCart
+      ? cartItems.map((item) =>
+          item.id === cartItem.id
+            ? { quantity: cartItem.quantity, product_id: cartItem.id }
+            : { quantity: item.quantity, product_id: item.id },
+        )
+      : [
+          ...cartItems.map((item) => ({
+            quantity: item.quantity,
+            product_id: item.id,
+          })),
+          { quantity: cartItem.quantity, product_id: cartItem.id },
+        ]
+
+    return await request({
+      url: '/commerce/add-cart',
+      method: 'post',
+      body: { line_items },
+      user: 'retailer',
+      onSuccess,
+    })
+  },
+)
+
+export const removeFromCart = createAsyncThunk(
+  'retailer/removeFromCart',
+  async (
+    {
+      productId: product_id,
+      onSuccess,
+    }: { productId: string; onSuccess: () => void },
+    { getState },
+  ) => {
+    const {
+      retailer: { cartId: cart_id },
+    } = getState() as RootState
+
+    return await request({
+      url: '/commerce/remove-cart-item',
+      method: 'put',
+      body: {
+        cart_id,
+        product_id,
+      },
+      user: 'retailer',
+      onSuccess,
+    })
+  },
+)
+
+export const placeOrder = createAsyncThunk(
+  'retailer/placeOrder',
+  async (
+    order: {
+      location: { latitude: number; longitude: number }
+      delivery_instructions?: string
+      delivery_options?: number
+      pickup_options?: number
+      pickup_time?: string
+      delivery_time?: string
+    },
+    { getState },
+  ) => {
+    const {
+      auth: { id: user_id },
+      retailer: { cartId: cart_id },
+    } = getState() as RootState
+
+    return await request({
+      url: '/commerce/place-order',
+      method: 'post',
+      body: {
+        ...order,
+        user_id,
+        cart_id,
+      },
+      user: 'retailer',
+    })
+  },
+)
+
+export const fetchOrders = createAsyncThunk(
+  'retailer/fetchOrders',
+  async () => {
+    return await request({
+      url: '/commerce/get-orders',
+      method: 'get',
+      user: 'retailer',
+    })
+  },
+)
+
+export const fetchSingleOrder = createAsyncThunk(
+  'retailer/fetchSingleOrder',
+  async (id: string) => {
+    return await request({
+      url: `/commerce/order/${id}`,
+      method: 'get',
+      user: 'retailer',
+    })
+  },
+)
+
 export const retailerSlice = createSlice({
   name: 'retailer',
   initialState,
@@ -47,43 +174,81 @@ export const retailerSlice = createSlice({
     clearRetailerStamp: (state) => {
       state.retailerStamp = null
     },
-    addToCart: (state, { payload }: { payload: CartItem }) => {
-      let itemInCart = state.cartItems.find((item) => item.id === payload.id)
-      state.cartItems = itemInCart
-        ? state.cartItems.map((item) =>
-            item.id === payload.id ? payload : item,
-          )
-        : [...state.cartItems, payload]
-    },
-    removeFromCart: (state, { payload }: { payload: string }) => {
-      state.cartItems = state.cartItems.filter((item) => item.id !== payload)
+    clearCart: (state) => {
+      state.cartItems = []
     },
   },
   extraReducers(builder) {
     builder
-      .addMatcher(isPendingAction('retailer'), (state, action) => {
-        state.loading = true
-      })
+      .addMatcher(
+        isPendingAction('retailer'),
+        (state, { type, meta: { arg } }) => {
+          switch (type) {
+            case 'retailer/addToCart/pending':
+              state.retailerStamp = arg.cartItem.id
+              break
+            case 'retailer/removeFromCart/pending':
+              state.retailerStamp = arg.productId
+              break
+          }
+
+          state.loading = true
+        },
+      )
       .addMatcher(isRejectedAction('retailer'), (state, action) => {
         state.loading = false
       })
-      .addMatcher(isFulfilledAction('retailer'), (state, action) => {
-        switch (action.type) {
-          case 'retailer/addBusinessInfo/fulfilled':
-            state.retailerStamp = new Date().getTime()
-            break
-        }
+      .addMatcher(
+        isFulfilledAction('retailer'),
+        (state, { type, payload, meta: { arg } }) => {
+          switch (type) {
+            case 'retailer/addBusinessInfo/fulfilled':
+              state.retailerStamp = new Date().getTime()
+              break
+            case 'retailer/addToCart/fulfilled':
+              let itemInCart = state.cartItems.find(
+                (item) => item.id === arg.cartItem.id,
+              )
+              state.cartItems = itemInCart
+                ? state.cartItems.map((item) =>
+                    item.id === arg.cartItem.id ? arg.cartItem : item,
+                  )
+                : [...state.cartItems, arg.cartItem]
+              state.cartId = payload.cart_id
+              break
+            case 'retailer/removeFromCart/fulfilled':
+              state.cartItems = state.cartItems.filter(
+                (item) => item.id !== arg.productId,
+              )
+              break
+            case 'retailer/fetchCart/fulfilled':
+              state.cartItems =
+                payload.cart.line_items?.map((item: any) => ({
+                  id: item.product_id,
+                  quantity: item.quantity,
+                  price: item.price,
+                  name: item.name,
+                  image: item.images[0],
+                })) || []
+              state.cartId = payload.cart._id || null
+              break
+            case 'retailer/PlaceOrder/fulfilled':
+              state.orderId = payload.order_id
+              break
+            case 'retailer/fetchOrders/fulfilled':
+              state.orders = payload.orders
+              break
+            case 'retailer/fetchSingleOrder/fulfilled':
+              state.order = payload.order
+              break
+          }
 
-        state.loading = false
-      })
+          state.loading = false
+        },
+      )
   },
 })
 
-export const {
-  reset,
-  clearRetailerStamp,
-  addToCart,
-  removeFromCart,
-} = retailerSlice.actions
+export const { reset, clearRetailerStamp, clearCart } = retailerSlice.actions
 
 export default retailerSlice.reducer

@@ -137,6 +137,11 @@ export interface MapProps {
   }
   lat: number
   lng: number
+  markers?: {
+    lat: number
+    lng: number
+    img?: string
+  }[]
 }
 
 export interface DatePickerProps {
@@ -153,6 +158,7 @@ export interface RequestArgs {
   body?: any
   type?: 'form-data' | 'json'
   user?: 'retailer' | 'distributor'
+  onSuccess?: () => void
 }
 
 export interface Owner {
@@ -273,12 +279,18 @@ export interface OrderCounterProps {
   price: number
   name: string
   image: string
+  quantity: number
+  setQuantity: (value: any) => void
 }
 
 export interface RetailerState {
-  retailerStamp: number | null
+  retailerStamp: string | number | null
   loading: boolean
   cartItems: CartItem[]
+  cartId: string | null
+  orderId: string | null
+  orders: any[]
+  order: any
 }
 
 export type CartItem = {
@@ -291,7 +303,7 @@ export type CartItem = {
 
 export type DeliveryOptions = 'priority' | 'standard' | 'schedule'
 
-export type PaymentOptions = 'mastercard' | 'visa' | 'cash'
+export type PaymentOptions = string //'mastercard-****' | 'visa-****' | 'cash'
 
 export interface PaymentOptionProps {
   id: string
@@ -301,9 +313,12 @@ export interface PaymentOptionProps {
   checked: boolean
   onChange: (value: any) => void
   option: PaymentOptions
+  className?: string
 }
 
 export interface SignInProps {
   type: UserType
   forgotPassword: string
 }
+
+export type OrderStatus = 'PENDING'

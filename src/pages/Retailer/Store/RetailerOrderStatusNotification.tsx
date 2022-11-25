@@ -1,19 +1,23 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import AppLayout from '../../../components/layouts/AppLayout'
 
 import orderPlaced from '../../../assets/images/order-placed.svg'
 
-const RetailerOrderSuccess = () => {
+import * as ROUTES from '../../../routes'
+
+const RetailerOrderStatusNotification = () => {
   const navigate = useNavigate()
+  const { order } = useParams()
 
   return (
     <>
       <AppLayout
         alternate
         onClose={() => {
-          navigate(-1)
+          navigate(ROUTES.RETAILER.ORDERS)
         }}
       >
         <div className="flex flex-col items-center text-center">
@@ -29,7 +33,7 @@ const RetailerOrderSuccess = () => {
             Your order has been placed
           </p>
           <Link
-            to=""
+            to={ROUTES.RETAILER.ORDER_STATUS_FOR(order as string)}
             className="font-[700] text-[0.75rem] leading-[1rem] text-purple"
           >
             View order status
@@ -40,4 +44,4 @@ const RetailerOrderSuccess = () => {
   )
 }
 
-export default RetailerOrderSuccess
+export default RetailerOrderStatusNotification

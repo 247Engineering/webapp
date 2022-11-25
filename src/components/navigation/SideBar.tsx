@@ -14,7 +14,10 @@ import { AuthContextType } from '../../types'
 import * as ROUTES from '../../routes'
 
 const SideBar = ({ show }: { show: boolean }) => {
-  const { logout } = useAuth() as AuthContextType
+  const {
+    logout,
+    user: { type },
+  } = useAuth() as AuthContextType
   return (
     <aside
       className={`absolute top-0 bottom-0 z-50 min-h-screen w-full max-w-[16.875rem] bg-[#461A53] p-4 text-white font-[700] text-[0.875rem] leading-[1.25rem] ease-in-out transition-all duration-300 ${
@@ -32,7 +35,11 @@ const SideBar = ({ show }: { show: boolean }) => {
         <p>Dashboard</p>
       </Link>
       <Link
-        to={ROUTES.DISTRIBUTOR.DASHBOARD}
+        to={
+          type === 'distributor'
+            ? ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS
+            : ROUTES.RETAILER.DASHBOARD
+        }
         className="px-2 py-3.5 flex flex-items"
       >
         <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
@@ -40,10 +47,7 @@ const SideBar = ({ show }: { show: boolean }) => {
         </div>
         <p>Products</p>
       </Link>
-      <Link
-        to={ROUTES.DISTRIBUTOR.DASHBOARD}
-        className="px-2 py-3.5 flex flex-items"
-      >
+      <Link to={ROUTES.RETAILER.ORDERS} className="px-2 py-3.5 flex flex-items">
         <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
           <img src={orders} alt="orders" />
         </div>
