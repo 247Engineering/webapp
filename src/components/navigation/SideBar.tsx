@@ -10,7 +10,7 @@ import operations from '../../assets/images/operations-icon.svg'
 import settings from '../../assets/images/settings-icon.svg'
 
 import { useAuth } from '../../hooks/useAuth'
-import { AuthContextType } from '../../types'
+import { AuthContextType, UserType } from '../../types'
 import * as ROUTES from '../../routes'
 
 const SideBar = ({ show }: { show: boolean }) => {
@@ -26,7 +26,7 @@ const SideBar = ({ show }: { show: boolean }) => {
     >
       <img src={logo} alt="logo" className="mb-8" />
       <Link
-        to={ROUTES.DISTRIBUTOR.DASHBOARD}
+        to={ROUTES[type.toUpperCase() as 'DISTRIBUTOR' | 'RETAILER'].DASHBOARD}
         className="px-2 py-3.5 flex flex-items"
       >
         <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
@@ -47,14 +47,25 @@ const SideBar = ({ show }: { show: boolean }) => {
         </div>
         <p>Products</p>
       </Link>
-      <Link to={ROUTES.RETAILER.ORDERS} className="px-2 py-3.5 flex flex-items">
+      <Link
+        to={
+          type === 'retailer'
+            ? ROUTES.RETAILER.ORDERS
+            : ROUTES.DISTRIBUTOR.DASHBOARD
+        }
+        className="px-2 py-3.5 flex flex-items"
+      >
         <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
           <img src={orders} alt="orders" />
         </div>
         <p>Orders</p>
       </Link>
       <Link
-        to={ROUTES.DISTRIBUTOR.WAREHOUSES}
+        to={
+          type === 'distributor'
+            ? ROUTES.DISTRIBUTOR.WAREHOUSES
+            : ROUTES.RETAILER.DASHBOARD
+        }
         className="px-2 py-3.5 flex flex-items"
       >
         <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
@@ -63,7 +74,7 @@ const SideBar = ({ show }: { show: boolean }) => {
         <p>Warehouses</p>
       </Link>
       <Link
-        to={ROUTES.DISTRIBUTOR.DASHBOARD}
+        to={ROUTES[type.toUpperCase() as 'DISTRIBUTOR' | 'RETAILER'].DASHBOARD}
         className="px-2 py-3.5 flex flex-items"
       >
         <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
@@ -72,7 +83,7 @@ const SideBar = ({ show }: { show: boolean }) => {
         <p>Operations</p>
       </Link>
       <Link
-        to={ROUTES.DISTRIBUTOR.DASHBOARD}
+        to={ROUTES[type.toUpperCase() as 'DISTRIBUTOR' | 'RETAILER'].DASHBOARD}
         className="px-2 py-3.5 flex flex-items"
       >
         <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
