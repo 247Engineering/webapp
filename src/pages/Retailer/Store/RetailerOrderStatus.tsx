@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { format } from 'date-fns'
 
 import orderProgress from '../../../assets/images/order-progress.svg'
@@ -99,7 +99,6 @@ const statusMap = {
 
 const RetailerOrderStatus = () => {
   const { order: orderId } = useParams()
-  const navigate = useNavigate()
 
   const dispatch = useDispatch<AppDispatch>()
   const { order } = useSelector<RootState>(
@@ -123,7 +122,7 @@ const RetailerOrderStatus = () => {
         hideName
         secondaryNav={`Order #${order?.order_id.replace('ORD_', '')}`}
         secondaryNavBack="Orders"
-        onClose={() => navigate(ROUTES.RETAILER.ORDERS)}
+        back={ROUTES.RETAILER.ORDERS}
       >
         <section>
           <div className="rounded-[8px] w-full h-[8.5rem] mb-8 overflow-hidden">
@@ -162,13 +161,15 @@ const RetailerOrderStatus = () => {
             />
           </div>
           <OrderSummary
-            cartItems={order?.line_items.map((item: any) => ({
-              id: item.product_id,
-              quantity: item.quantity,
-              price: item.price,
-              name: item.name,
-              image: item.images[0],
-            }))}
+            cartItems={
+              order?.line_items?.map((item: any) => ({
+                id: item.product_id,
+                quantity: item.quantity,
+                price: item.price,
+                name: item.name,
+                image: item.images[0],
+              })) || []
+            }
           />
           <h4 className="font-[700] text-[1rem] leading-[1.5rem]">Address</h4>
           <p className="w-[11.75rem] text-[0.875rem] leading-[1.25rem] mb-20 capitalize">

@@ -40,6 +40,10 @@ const ProductItem = ({
         src={image || defaultImage}
         className="w-[6.25rem] h-[5.938rem] rounded-[4px]"
         alt="product"
+        onError={(e) => {
+          //@ts-ignore
+          e.target.src = defaultImage
+        }}
       />
       {/* </div> */}
       <div className="w-full flex flex-col pl-4">

@@ -41,7 +41,7 @@ const VerifyOtp = () => {
         <form onSubmit={handleSubmit}>
           <div className="mb-[12.75rem]">
             <Input
-              label="OTP (6 Digits)"
+              label="OTP (4 Digits)"
               value={otp}
               onChange={setOtp}
               type="text"

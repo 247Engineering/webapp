@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react'
+import React, { CSSProperties, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import MoonLoader from 'react-spinners/MoonLoader'
 
@@ -7,7 +7,11 @@ import remove from '../../assets/images/delete-order.svg'
 import reduce from '../../assets/images/reduce-order.svg'
 
 import { OrderCounterProps, RetailerState } from '../../types'
-import { addToCart, removeFromCart } from '../../store/features/retailer'
+import {
+  addToCart,
+  clearRetailerStamp,
+  removeFromCart,
+} from '../../store/features/retailer'
 import { AppDispatch, RootState } from '../../store'
 
 const OrderCounter = ({
@@ -30,6 +34,12 @@ const OrderCounter = ({
   const { loading, retailerStamp } = useSelector<RootState>(
     ({ retailer }) => retailer,
   ) as RetailerState
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearRetailerStamp())
+    }
+  }, [dispatch])
 
   return (
     <div

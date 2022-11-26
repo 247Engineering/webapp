@@ -26,6 +26,7 @@ const NavBar = ({
   setShowSideBar,
   secondaryNav,
   secondaryNavBack,
+  back
 }: AppLayoutProps) => {
   const navigate = useNavigate()
 
@@ -110,7 +111,7 @@ const NavBar = ({
       </nav>
       {secondaryNav ? (
         <div className="p-4 pt-8 shadow-sm-alt">
-          <BackButton text={secondaryNavBack as string} />
+          <BackButton text={secondaryNavBack as string} goTo={back} />
           <p className="font-[700] text-[1.25rem] leading-[1.75rem]">
             {secondaryNav}
           </p>

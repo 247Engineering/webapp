@@ -196,6 +196,7 @@ export interface AppLayoutProps {
   setShowSideBar?: (value: boolean) => void
   secondaryNav?: string
   secondaryNavBack?: string
+  back?: string
 }
 
 export interface WeightInputProps {

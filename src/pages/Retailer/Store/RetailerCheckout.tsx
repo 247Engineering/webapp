@@ -19,7 +19,7 @@ import OrderSummary from '../../../components/miscellaneous/OrderSummary'
 
 import { Address, DeliveryOptions, RetailerState } from '../../../types'
 import { AppDispatch, RootState } from '../../../store'
-import { placeOrder } from '../../../store/features/retailer'
+import { clearRetailerStamp, placeOrder } from '../../../store/features/retailer'
 import * as ROUTES from '../../../routes'
 
 const deliveryOptionMap = {
@@ -32,7 +32,7 @@ const RetailerCheckout = () => {
   const navigate = useNavigate()
 
   const dispatch = useDispatch<AppDispatch>()
-  const { cartItems, loading, orderId } = useSelector<RootState>(
+  const { cartItems, loading, orderId, retailerStamp } = useSelector<RootState>(
     ({ retailer }) => retailer,
   ) as RetailerState
 
@@ -61,8 +61,11 @@ const RetailerCheckout = () => {
   }
 
   useEffect(() => {
-    if (orderId) navigate(ROUTES.RETAILER.PAYMENT_FOR(orderId))
-  }, [orderId, navigate])
+    if (retailerStamp) navigate(ROUTES.RETAILER.PAYMENT_FOR(orderId as string))
+    return () => {
+      dispatch(clearRetailerStamp())
+    }
+  }, [retailerStamp, orderId, navigate, dispatch])
 
   return (
     <div onClick={() => setLocationDropdown(false)} className="h-full">
@@ -72,6 +75,7 @@ const RetailerCheckout = () => {
         hideName
         secondaryNav="Checkout"
         secondaryNavBack="Cart"
+        back={ROUTES.RETAILER.CART}
       >
         <section>
           <div className="p-1 bg-grey-light-200 rounded-[10px] flex items-center justify-between font-[700] text-[0.875rem] leading-[1.25rem] mb-8">

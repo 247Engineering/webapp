@@ -27,6 +27,7 @@ const RetailerCart = () => {
         hideName
         secondaryNav="Cart"
         secondaryNavBack="Store"
+        back={ROUTES.RETAILER.DASHBOARD}
       >
         <section className="pb-32">
           {cartItems.map((item) => (
@@ -56,6 +57,7 @@ const RetailerCart = () => {
               text="Continue to checkout"
               onClick={() => navigate(ROUTES.RETAILER.CHECKOUT)}
               className="text-white bg-orange"
+              disabled={!Boolean(cartItems.length)}
             />
           </div>
         </section>

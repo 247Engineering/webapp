@@ -10,13 +10,17 @@ import PaymentOptionItem from '../../../components/miscellaneous/PaymentOption'
 
 import { RetailerState } from '../../../types'
 import { AppDispatch, RootState } from '../../../store'
-import { clearCart, clearRetailerStamp } from '../../../store/features/retailer'
+import {
+  clearRetailerStamp,
+  completeOrder,
+} from '../../../store/features/retailer'
 import * as ROUTES from '../../../routes'
 
-// const paymentOptionMap = {
-//   cash: 0,
-//   card: 1,
-// }
+const paymentOptionMap = {
+  cash: 0,
+  card: 1,
+  transfer: 2,
+}
 
 const RetailerPayment = () => {
   const navigate = useNavigate()
@@ -31,16 +35,22 @@ const RetailerPayment = () => {
   const [selectedCard, setSelectedCard] = useState('mastercard')
 
   const handleSubmit = () => {
-    dispatch(clearCart())
-    navigate(ROUTES.RETAILER.ORDER_NOTIFICATION_FOR(order as string))
+    dispatch(
+      completeOrder({
+        order_id: order as string,
+        payment_option:
+          paymentOptionMap[paymentOption as 'cash' | 'card' | 'transfer'],
+      }),
+    )
   }
 
   useEffect(() => {
-    if (retailerStamp) navigate(ROUTES.RETAILER.DASHBOARD)
+    if (retailerStamp)
+      navigate(ROUTES.RETAILER.ORDER_NOTIFICATION_FOR(order as string))
     return () => {
       dispatch(clearRetailerStamp())
     }
-  }, [retailerStamp, dispatch, navigate])
+  }, [order, retailerStamp, dispatch, navigate])
 
   return (
     <div>
@@ -48,8 +58,9 @@ const RetailerPayment = () => {
         cart
         hideLogo
         hideName
-        secondaryNav="Checkout"
-        secondaryNavBack="Cart"
+        secondaryNav="Make Payment"
+        secondaryNavBack="Checkout"
+        back={ROUTES.RETAILER.CHECKOUT}
       >
         <section>
           <h4 className="font-[700] text-[1rem] leading-[1.5rem] mb-6">

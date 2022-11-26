@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
@@ -22,6 +22,15 @@ const RetailerOrders = () => {
     ({ retailer }) => retailer,
   ) as RetailerState
 
+  const ongoingOrders = useMemo(
+    () => orders.filter((order) => order.status !== 'COMPLETED'),
+    [orders],
+  )
+  const completedOrders = useMemo(
+    () => orders.filter((order) => order.status === 'COMPLETED'),
+    [orders],
+  )
+
   useEffect(() => {
     dispatch(fetchOrders())
   }, [dispatch])
@@ -29,7 +38,7 @@ const RetailerOrders = () => {
   const [sort, setSort] = useState('')
   return (
     <>
-      <AppLayout>
+      <AppLayout cart hideName>
         <header>
           <h1 className="h1 text-black">Orders</h1>
         </header>
@@ -55,7 +64,7 @@ const RetailerOrders = () => {
             </button>
           </div>
           <h4 className="mb-2 font-[700] text-[1rem] leading-[1.5rem]">
-            Ongoing ({orders.length})
+            Ongoing ({ongoingOrders.length})
           </h4>
           <TableLayout>
             <thead>
@@ -66,7 +75,7 @@ const RetailerOrders = () => {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => (
+              {ongoingOrders.map((order) => (
                 <tr key={order.order_id}>
                   <td
                     className="w-[9.5rem] p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple uppercase"
@@ -78,8 +87,8 @@ const RetailerOrders = () => {
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
                     {format(
-                      order.date_created
-                        ? new Date(order.date_created)
+                      order.order_date
+                        ? new Date(order.order_date)
                         : new Date(),
                       'dd/M/yyy h:ma',
                     )}
@@ -92,7 +101,7 @@ const RetailerOrders = () => {
             </tbody>
           </TableLayout>
           <h4 className="mt-8 mb-2 font-[700] text-[1rem] leading-[1.5rem]">
-            Completed (1)
+            Completed ({completedOrders.length})
           </h4>
           <TableLayout className="mb-8">
             <thead>
@@ -103,17 +112,29 @@ const RetailerOrders = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="w-[9.5rem] p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple">
-                  FD089345
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  10/10/2022 13:00PM
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Ebeano Supermarket Chevron
-                </td>
-              </tr>
+              {completedOrders.map((order) => (
+                <tr key={order.order_id}>
+                  <td
+                    className="w-[9.5rem] p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple uppercase"
+                    onClick={() =>
+                      navigate(ROUTES.RETAILER.ORDER_STATUS_FOR(order.order_id))
+                    }
+                  >
+                    {order.order_id.replace('ORD_', '')}
+                  </td>
+                  <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
+                    {format(
+                      order.order_date
+                        ? new Date(order.order_date)
+                        : new Date(),
+                      'dd/M/yyy h:ma',
+                    )}
+                  </td>
+                  <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
+                    {order.address || 'Ebeano Supermarket Chevron'}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </TableLayout>
         </section>
