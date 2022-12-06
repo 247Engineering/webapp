@@ -113,7 +113,21 @@ const OrderCounter = ({
             value={quantity}
             min={minOrder}
             //@ts-ignore
-            onChange={(e) => setQuantity(e.target.value)}
+            onChange={(e) => setQuantity(Number(e.target.value))}
+            onBlur={(e) =>
+              dispatch(
+                addToCart({
+                  cartItem: {
+                    id,
+                    quantity: Number(quantity),
+                    price,
+                    name,
+                    image,
+                  },
+                  onSuccess: () => {},
+                }),
+              )
+            }
           />
         </>
       ) : null}
@@ -130,7 +144,7 @@ const OrderCounter = ({
                 image,
               },
               onSuccess: () =>
-                setQuantity((quantity: number) => quantity + minOrder),
+                setQuantity((quantity: number) => Number(quantity) + minOrder),
             }),
           )
         }

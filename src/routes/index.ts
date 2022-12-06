@@ -21,6 +21,10 @@ export const DISTRIBUTOR = {
     `/distributor/warehouses/${warehouse}/products/form`,
 }
 
+export const WAREHOUSE = {
+  DASHBOARD: '/distributor/dashboard',
+}
+
 export const RETAILER = {
   SIGNUP: '/retailer/signup',
   SIGNIN: '/retailer/signin',
@@ -36,7 +40,8 @@ export const RETAILER = {
   PAYMENT: '/retailer/orders/:order/payment',
   PAYMENT_FOR: (order: string) => `/retailer/orders/${order}/payment`,
   ORDER_NOTIFICATION: '/retailer/orders/:order/notification',
-  ORDER_NOTIFICATION_FOR: (order: string) => `/retailer/orders/${order}/notification`,
+  ORDER_NOTIFICATION_FOR: (order: string) =>
+    `/retailer/orders/${order}/notification`,
   ORDER_STATUS: '/retailer/orders/:order/status',
   ORDER_STATUS_FOR: (order: string) => `/retailer/orders/${order}/status`,
 }

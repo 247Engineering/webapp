@@ -5,7 +5,7 @@ import UnauthedLayout from '../components/layouts/UnauthedLayout'
 
 import AccountSelect from '../pages/AccountSelect'
 import ResetPassword from '../pages/ResetPassword'
-// import Current from '../pages/Distributor/Warehouse/AddWarehouseProduct'
+import Current from '../pages/Distributor/Warehouse/WarehouseFormEdit'
 
 import {
   unAuthedDistributorRoutes,
@@ -19,7 +19,7 @@ export default function App() {
   return (
     <Routes>
       <Route element={<UnauthedLayout />}>
-        {/* <Route path="/" element={<Current />} /> */}
+        <Route path="/" element={<Current />} />
         <Route path="/" element={<AccountSelect />} />
         <Route path={ROUTES.AUTH.ACCOUNT_SELECT} element={<AccountSelect />} />
         <Route path={ROUTES.AUTH.RESET_PASSWORD} element={<ResetPassword />} />

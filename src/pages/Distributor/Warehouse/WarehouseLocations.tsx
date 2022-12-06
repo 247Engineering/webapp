@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
-import location from '../../../assets/images/location.svg'
 import add from '../../../assets/images/add.svg'
 import search from '../../../assets/images/search.svg'
+import dots from '../../../assets/images/three-dots.svg'
+import distributor from '../../../assets/images/distributor-checked.svg'
 
 import AppLayout from '../../../components/layouts/AppLayout'
 import SortSelect from '../../../components/forms/SortSelect'
-import WarehouseItem from '../../../components/miscellaneous/WarehouseItem'
+import TableLayout from '../../../components/tables/TableLayout'
 
 import { fetchWarehouses } from '../../../store/features/distributor'
 import { AppDispatch, RootState } from '../../../store'
@@ -34,14 +35,9 @@ const WarehouseLocations = () => {
       <AppLayout>
         <header className="flex justify-between">
           <div>
-            <h1 className="h1 mb-2 text-black">Locations</h1>
+            <h1 className="h1 mb-2 text-black">Warehouses</h1>
             <p className="p text-black-100">
-              <img
-                src={location}
-                className="w-[1.563rem] h-[1.25rem] inline"
-                alt="location icon"
-              />{' '}
-              Femadons LTD.
+              View and manage all your warehouses
             </p>
           </div>
           <button
@@ -76,22 +72,86 @@ const WarehouseLocations = () => {
             <h5 className="font-[700] text-[1rem] leading-[1.5rem] mb-6">
               Open ({warehouses?.length})
             </h5>
-            {warehouses?.map((warehouse, i) => (
-              <WarehouseItem
-                key={i}
-                textPrimary={warehouse.name}
-                textSecondary="365 Adeola Odeku Street "
-              />
-            ))}
+            <TableLayout>
+              <tbody>
+                {warehouses?.map((warehouse, i) => (
+                  <tr key={i}>
+                    <td className="w-[15rem] p-2 pl-4 text-[0.75rem] leading-[1rem]">
+                      <div className="flex items-center">
+                        <img
+                          src={distributor}
+                          alt="warehouse icon"
+                          className="h-[2rem] w-[2rem] mr-2"
+                        />
+                        <div className="flex flex-col justify-between capitalize">
+                          <h6 className="hover:text-purple font-[700]">
+                            {warehouse.name}
+                          </h6>
+                          <p>365 Adeola Odeku Street</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
+                      <div>
+                        <p className="font-[700]">Open</p>
+                        <p>Closes 22:00 Mon-Sat</p>
+                      </div>
+                    </td>
+                    <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
+                      <div>
+                        <p className="font-[700]">N5,000,000</p>
+                        <p>Sales</p>
+                      </div>
+                    </td>
+                    <td className="w-10 p-2">
+                      <div className="flex items-center justify-center">
+                        <img src={dots} alt="options" className="w-1.5 h-5" />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </TableLayout>
           </div>
           <div>
             <h5 className="font-[700] text-[1rem] leading-[1.5rem] mb-6">
               Closed (0)
             </h5>
-            {/* <WarehouseItem
-              textPrimary="Femadons Alaba"
-              textSecondary="36 Obafemi Martins Street"
-            /> */}
+            {/* <TableLayout>
+              <tbody>
+                {warehouses?.map((warehouse, i) => (
+                  <tr key={i}>
+                    <td className="w-[15rem] p-2 pl-4 text-[0.75rem] leading-[1rem]">
+                      <div className="flex items-center">
+                        <img
+                          src={distributor}
+                          alt="warehouse icon"
+                          className="h-[2rem] w-[2rem] mr-2"
+                        />
+                        <div className="flex flex-col justify-between capitalize">
+                          <h6 className="hover:text-purple font-[700]">
+                            {warehouse.name}
+                          </h6>
+                          <p>365 Adeola Odeku Street</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
+                      <div>
+                        <p className="font-[700]">Open</p>
+                        <p>Closes 22:00 Mon-Sat</p>
+                      </div>
+                    </td>
+                    <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
+                      <div>
+                        <p className="font-[700]">N5,000,000</p>
+                        <p>Sales</p>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </TableLayout> */}
           </div>
         </section>
       </AppLayout>
