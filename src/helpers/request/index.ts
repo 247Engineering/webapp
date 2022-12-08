@@ -35,17 +35,13 @@ const onResponseError = async (
     ) {
       const storedTokens = JSON.parse(localStorage.getItem('tokens') as string)
 
+      let user = error.config?.url?.split('/')[3]
+
       try {
         const {
           data: { tokens },
         } = await axios({
-          url: `${
-            error.config?.url?.includes(
-              process.env.REACT_APP_BASE_URL_RETAILER as string,
-            )
-              ? process.env.REACT_APP_BASE_URL_RETAILER
-              : process.env.REACT_APP_BASE_URL
-          }/auth/refresh-tokens`,
+          url: `${process.env.REACT_APP_BASE_URL}/${user}/auth/refresh-tokens`,
           method: 'put',
           headers: {
             Authorization: `Bearer ${storedTokens?.refresh_token}`,
@@ -94,11 +90,7 @@ const request = async ({
 }: RequestArgs) => {
   try {
     const { data } = await api({
-      url: `${
-        user === 'retailer'
-          ? process.env.REACT_APP_BASE_URL_RETAILER
-          : process.env.REACT_APP_BASE_URL
-      }${url}`,
+      url: `${process.env.REACT_APP_BASE_URL}${user ? `/${user}` : ''}${url}`,
       method,
       ...(body && { data: body }),
       ...(type === 'form-data' && {

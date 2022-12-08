@@ -3,7 +3,7 @@ import React from 'react'
 const TableLayout = ({ children, className }: any) => {
   return (
     <div
-      className={`overflow-x-auto mr-[-1rem] text-black ${
+      className={`overflow-x-auto overflow-visible mr-[-1rem] text-black ${
         className ? className : ''
       }`}
     >

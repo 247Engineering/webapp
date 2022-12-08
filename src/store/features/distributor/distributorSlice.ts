@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { DistributorState, Address, Owner } from '../../../types'
 import request from '../../../helpers/request'
 import { RootState } from '../..'
-import { signin } from '../auth'
+// import { signin } from '../auth'
 import { isRejectedAction, isPendingAction, isFulfilledAction } from '../utils'
 
 const initialState: DistributorState = {
@@ -18,6 +18,8 @@ const initialState: DistributorState = {
   loading: false,
   warehouseStamp: null,
   warehouses: [],
+  warehouse: null,
+  order: null,
 }
 
 export const submitDistributor = createAsyncThunk(
@@ -47,6 +49,7 @@ export const submitDistributor = createAsyncThunk(
           image: owner.idImage,
         })),
       },
+      user: 'distributor',
     })
   },
 )
@@ -72,6 +75,7 @@ export const addWarehouse = createAsyncThunk(
         distributor_id: id,
         ...body,
       },
+      user: 'distributor',
     })
   },
 )
@@ -86,6 +90,61 @@ export const fetchWarehouses = createAsyncThunk(
     return await request({
       url: `/warehouse/get-warehouses/${id}`,
       method: 'get',
+      user: 'distributor',
+    })
+  },
+)
+
+export const fetchWarehouse = createAsyncThunk(
+  'distributor/fetchWarehouse',
+  async (warehouse: string) => {
+
+    return await request({
+      url: `/warehouse/get-warehouses/${warehouse}`,
+      method: 'get',
+      user: 'distributor',
+    })
+  },
+)
+
+export const fetchWarehouseOrders = createAsyncThunk(
+  'distributor/fetchWarehouseOrders',
+  async (warehouse: string) => {
+    return await request({
+      url: `/warehouse/orders/${warehouse}`,
+      method: 'get',
+      user: 'distributor',
+    })
+  },
+)
+
+export const fetchWarehouseOrder = createAsyncThunk(
+  'distributor/fetchWarehouseOrder',
+  async ({ order, warehouse }: { order: string; warehouse: string }) => {
+    return await request({
+      url: `/warehouse/order/${order}/${warehouse}`,
+      method: 'get',
+      user: 'distributor',
+    })
+  },
+)
+
+export const updateWarehouseOrder = createAsyncThunk(
+  'distributor/updateWarehouseOrder',
+  async ({
+    order,
+    warehouse,
+    status: order_status,
+  }: {
+    order: string
+    warehouse: string
+    status: string
+  }) => {
+    return await request({
+      url: `/warehouse/order/${order}/${warehouse}`,
+      method: 'put',
+      body: { order_status },
+      user: 'distributor',
     })
   },
 )
@@ -117,10 +176,9 @@ export const distributorSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      // @ts-ignore
-      .addCase(signin.fulfilled, (state, { payload: { step } }) => {
-        if (step > 0) state.stepsCompleted = 3
-      })
+      // .addCase(signin.fulfilled, (state, { payload: { step } }) => {
+      //   if (step > 0) state.stepsCompleted = 3
+      // })
       .addMatcher(isPendingAction('distributor'), (state, action) => {
         state.loading = true
       })
@@ -137,6 +195,15 @@ export const distributorSlice = createSlice({
             break
           case 'distributor/fetchWarehouses/fulfilled':
             state.warehouses = action.payload.data
+            break
+          case 'distributor/fetchWarehouse/fulfilled':
+            state.warehouse = action.payload.data
+            break
+          case 'distributor/fetchWarehouseOrder/fulfilled':
+            state.order = action.payload.data
+            break
+          case 'distributor/fetchWarehouseOrders/fulfilled':
+            state.orders = action.payload.data
             break
         }
 

@@ -1,5 +1,5 @@
 import Dashboard from '../pages/Distributor/Dashboard/Dashboard'
-import VerifyMail from '../pages/Distributor/Onboarding/VerifyMail';
+import VerifyMail from '../pages/Distributor/Onboarding/VerifyMail'
 import SignIn from '../pages/SignIn'
 import SignUp from '../pages/Distributor/Onboarding/SignUp'
 import ForgotPassword from '../pages/Distributor/Onboarding/ForgotPassword'
@@ -13,6 +13,9 @@ import WarehouseLocations from '../pages/Distributor/Warehouse/WarehouseLocation
 import WarehouseSignUp from '../pages/Distributor/Onboarding/Warehouse/SignUp'
 import WarehouseProducts from '../pages/Distributor/Warehouse/WarehouseProducts'
 import AddWarehouseProduct from '../pages/Distributor/Warehouse/AddWarehouseProduct'
+import WarehouseDetails from '../pages/Distributor/Warehouse/WarehouseDetails'
+import WarehouseOrders from '../pages/Distributor/Warehouse/Orders/Orders'
+import WarehouseOrderDetails from '../pages/Distributor/Warehouse/Orders/OrderDetails'
 
 import * as ROUTES from '../routes'
 
@@ -23,7 +26,12 @@ export const unAuthedDistributorRoutes = [
   },
   {
     path: ROUTES.DISTRIBUTOR.SIGNIN,
-    element: <SignIn type='distributor' forgotPassword={ROUTES.DISTRIBUTOR.FORGOT_PASSWORD} />,
+    element: (
+      <SignIn
+        type="distributor"
+        forgotPassword={ROUTES.DISTRIBUTOR.FORGOT_PASSWORD}
+      />
+    ),
   },
   {
     path: ROUTES.DISTRIBUTOR.WAREHOUSE_SIGNUP,
@@ -31,7 +39,12 @@ export const unAuthedDistributorRoutes = [
   },
   {
     path: ROUTES.DISTRIBUTOR.WAREHOUSE_LOGIN,
-    element: <SignIn type='warehouse' forgotPassword={ROUTES.DISTRIBUTOR.FORGOT_PASSWORD} />,
+    element: (
+      <SignIn
+        type="warehouse"
+        forgotPassword={ROUTES.DISTRIBUTOR.FORGOT_PASSWORD}
+      />
+    ),
   },
   {
     path: ROUTES.DISTRIBUTOR.FORGOT_PASSWORD,
@@ -73,12 +86,24 @@ export const authedDistributorRoutes = [
     element: <WarehouseLocations />,
   },
   {
+    path: ROUTES.DISTRIBUTOR.WAREHOUSE_DETAILS,
+    element: <WarehouseDetails />,
+  },
+  {
     path: ROUTES.DISTRIBUTOR.WAREHOUSE_FORM,
     element: <WarehouseForm />,
   },
   {
     path: ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS,
     element: <WarehouseProducts />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.WAREHOUSE_ORDERS,
+    element: <WarehouseOrders />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.WAREHOUSE_ORDER,
+    element: <WarehouseOrderDetails />,
   },
   {
     path: ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCT_FORM,

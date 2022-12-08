@@ -49,7 +49,7 @@ const DragAndDrop = ({
           const {
             files: uploadedFiles,
           }: { files: { path: string }[] } = await request({
-            url: '/onboarding/upload',
+            url: '/helper/upload',
             method: 'post',
             body: formData,
             type: 'form-data',

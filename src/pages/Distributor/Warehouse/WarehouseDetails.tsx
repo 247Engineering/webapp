@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
 import edit from '../../../assets/images/edit.svg'
 import image from '../../../assets/images/image.svg'
@@ -9,8 +11,31 @@ import TableLayout from '../../../components/tables/TableLayout'
 import TableFooter from '../../../components/tables/TableFooter'
 import BackButton from '../../../components/forms/BackButton'
 
+import { fetchWarehouse } from '../../../store/features/distributor'
+import { fetchWarehouseProducts } from '../../../store/features/product'
+import { AppDispatch, RootState } from '../../../store'
+import { DistributorState, ProductState } from '../../../types'
+// import * as ROUTES from '../../../routes'
+
 const WarehouseDetails = () => {
+  const navigate = useNavigate()
+  const { warehouse: warehouseId } = useParams()
+
+  const dispatch = useDispatch<AppDispatch>()
+  const { warehouse } = useSelector<RootState>(
+    ({ distributor }) => distributor,
+  ) as DistributorState
+  const { products } = useSelector<RootState>(
+    ({ product }) => product,
+  ) as ProductState
+
   const [type, setType] = useState('details')
+
+  useEffect(() => {
+    dispatch(fetchWarehouse(warehouseId as string))
+    dispatch(fetchWarehouseProducts(warehouseId as string))
+    console.log({ warehouse, products, navigate })
+  }, [dispatch, warehouseId, warehouse, products, navigate])
 
   return (
     <>

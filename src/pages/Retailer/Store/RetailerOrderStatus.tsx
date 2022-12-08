@@ -120,7 +120,7 @@ const RetailerOrderStatus = () => {
         cart
         hideLogo
         hideName
-        secondaryNav={`Order #${order?.order_id.replace('ORD_', '')}`}
+        secondaryNav={`Order #${order?.id}`}
         secondaryNavBack="Orders"
         back={ROUTES.RETAILER.ORDERS}
       >

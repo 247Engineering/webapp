@@ -157,7 +157,7 @@ export interface RequestArgs {
   url: string
   body?: any
   type?: 'form-data' | 'json'
-  user?: 'retailer' | 'distributor'
+  user?: UserType
   onSuccess?: () => void
 }
 
@@ -181,6 +181,9 @@ export interface DistributorState {
   loading?: boolean
   warehouseStamp?: number | null
   warehouses?: any[]
+  warehouse?: string | null
+  order?: any
+  orders?: any[]
 }
 
 export interface AppLayoutProps {

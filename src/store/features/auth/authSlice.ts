@@ -13,7 +13,7 @@ const initialState: AuthState = {
   loading: false,
   resetPasswordStamp: null,
   businessName: null,
-  stepsCompleted: 1
+  stepsCompleted: 1,
 }
 
 export const signup = createAsyncThunk(
@@ -29,6 +29,7 @@ export const signup = createAsyncThunk(
       url: '/auth/signup',
       method: 'post',
       body,
+      user: body.type,
     })
   },
 )
@@ -57,6 +58,7 @@ export const createWarehouseUser = createAsyncThunk(
       url: '/warehouse/create-user',
       method: 'post',
       body,
+      user: 'distributor',
     })
   },
 )
@@ -97,6 +99,7 @@ export const requestPasswordReset = createAsyncThunk(
       url: '/auth/reset',
       method: 'put',
       body,
+      user: 'distributor',
     })
   },
 )
@@ -108,6 +111,7 @@ export const resetPassword = createAsyncThunk(
       url: '/auth/change-password',
       method: 'put',
       body,
+      user: 'distributor',
     })
   },
 )

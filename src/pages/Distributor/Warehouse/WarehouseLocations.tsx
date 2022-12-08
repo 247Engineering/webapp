@@ -11,7 +11,9 @@ import AppLayout from '../../../components/layouts/AppLayout'
 import SortSelect from '../../../components/forms/SortSelect'
 import TableLayout from '../../../components/tables/TableLayout'
 
-import { fetchWarehouses } from '../../../store/features/distributor'
+import {
+  fetchWarehouses,
+} from '../../../store/features/distributor'
 import { AppDispatch, RootState } from '../../../store'
 import { DistributorState } from '../../../types'
 import * as ROUTES from '../../../routes'
@@ -25,13 +27,15 @@ const WarehouseLocations = () => {
   ) as DistributorState
 
   const [sort, setSort] = useState('')
+  const [open, setOpen] = useState(false)
+  const [selected, setSelected] = useState('')
 
   useEffect(() => {
     dispatch(fetchWarehouses())
   }, [dispatch])
 
   return (
-    <>
+    <div onClick={() => setOpen(false)}>
       <AppLayout>
         <header className="flex justify-between">
           <div>
@@ -104,8 +108,34 @@ const WarehouseLocations = () => {
                       </div>
                     </td>
                     <td className="w-10 p-2">
-                      <div className="flex items-center justify-center">
-                        <img src={dots} alt="options" className="w-1.5 h-5" />
+                      <div
+                        className="flex items-center justify-center relative"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <img
+                          src={dots}
+                          alt="options"
+                          className="w-1.5 h-5"
+                          onClick={() => {
+                            setOpen(!open)
+                            setSelected(warehouse._id)
+                          }}
+                        />
+                        {open && warehouse._id === selected ? (
+                          <ul className="rounded-[8px] shadow-sm py-2 w-[11.125rem] absolute top-[-5px] right-[23px] z-10 bg-white">
+                            <li
+                              className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p"
+                              onClick={() => {
+                                navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_DETAILS_FOR(warehouse.id))
+                              }}
+                            >
+                              View
+                            </li>
+                            <li className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p">
+                              Delete
+                            </li>
+                          </ul>
+                        ) : null}
                       </div>
                     </td>
                   </tr>
@@ -155,7 +185,7 @@ const WarehouseLocations = () => {
           </div>
         </section>
       </AppLayout>
-    </>
+    </div>
   )
 }
 

@@ -1,15 +1,43 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
-import image from '../../../assets/images/image.svg'
+import image from '../../../../assets/images/image.svg'
 
-import AppLayout from '../../../components/layouts/AppLayout'
-import TableLayout from '../../../components/tables/TableLayout'
-import Status from '../../../components/miscellaneous/Status'
-import ButtonSubmit from '../../../components/forms/ButtonSubmit'
-import Map from '../../../components/miscellaneous/Map'
-import BackButton from '../../../components/forms/BackButton'
+import AppLayout from '../../../../components/layouts/AppLayout'
+import TableLayout from '../../../../components/tables/TableLayout'
+import Status from '../../../../components/miscellaneous/Status'
+import ButtonSubmit from '../../../../components/forms/ButtonSubmit'
+import Map from '../../../../components/miscellaneous/Map'
+import BackButton from '../../../../components/forms/BackButton'
+
+import {
+  fetchWarehouseOrder,
+  updateWarehouseOrder,
+} from '../../../../store/features/distributor'
+import { AppDispatch, RootState } from '../../../../store'
+import { DistributorState } from '../../../../types'
+// import * as ROUTES from '../../../../routes'
 
 const OrderDetails = () => {
+  const { warehouse, order: orderId } = useParams()
+
+  const dispatch = useDispatch<AppDispatch>()
+  const { order } = useSelector<RootState>(
+    ({ distributor }) => distributor,
+  ) as DistributorState
+
+  useEffect(() => {
+    dispatch(
+      fetchWarehouseOrder({
+        warehouse: warehouse as string,
+        order: orderId as string,
+      }),
+    )
+  }, [dispatch, warehouse, orderId])
+
+  console.log({ order })
+
   return (
     <>
       <AppLayout>
@@ -124,7 +152,18 @@ const OrderDetails = () => {
               </div>
             </div>
           </div>
-          <ButtonSubmit text="Confirm order" onClick={() => {}} />
+          <ButtonSubmit
+            text="Confirm order"
+            onClick={() =>
+              dispatch(
+                updateWarehouseOrder({
+                  order: orderId as string,
+                  warehouse: warehouse as string,
+                  status: 'CONFIRMED',
+                }),
+              )
+            }
+          />
         </section>
       </AppLayout>
     </>

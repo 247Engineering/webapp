@@ -32,14 +32,22 @@ const initialState: ProductState = {
 
 export const fetchProducts = createAsyncThunk(
   'product/fetchProducts',
-  async (_, { getState }) => {
-    const {
-      auth: { id },
-    } = getState() as RootState
-
+  async () => {
     return await request({
-      url: `/product/get-products/${id}`,
+      url: `/product/get-products`,
       method: 'get',
+      user: "distributor"
+    })
+  },
+)
+
+export const fetchWarehouseProducts = createAsyncThunk(
+  'product/fetchWarehouseProducts',
+  async (warehouse: string) => {
+    return await request({
+      url: `/warehouse/products/${warehouse}`,
+      method: 'get',
+      user: 'distributor',
     })
   },
 )
@@ -61,7 +69,7 @@ export const fetchSingleProduct = createAsyncThunk(
     return await request({
       url: `/product/get-product/${id}`,
       method: 'get',
-      user: "retailer"
+      user: "distributor"
     })
   },
 )
@@ -70,6 +78,7 @@ export const generateSku = createAsyncThunk('product/generateSku', async () => {
   return await request({
     url: '/product/generate-sku',
     method: 'get',
+    user: "distributor"
   })
 })
 
@@ -79,6 +88,7 @@ export const fetchCategories = createAsyncThunk(
     return await request({
       url: '/product/categories',
       method: 'get',
+      user: "distributor"
     })
   },
 )
@@ -89,6 +99,7 @@ export const fetchSubCategories = createAsyncThunk(
     return await request({
       url: '/product/sub-categories',
       method: 'get',
+      user: "distributor"
     })
   },
 )
@@ -99,6 +110,7 @@ export const fetchManufacturers = createAsyncThunk(
     return await request({
       url: '/product/manufacturers',
       method: 'get',
+      user: "distributor"
     })
   },
 )
@@ -109,6 +121,7 @@ export const searchProducts = createAsyncThunk(
     return await request({
       url: `/product/search-product/${product}`,
       method: 'get',
+      user: "distributor"
     })
   },
 )
@@ -143,6 +156,7 @@ export const addProduct = createAsyncThunk(
         user_id: id,
         ...body,
       },
+      user: "distributor"
     })
   },
 )
@@ -173,6 +187,9 @@ export const productSlice = createSlice({
             state.searchResult = action.payload.products
             break
           case 'product/fetchProducts/fulfilled':
+            state.products = action.payload.products
+            break
+          case 'product/fetchWarehouseProducts/fulfilled':
             state.products = action.payload.products
             break
           case 'product/fetchAllProducts/fulfilled':

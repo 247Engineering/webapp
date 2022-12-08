@@ -76,14 +76,14 @@ const RetailerOrders = () => {
             </thead>
             <tbody>
               {ongoingOrders.map((order) => (
-                <tr key={order.order_id}>
+                <tr key={order.id}>
                   <td
                     className="w-[9.5rem] p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple uppercase"
                     onClick={() =>
-                      navigate(ROUTES.RETAILER.ORDER_STATUS_FOR(order.order_id))
+                      navigate(ROUTES.RETAILER.ORDER_STATUS_FOR(order.id))
                     }
                   >
-                    {order.order_id.replace('ORD_', '')}
+                    {order.id}
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
                     {format(
@@ -113,14 +113,14 @@ const RetailerOrders = () => {
             </thead>
             <tbody>
               {completedOrders.map((order) => (
-                <tr key={order.order_id}>
+                <tr key={order.id}>
                   <td
                     className="w-[9.5rem] p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple uppercase"
                     onClick={() =>
-                      navigate(ROUTES.RETAILER.ORDER_STATUS_FOR(order.order_id))
+                      navigate(ROUTES.RETAILER.ORDER_STATUS_FOR(order.id))
                     }
                   >
-                    {order.order_id.replace('ORD_', '')}
+                    {order.id}
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
                     {format(
