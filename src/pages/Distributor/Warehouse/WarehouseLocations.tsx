@@ -35,7 +35,7 @@ const WarehouseLocations = () => {
   }, [dispatch])
 
   return (
-    <div onClick={() => setOpen(false)}>
+    <div className="h-full" onClick={() => setOpen(false)}>
       <AppLayout>
         <header className="flex justify-between">
           <div>
@@ -126,7 +126,7 @@ const WarehouseLocations = () => {
                             <li
                               className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p"
                               onClick={() => {
-                                navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_DETAILS_FOR(warehouse.id))
+                                navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_DETAILS_FOR(warehouse._id))
                               }}
                             >
                               View

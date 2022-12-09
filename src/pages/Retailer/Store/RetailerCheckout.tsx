@@ -19,7 +19,10 @@ import OrderSummary from '../../../components/miscellaneous/OrderSummary'
 
 import { Address, DeliveryOptions, RetailerState } from '../../../types'
 import { AppDispatch, RootState } from '../../../store'
-import { clearRetailerStamp, placeOrder } from '../../../store/features/retailer'
+import {
+  clearRetailerStamp,
+  placeOrder,
+} from '../../../store/features/retailer'
 import * as ROUTES from '../../../routes'
 
 const deliveryOptionMap = {
@@ -224,7 +227,7 @@ const RetailerCheckout = () => {
               </span>
             </div>
             <ButtonSubmit
-              disabled={!location || loading}
+              disabled={(type === 'delivery' && !location) || loading}
               loading={loading}
               text="Place order"
               onClick={handleSubmit}

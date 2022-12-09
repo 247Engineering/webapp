@@ -15,7 +15,7 @@ import { fetchWarehouse } from '../../../store/features/distributor'
 import { fetchWarehouseProducts } from '../../../store/features/product'
 import { AppDispatch, RootState } from '../../../store'
 import { DistributorState, ProductState } from '../../../types'
-// import * as ROUTES from '../../../routes'
+import * as ROUTES from '../../../routes'
 
 const WarehouseDetails = () => {
   const navigate = useNavigate()
@@ -30,15 +30,15 @@ const WarehouseDetails = () => {
   ) as ProductState
 
   const [type, setType] = useState('details')
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     dispatch(fetchWarehouse(warehouseId as string))
     dispatch(fetchWarehouseProducts(warehouseId as string))
-    console.log({ warehouse, products, navigate })
-  }, [dispatch, warehouseId, warehouse, products, navigate])
+  }, [dispatch, warehouseId])
 
   return (
-    <>
+    <div className="h-full" onClick={() => setOpen(false)}>
       <AppLayout>
         <header>
           <BackButton text="Warehouse" />
@@ -49,9 +49,39 @@ const WarehouseDetails = () => {
               </h1>
               <p className="p mb-2 text-black-100">10/10/2022 at 13:00PM</p>
             </div>
-            <button className="bg-orange h-[2rem] w-[2rem] rounded-[10px] flex justify-center items-center">
-              <img src={dots} alt="open options" />
-            </button>
+            <div onClick={(e) => e.stopPropagation()}>
+              <button
+                onClick={() => setOpen(true)}
+                className="bg-orange h-[2rem] w-[2rem] rounded-[10px] flex justify-center items-center relative"
+              >
+                <img src={dots} alt="open options" />
+                {open ? (
+                  <ul className="rounded-[8px] shadow-sm py-2 absolute top-[40px] right-0 z-10 bg-white w-max text-left">
+                    <li className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p">
+                      Delete
+                    </li>
+                    <li className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p">
+                      Disable
+                    </li>
+                    <li className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p">
+                      Enable
+                    </li>
+                    <li
+                      className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p"
+                      onClick={() =>
+                        navigate(
+                          ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCT_FORM_FOR(
+                            warehouseId as string,
+                          ),
+                        )
+                      }
+                    >
+                      Add product
+                    </li>
+                  </ul>
+                ) : null}
+              </button>
+            </div>
           </div>
         </header>
         <section>
@@ -80,8 +110,10 @@ const WarehouseDetails = () => {
                   Warehouse Manager
                 </h6>
                 <div className="font-[400] text-[0.875rem] leading-[1.25rem]">
-                  <p>Funpe Martins</p>
-                  <p>fmartins@femadons.com</p>
+                  <p className="capitalize">
+                    {warehouse?.user.first_name} {warehouse?.user.last_name}
+                  </p>
+                  <p>{warehouse?.user.email}</p>
                 </div>
                 <img
                   className="absolute w-[1.25rem] h-[1.25rem] top-[1.25rem] right-[1.25rem]"
@@ -95,16 +127,16 @@ const WarehouseDetails = () => {
                   <h6 className="mb-2 font-[700] text-[0.75rem] leading-[1rem]">
                     Warehouse Name
                   </h6>
-                  <p className="font-[400] text-[0.875rem] leading-[1.25rem]">
-                    Director at Femadons
+                  <p className="font-[400] text-[0.875rem] leading-[1.25rem] capitalize">
+                    {warehouse?.warehouse.name}
                   </p>
                 </div>
                 <div>
                   <h6 className="mb-2 font-[700] text-[0.75rem] leading-[1rem]">
                     Warehouse Address
                   </h6>
-                  <p className="font-[400] text-[0.875rem] leading-[1.25rem] max-w-[13.563rem]">
-                    635 Akin Adesola, Victoria island Lagos, Nigeria
+                  <p className="font-[400] text-[0.875rem] leading-[1.25rem] max-w-[13.563rem] capitalize">
+                    {warehouse?.warehouse.address}
                   </p>
                 </div>
                 <img
@@ -125,25 +157,26 @@ const WarehouseDetails = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Array(3)
-                    .fill('')
-                    .map((_, i) => (
-                      <tr key={i} className="text-[0.75rem] leading-[1rem]">
-                        <td className="w-[11.938rem] px-4 py-2">
-                          <div className="flex items-center">
-                            <img
-                              src={image}
-                              className="w-[2rem] h-[2rem] rounded-[4px] mr-2"
-                              alt="product item"
-                            />
-                            <p className="font-[700] text-purple capitalize truncate">
-                              Honeywell Macaroni and pasta and things
-                            </p>
-                          </div>
-                        </td>
-                        <td className="w-[11.188rem] p-4">789345</td>
-                      </tr>
-                    ))}
+                  {products?.map((product) => (
+                    <tr
+                      key={product.sku}
+                      className="text-[0.75rem] leading-[1rem]"
+                    >
+                      <td className="w-[11.938rem] px-4 py-2">
+                        <div className="flex items-center">
+                          <img
+                            src={product.images[0] || image}
+                            className="w-[2rem] h-[2rem] rounded-[4px] mr-2"
+                            alt="product item"
+                          />
+                          <p className="font-[700] text-purple capitalize truncate">
+                            {product.name}
+                          </p>
+                        </div>
+                      </td>
+                      <td className="w-[11.188rem] p-4">{product.sku}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </TableLayout>
               <TableFooter />
@@ -151,7 +184,7 @@ const WarehouseDetails = () => {
           )}
         </section>
       </AppLayout>
-    </>
+    </div>
   )
 }
 

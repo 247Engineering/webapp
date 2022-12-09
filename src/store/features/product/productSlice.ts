@@ -3,7 +3,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { ProductState } from '../../../types'
 import request from '../../../helpers/request'
 import { isRejectedAction, isPendingAction, isFulfilledAction } from '../utils'
-import { RootState } from '../..'
 
 const initialState: ProductState = {
   name: null,
@@ -36,7 +35,7 @@ export const fetchProducts = createAsyncThunk(
     return await request({
       url: `/product/get-products`,
       method: 'get',
-      user: "distributor"
+      user: 'distributor',
     })
   },
 )
@@ -45,7 +44,7 @@ export const fetchWarehouseProducts = createAsyncThunk(
   'product/fetchWarehouseProducts',
   async (warehouse: string) => {
     return await request({
-      url: `/warehouse/products/${warehouse}`,
+      url: `/warehouse/inventory/${warehouse}`,
       method: 'get',
       user: 'distributor',
     })
@@ -58,7 +57,7 @@ export const fetchAllProducts = createAsyncThunk(
     return await request({
       url: '/product/get-products',
       method: 'get',
-      user: "retailer"
+      user: 'retailer',
     })
   },
 )
@@ -69,7 +68,7 @@ export const fetchSingleProduct = createAsyncThunk(
     return await request({
       url: `/product/get-product/${id}`,
       method: 'get',
-      user: "distributor"
+      user: 'distributor',
     })
   },
 )
@@ -78,7 +77,7 @@ export const generateSku = createAsyncThunk('product/generateSku', async () => {
   return await request({
     url: '/product/generate-sku',
     method: 'get',
-    user: "distributor"
+    user: 'distributor',
   })
 })
 
@@ -88,7 +87,7 @@ export const fetchCategories = createAsyncThunk(
     return await request({
       url: '/product/categories',
       method: 'get',
-      user: "distributor"
+      user: 'distributor',
     })
   },
 )
@@ -99,7 +98,7 @@ export const fetchSubCategories = createAsyncThunk(
     return await request({
       url: '/product/sub-categories',
       method: 'get',
-      user: "distributor"
+      user: 'distributor',
     })
   },
 )
@@ -110,7 +109,7 @@ export const fetchManufacturers = createAsyncThunk(
     return await request({
       url: '/product/manufacturers',
       method: 'get',
-      user: "distributor"
+      user: 'distributor',
     })
   },
 )
@@ -121,42 +120,33 @@ export const searchProducts = createAsyncThunk(
     return await request({
       url: `/product/search-product/${product}`,
       method: 'get',
-      user: "distributor"
+      user: 'distributor',
     })
   },
 )
 
 export const addProduct = createAsyncThunk(
   'product/addProduct',
-  async (
-    body: {
-      name: string
-      description: string
-      price: number
-      discount_price: number
-      cost_per_item: number
-      sku: string
-      quantity: number
-      weight: { type: number; value: number }
-      sub_category: string
-      category: string
-      manufacturer: string
-      images: string[]
-    },
-    { getState },
-  ) => {
-    const {
-      auth: { id },
-    } = getState() as RootState
-
+  async (body: {
+    name: string
+    description: string
+    price: number
+    discount_price: number
+    cost_per_item: number
+    sku: string
+    quantity: number
+    weight: { type: number; value: number }
+    sub_category: string
+    category: string
+    manufacturer: string
+    images: string[]
+    warehouse_id: string
+  }) => {
     return await request({
       url: '/product/add',
       method: 'post',
-      body: {
-        user_id: id,
-        ...body,
-      },
-      user: "distributor"
+      body,
+      user: 'distributor',
     })
   },
 )
@@ -190,7 +180,7 @@ export const productSlice = createSlice({
             state.products = action.payload.products
             break
           case 'product/fetchWarehouseProducts/fulfilled':
-            state.products = action.payload.products
+            state.products = action.payload.data
             break
           case 'product/fetchAllProducts/fulfilled':
             state.products = action.payload.data
@@ -220,6 +210,10 @@ export const productSlice = createSlice({
   },
 })
 
-export const { reset, clearSearchResult, clearViewedProduct } = productSlice.actions
+export const {
+  reset,
+  clearSearchResult,
+  clearViewedProduct,
+} = productSlice.actions
 
 export default productSlice.reducer

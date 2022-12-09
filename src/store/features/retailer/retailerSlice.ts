@@ -245,7 +245,7 @@ export const retailerSlice = createSlice({
               state.cartId = payload.cart._id || null
               break
             case 'retailer/placeOrder/fulfilled':
-              state.orderId = payload.id
+              state.orderId = payload.order_id
               state.retailerStamp = payload.id
               break
             case 'retailer/completeOrder/fulfilled':

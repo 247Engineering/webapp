@@ -119,6 +119,7 @@ const WarehouseProduct = ({
         sub_category: subCategory,
         manufacturer: manufacturer,
         images,
+        warehouse_id: warehouse as string
       }),
     )
   }
@@ -167,7 +168,7 @@ const WarehouseProduct = ({
   }, [dispatch, navigate, productStamp, warehouse])
 
   return (
-    <div className="" onClick={() => setDropdown(false)}>
+    <div className="h-full" onClick={() => setDropdown(false)}>
       <AppLayout>
         <header>
           <BackButton text="Products" />

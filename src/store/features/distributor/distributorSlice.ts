@@ -82,13 +82,9 @@ export const addWarehouse = createAsyncThunk(
 
 export const fetchWarehouses = createAsyncThunk(
   'distributor/fetchWarehouses',
-  async (_, { getState }) => {
-    const {
-      auth: { id },
-    } = getState() as RootState
-
+  async () => {
     return await request({
-      url: `/warehouse/get-warehouses/${id}`,
+      url: `/warehouse/get-warehouses`,
       method: 'get',
       user: 'distributor',
     })
@@ -100,7 +96,7 @@ export const fetchWarehouse = createAsyncThunk(
   async (warehouse: string) => {
 
     return await request({
-      url: `/warehouse/get-warehouses/${warehouse}`,
+      url: `/warehouse/single/${warehouse}`,
       method: 'get',
       user: 'distributor',
     })

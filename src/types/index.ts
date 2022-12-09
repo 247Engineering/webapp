@@ -181,7 +181,7 @@ export interface DistributorState {
   loading?: boolean
   warehouseStamp?: number | null
   warehouses?: any[]
-  warehouse?: string | null
+  warehouse?: any
   order?: any
   orders?: any[]
 }

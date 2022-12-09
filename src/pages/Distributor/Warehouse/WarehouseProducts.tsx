@@ -117,7 +117,7 @@ const WarehouseProducts = () => {
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
+              {products?.map((product) => (
                 <tr key={product.sku} className="text-[0.75rem] leading-[1rem]">
                   <td className="w-[2.25rem]">
                     <div className="flex justify-center items-center">
