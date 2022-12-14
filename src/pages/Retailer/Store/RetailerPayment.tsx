@@ -37,7 +37,7 @@ const RetailerPayment = () => {
   const handleSubmit = () => {
     dispatch(
       completeOrder({
-        order_id: order as string,
+        order_doc_id: order as string,
         payment_option:
           paymentOptionMap[paymentOption as 'cash' | 'card' | 'transfer'],
       }),

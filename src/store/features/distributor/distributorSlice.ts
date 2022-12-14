@@ -134,10 +134,10 @@ export const updateWarehouseOrder = createAsyncThunk(
   }: {
     order: string
     warehouse: string
-    status: string
+    status: string | null
   }) => {
     return await request({
-      url: `/warehouse/order/${order}/${warehouse}`,
+      url: `/warehouse/update-order/${order}/${warehouse}`,
       method: 'put',
       body: { order_status },
       user: 'distributor',
@@ -196,6 +196,7 @@ export const distributorSlice = createSlice({
             state.warehouse = action.payload.data
             break
           case 'distributor/fetchWarehouseOrder/fulfilled':
+          case 'distributor/updateWarehouseOrder/fulfilled':
             state.order = action.payload.data
             break
           case 'distributor/fetchWarehouseOrders/fulfilled':

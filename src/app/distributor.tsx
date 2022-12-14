@@ -16,6 +16,7 @@ import AddWarehouseProduct from '../pages/Distributor/Warehouse/AddWarehouseProd
 import WarehouseDetails from '../pages/Distributor/Warehouse/WarehouseDetails'
 import WarehouseOrders from '../pages/Distributor/Warehouse/Orders/Orders'
 import WarehouseOrderDetails from '../pages/Distributor/Warehouse/Orders/OrderDetails'
+import ConfirmPickup from '../pages/Distributor/Warehouse/ConfirmPickup'
 
 import * as ROUTES from '../routes'
 
@@ -104,6 +105,10 @@ export const authedDistributorRoutes = [
   {
     path: ROUTES.DISTRIBUTOR.WAREHOUSE_ORDER,
     element: <WarehouseOrderDetails />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.WAREHOUSE_ORDER_CONFIRM,
+    element: <ConfirmPickup />,
   },
   {
     path: ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCT_FORM,

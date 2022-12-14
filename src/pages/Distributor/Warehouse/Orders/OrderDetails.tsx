@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { format } from 'date-fns'
 
@@ -17,10 +17,11 @@ import {
   updateWarehouseOrder,
 } from '../../../../store/features/distributor'
 import { AppDispatch, RootState } from '../../../../store'
-import { DistributorState } from '../../../../types'
-// import * as ROUTES from '../../../../routes'
+import { DistributorState, OrderStatus } from '../../../../types'
+import * as ROUTES from '../../../../routes'
 
 const OrderDetails = () => {
+  const navigate = useNavigate()
   const { warehouse, order: orderId } = useParams()
 
   const dispatch = useDispatch<AppDispatch>()
@@ -37,6 +38,46 @@ const OrderDetails = () => {
     )
   }, [dispatch, warehouse, orderId])
 
+  const statusMap = {
+    PENDING: {
+      statusText: 'Pending order',
+      statusClassName: 'bg-pumpkin-light text-pumpkin',
+      buttonText: 'Confirm order',
+      nextStatus: 'CONFIRMED',
+      goToConfirm: false,
+    },
+    CONFIRMED: {
+      statusText: 'Order confirmed',
+      statusClassName: 'bg-[#E9D9F1] text-[#461A53]',
+      buttonText: 'Ready for pickup',
+      nextStatus: 'PICKED',
+      goToConfirm: false,
+    },
+    PICKED: {
+      statusText: 'Order confirmed',
+      statusClassName: 'bg-[#E9D9F1] text-[#461A53]',
+      buttonText: 'Confirm pickup',
+      nextStatus: 'DELIVERY',
+      goToConfirm: order?.delivery_type === 'RT_PICKUP' ? true : false,
+    },
+    DELIVERY: {
+      statusText: 'Out for delivery',
+      statusClassName: 'bg-pumpkin-light text-pumpkins',
+      buttonText: null,
+      nextStatus: null,
+      goToConfirm: false,
+    },
+    COMPLETED: {
+      statusText: 'Order completed',
+      statusClassName: 'bg-green-light text-green',
+      buttonText: null,
+      nextStatus: null,
+      goToConfirm: false,
+    },
+  }
+
+  const orderStatus = statusMap[(order?.status || 'PENDING') as OrderStatus]
+
   return (
     <>
       <AppLayout>
@@ -47,12 +88,12 @@ const OrderDetails = () => {
           </h1>
           <p className="p mb-2 text-black-100">
             {format(
-              order.order_date ? new Date(order.order_date) : new Date(),
+              order?.order_date ? new Date(order.order_date) : new Date(),
               'dd/M/yyy',
             )}{' '}
             at{' '}
             {format(
-              order.order_date ? new Date(order.order_date) : new Date(),
+              order?.order_date ? new Date(order.order_date) : new Date(),
               'h:Ma',
             )}
           </p>
@@ -62,8 +103,8 @@ const OrderDetails = () => {
               text="Paid"
             />
             <Status
-              className="bg-pumpkin-light text-pumpkin rounded-[10px] py-1 px-2"
-              text="Pending order"
+              className={`${orderStatus.statusClassName} rounded-[10px] py-1 px-2`}
+              text={orderStatus.statusText}
             />
           </div>
         </header>
@@ -77,7 +118,7 @@ const OrderDetails = () => {
             </thead>
             <tbody>
               {order?.line_items.map((item: any) => (
-                <tr>
+                <tr key={item.product_id}>
                   <td className="w-[14.688rem] p-4 text-[0.75rem] leading-[1rem]">
                     <div className="flex">
                       <img
@@ -112,29 +153,41 @@ const OrderDetails = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="text-[0.75rem] leading-[1rem]">
                 <h6 className="font-[700] mb-2">Shipping address</h6>
-                <p className="max-w-[8.75rem]">
-                  Ebeano Supermarket Chevron 556 Chevron Drive, Lekki, Lagos
-                  101210 Nigeria
+                <p className="max-w-[8.75rem] capitalize">
+                  {order?.delivery_type === 'WH_DELIVERY'
+                    ? order.address
+                    : 'Retailer Pickup'}
                 </p>
               </div>
               <div className="text-[0.75rem] leading-[1rem]">
                 <h6 className="font-[700] mb-2">Payment method</h6>
-                <p className="max-w-[8.75rem]">Bank transfer</p>
+                <p className="max-w-[8.75rem] capitalize">
+                  {order?.payment_type}
+                </p>
               </div>
             </div>
           </div>
-          <ButtonSubmit
-            text="Confirm order"
-            onClick={() =>
-              dispatch(
-                updateWarehouseOrder({
-                  order: orderId as string,
-                  warehouse: warehouse as string,
-                  status: 'CONFIRMED',
-                }),
-              )
-            }
-          />
+          {orderStatus.buttonText ? (
+            <ButtonSubmit
+              text={orderStatus.buttonText}
+              onClick={() =>
+                orderStatus.goToConfirm
+                  ? navigate(
+                      ROUTES.DISTRIBUTOR.WAREHOUSE_ORDER_CONFIRM_FOR(
+                        warehouse as string,
+                        orderId as string,
+                      ),
+                    )
+                  : dispatch(
+                      updateWarehouseOrder({
+                        order: orderId as string,
+                        warehouse: warehouse as string,
+                        status: orderStatus.nextStatus,
+                      }),
+                    )
+              }
+            />
+          ) : null}
         </section>
       </AppLayout>
     </>

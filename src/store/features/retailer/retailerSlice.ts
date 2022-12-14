@@ -146,7 +146,7 @@ export const placeOrder = createAsyncThunk(
 
 export const completeOrder = createAsyncThunk(
   'retailer/completeOrder',
-  async (body: { order_id: string; payment_option: number }) => {
+  async (body: { order_doc_id: string; payment_option: number }) => {
     return await request({
       url: '/commerce/complete-order',
       method: 'post',
@@ -245,8 +245,8 @@ export const retailerSlice = createSlice({
               state.cartId = payload.cart._id || null
               break
             case 'retailer/placeOrder/fulfilled':
-              state.orderId = payload.order_id
-              state.retailerStamp = payload.order_id
+              state.orderId = payload.id
+              state.retailerStamp = payload.id
               break
             case 'retailer/completeOrder/fulfilled':
               state.retailerStamp = new Date().getTime()

@@ -28,6 +28,9 @@ export const DISTRIBUTOR = {
   WAREHOUSE_ORDER: '/distributor/warehouses/:warehouse/orders/:order',
   WAREHOUSE_ORDER_FOR: (warehouse: string, order: string) =>
     `/distributor/warehouses/${warehouse}/orders/${order}`,
+  WAREHOUSE_ORDER_CONFIRM: '/distributor/warehouses/:warehouse/orders/:order/confirm',
+  WAREHOUSE_ORDER_CONFIRM_FOR: (warehouse: string, order: string) =>
+    `/distributor/warehouses/${warehouse}/orders/${order}/confirm`,
 }
 
 export const WAREHOUSE = {

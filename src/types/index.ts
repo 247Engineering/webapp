@@ -325,7 +325,12 @@ export interface SignInProps {
   forgotPassword: string
 }
 
-export type OrderStatus = 'PENDING'
+export type OrderStatus =
+  | 'PENDING'
+  | 'CONFIRMED'
+  | 'PICKED'
+  | 'DELIVERY'
+  | 'COMPLETED'
 
 export interface OtpInputProps {
   value: string
