@@ -53,7 +53,7 @@ const OrderDetails = () => {
       nextStatus: 'PICKED',
       goToConfirm: false,
     },
-    PICKED: {
+    PICKUP: {
       statusText: 'Order confirmed',
       statusClassName: 'bg-[#E9D9F1] text-[#461A53]',
       buttonText: 'Confirm pickup',

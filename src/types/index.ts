@@ -328,7 +328,7 @@ export interface SignInProps {
 export type OrderStatus =
   | 'PENDING'
   | 'CONFIRMED'
-  | 'PICKED'
+  | 'PICKUP'
   | 'DELIVERY'
   | 'COMPLETED'
 

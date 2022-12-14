@@ -66,7 +66,7 @@ const RetailerOrderStatus = () => {
       totalSteps: 3,
       button: false,
     },
-    PICKED: {
+    PICKUP: {
       title: 'Order picked up',
       text: 'Mike A has picked up your order',
       deliveryDate: true,
