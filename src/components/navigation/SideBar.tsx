@@ -16,7 +16,7 @@ import * as ROUTES from '../../routes'
 const SideBar = ({ show }: { show: boolean }) => {
   const { logout, user } = useAuth() as AuthContextType
   const userType =
-    user?.type === 'warehouse' ? 'DISTRIBUTOR' : user.type.toUpperCase()
+    user?.type === 'warehouse' ? 'DISTRIBUTOR' : user?.type.toUpperCase()
   return user ? (
     <aside
       className={`absolute top-0 bottom-0 z-50 min-h-screen w-full max-w-[16.875rem] bg-[#461A53] p-4 text-white font-[700] text-[0.875rem] leading-[1.25rem] ease-in-out transition-all duration-300 ${

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { format } from 'date-fns'
 
 import image from '../../../../assets/images/image.svg'
 
@@ -36,17 +37,25 @@ const OrderDetails = () => {
     )
   }, [dispatch, warehouse, orderId])
 
-  console.log({ order })
-
   return (
     <>
       <AppLayout>
         <header>
           <BackButton text="Orders" />
           <h1 className="font-[700] text-[1.25rem] leading-[1.75rem] my-2 text-black">
-            Order #FD089345
+            Order #{order?.order_id.replace('ORD_', '')}
           </h1>
-          <p className="p mb-2 text-black-100">10/10/2022 at 13:00PM</p>
+          <p className="p mb-2 text-black-100">
+            {format(
+              order.order_date ? new Date(order.order_date) : new Date(),
+              'dd/M/yyy',
+            )}{' '}
+            at{' '}
+            {format(
+              order.order_date ? new Date(order.order_date) : new Date(),
+              'h:Ma',
+            )}
+          </p>
           <div className="flex">
             <Status
               className="bg-green-light text-green rounded-[10px] mr-2 py-1 px-2"
@@ -67,64 +76,26 @@ const OrderDetails = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="w-[14.688rem] p-4 text-[0.75rem] leading-[1rem]">
-                  <div className="flex">
-                    <img
-                      src={image}
-                      className="w-[2rem] h-[2rem] rounded-[2px] mr-2"
-                      alt="product item"
-                    />
-                    <div className="flex flex-col justify-between">
-                      <p className="font-[700] capitalize">
-                        Colgate optic white
-                      </p>
-                      <p>75ml</p>
+              {order?.line_items.map((item: any) => (
+                <tr>
+                  <td className="w-[14.688rem] p-4 text-[0.75rem] leading-[1rem]">
+                    <div className="flex">
+                      <img
+                        src={item.images[0] || image}
+                        className="w-[2rem] h-[2rem] rounded-[2px] mr-2"
+                        alt="product item"
+                      />
+                      <div className="flex flex-col justify-between">
+                        <p className="font-[700] capitalize">{item.name}</p>
+                        <p>75ml</p>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td className="w-[14.688rem] p-4 text-[0.75rem] leading-[1rem]">
-                  N1,000 x 50
-                </td>
-              </tr>
-              <tr>
-                <td className="w-[14.688rem] p-4 text-[0.75rem] leading-[1rem]">
-                  <div className="flex">
-                    <img
-                      src={image}
-                      className="w-[2rem] h-[2rem] rounded-[2px] mr-2"
-                      alt="product item"
-                    />
-                    <div className="flex flex-col justify-between">
-                      <p className="font-[700] capitalize">
-                        Indomie onion chicken
-                      </p>
-                      <p>75ml</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="w-[14.688rem] p-4 text-[0.75rem] leading-[1rem]">
-                  N1,000 x 50
-                </td>
-              </tr>
-              <tr>
-                <td className="w-[14.688rem] p-4 text-[0.75rem] leading-[1rem]">
-                  <div className="flex">
-                    <img
-                      src={image}
-                      className="w-[2rem] h-[2rem] rounded-[2px] mr-2"
-                      alt="product item"
-                    />
-                    <div className="flex flex-col justify-between">
-                      <p className="font-[700] capitalize">Indomie relish</p>
-                      <p>Carton(40 pcs)</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="w-[14.688rem] p-4 text-[0.75rem] leading-[1rem]">
-                  N4,000 x 24
-                </td>
-              </tr>
+                  </td>
+                  <td className="w-[14.688rem] p-4 text-[0.75rem] leading-[1rem]">
+                    N{Number(item.price).toLocaleString()} x {item.quantity}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </TableLayout>
           <div className="mt-[1.875rem] rounded-tr-[12px] rounded-tl-[12px] border border-solid border-grey-light w-full h-[8.375rem] overflow-hidden">

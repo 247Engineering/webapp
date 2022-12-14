@@ -246,7 +246,7 @@ export const retailerSlice = createSlice({
               break
             case 'retailer/placeOrder/fulfilled':
               state.orderId = payload.order_id
-              state.retailerStamp = payload.id
+              state.retailerStamp = payload.order_id
               break
             case 'retailer/completeOrder/fulfilled':
               state.retailerStamp = new Date().getTime()

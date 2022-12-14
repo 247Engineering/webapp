@@ -15,6 +15,7 @@ import warehouse from '../../../assets/images/warehouse-marker.svg'
 
 import AppLayout from '../../../components/layouts/AppLayout'
 import ButtonSubmit from '../../../components/forms/ButtonSubmit'
+import OtpInput from '../../../components/forms/OtpInput'
 import Map from '../../../components/miscellaneous/Map'
 import OrderSummary from '../../../components/miscellaneous/OrderSummary'
 import IconProgressBar from '../../../components/miscellaneous/IconProgressBar'
@@ -160,6 +161,14 @@ const RetailerOrderStatus = () => {
               images={status.images}
             />
           </div>
+          {order?.status === 'DELIVERY' ? (
+            <div className="mb-8">
+              <h4 className="font-[700] text-[1rem] leading-[1.5rem] mb-6">
+                Confirmation OTP
+              </h4>
+              <OtpInput value="7654" onChange={() => {}} disabled />
+            </div>
+          ) : null}
           <OrderSummary
             cartItems={
               order?.line_items?.map((item: any) => ({

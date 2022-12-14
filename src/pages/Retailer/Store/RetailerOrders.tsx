@@ -76,14 +76,14 @@ const RetailerOrders = () => {
             </thead>
             <tbody>
               {ongoingOrders.map((order) => (
-                <tr key={order.id}>
-                  <td
-                    className="w-[9.5rem] overflow-hidden text-ellipsis p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple uppercase"
-                    onClick={() =>
-                      navigate(ROUTES.RETAILER.ORDER_STATUS_FOR(order.id))
-                    }
-                  >
-                    {order.id}
+                <tr
+                  key={order.id}
+                  onClick={() =>
+                    navigate(ROUTES.RETAILER.ORDER_STATUS_FOR(order.id))
+                  }
+                >
+                  <td className="w-[9.5rem] overflow-hidden text-ellipsis p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple uppercase">
+                    {order.order_id.replace('ORD_', '')}
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
                     {format(

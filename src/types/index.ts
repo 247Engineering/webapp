@@ -326,3 +326,10 @@ export interface SignInProps {
 }
 
 export type OrderStatus = 'PENDING'
+
+export interface OtpInputProps {
+  value: string
+  onChange: (value: string) => void
+  className?: string
+  disabled?: boolean
+}

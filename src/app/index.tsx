@@ -5,7 +5,7 @@ import UnauthedLayout from '../components/layouts/UnauthedLayout'
 
 import AccountSelect from '../pages/AccountSelect'
 import ResetPassword from '../pages/ResetPassword'
-import Current from '../pages/Distributor/Warehouse/WarehouseFormEdit'
+import Current from '../pages/Distributor/Warehouse/ConfirmPickup'
 
 import {
   unAuthedDistributorRoutes,

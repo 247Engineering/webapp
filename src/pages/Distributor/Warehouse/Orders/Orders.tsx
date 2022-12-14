@@ -13,7 +13,7 @@ import TableFooter from '../../../../components/tables/TableFooter'
 import { fetchWarehouseOrders } from '../../../../store/features/distributor'
 import { AppDispatch, RootState } from '../../../../store'
 import { DistributorState } from '../../../../types'
-// import * as ROUTES from '../../../../routes'
+import * as ROUTES from '../../../../routes'
 
 const Orders = () => {
   const navigate = useNavigate()
@@ -30,21 +30,19 @@ const Orders = () => {
     dispatch(fetchWarehouseOrders(warehouseId as string))
   }, [dispatch, warehouseId])
 
-  console.log({ navigate, orders, warehouse })
-
   return (
     <>
       <AppLayout>
         <header>
           <div>
             <h1 className="h1 mb-2 text-black">Orders</h1>
-            <p className="p text-black-100">
+            <p className="p text-black-100 capitalize">
               <img
                 src={location}
                 className="w-[1.563rem] h-[1.25rem] inline"
                 alt="location icon"
               />{' '}
-              Femadons Warehouse Victoria Island.
+              {warehouse?.warehouse.address}
             </p>
           </div>
         </header>
@@ -78,17 +76,24 @@ const Orders = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="w-[9.5rem] p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple">
-                  FD089345
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  10/10/2022 13:00PM
-                </td>
-                <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                  Ebeano Supermarket Chevron
-                </td>
-              </tr>
+              {orders?.map((order) => (
+                <tr
+                  key={order.id}
+                  onClick={() =>
+                    navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_ORDER_FOR(warehouseId as string, order.id))
+                  }
+                >
+                  <td className="w-[9.5rem] overflow-hidden text-ellipsis p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple">
+                    {order.order_id.replace('ORD_', '')}
+                  </td>
+                  <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
+                    10/10/2022 13:00PM
+                  </td>
+                  <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
+                    Ebeano Supermarket Chevron
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </TableLayout>
           <TableFooter />

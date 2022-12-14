@@ -25,7 +25,6 @@ const Dashboard = () => {
   const setSelectedRange = (dates: { start: Date; end: Date }) => {
     setStart(dates.start)
     setEnd(dates.end)
-    console.log({ start, end })
   }
 
   return (
