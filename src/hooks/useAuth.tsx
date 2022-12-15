@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }: any) => {
           navigate(distributorStep[step as 1 | 2 | 3], { replace: true })
           break
         case 'warehouse':
-          navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS_FOR(data.id))
+          navigate(ROUTES.DISTRIBUTOR.WAREHOUSES)
           break
         case 'retailer':
           dispatch(fetchCart())

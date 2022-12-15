@@ -1,41 +1,41 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import edit from '../../../assets/images/edit.svg'
-import image from '../../../assets/images/image.svg'
-import dots from '../../../assets/images/three-dots-white.svg'
+import edit from "../../../assets/images/edit.svg";
+import image from "../../../assets/images/image.svg";
+import dots from "../../../assets/images/three-dots-white.svg";
 
-import AppLayout from '../../../components/layouts/AppLayout'
-import TableLayout from '../../../components/tables/TableLayout'
-import TableFooter from '../../../components/tables/TableFooter'
-import BackButton from '../../../components/forms/BackButton'
+import AppLayout from "../../../components/layouts/AppLayout";
+import TableLayout from "../../../components/tables/TableLayout";
+import TableFooter from "../../../components/tables/TableFooter";
+import BackButton from "../../../components/forms/BackButton";
 
-import { fetchWarehouse } from '../../../store/features/distributor'
-import { fetchWarehouseProducts } from '../../../store/features/product'
-import { AppDispatch, RootState } from '../../../store'
-import { DistributorState, ProductState } from '../../../types'
-import * as ROUTES from '../../../routes'
+import { fetchWarehouse } from "../../../store/features/distributor";
+import { fetchWarehouseProducts } from "../../../store/features/product";
+import { AppDispatch, RootState } from "../../../store";
+import { DistributorState, ProductState } from "../../../types";
+import * as ROUTES from "../../../routes";
 
 const WarehouseDetails = () => {
-  const navigate = useNavigate()
-  const { warehouse: warehouseId } = useParams()
+  const navigate = useNavigate();
+  const { warehouse: warehouseId } = useParams();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const { warehouse } = useSelector<RootState>(
-    ({ distributor }) => distributor,
-  ) as DistributorState
+    ({ distributor }) => distributor
+  ) as DistributorState;
   const { products } = useSelector<RootState>(
-    ({ product }) => product,
-  ) as ProductState
+    ({ product }) => product
+  ) as ProductState;
 
-  const [type, setType] = useState('details')
-  const [open, setOpen] = useState(false)
+  const [type, setType] = useState("details");
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchWarehouse(warehouseId as string))
-    dispatch(fetchWarehouseProducts(warehouseId as string))
-  }, [dispatch, warehouseId])
+    dispatch(fetchWarehouse(warehouseId as string));
+    dispatch(fetchWarehouseProducts(warehouseId as string));
+  }, [dispatch, warehouseId]);
 
   return (
     <div className="h-full" onClick={() => setOpen(false)}>
@@ -71,8 +71,8 @@ const WarehouseDetails = () => {
                       onClick={() =>
                         navigate(
                           ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCT_FORM_FOR(
-                            warehouseId as string,
-                          ),
+                            warehouseId as string
+                          )
                         )
                       }
                     >
@@ -87,23 +87,23 @@ const WarehouseDetails = () => {
         <section>
           <div className="p-1 bg-grey-light-200 rounded-[10px] flex items-center justify-between font-[700] text-[0.875rem] leading-[1.25rem] mb-8">
             <button
-              className={`flex items-center justify-center text-black-100 rounded-[8px] p-[0.625rem] w-[9.75rem] ${
-                type === 'details' ? 'text-orange bg-orange-light-100' : ''
+              className={`flex items-center justify-center text-black-100 rounded-[8px] py-[0.625rem] px-[0.875rem] w-[9.75rem] ${
+                type === "details" ? "text-orange bg-orange-light-100" : ""
               }`}
-              onClick={() => setType('details')}
+              onClick={() => setType("details")}
             >
               Warehouse details
             </button>
             <button
-              className={`flex items-center justify-center text-black-100 rounded-[8px] p-[0.625rem] w-[9.75rem] ${
-                type === 'inventory' ? 'text-orange bg-orange-light-100' : ''
+              className={`flex items-center justify-center text-black-100 rounded-[8px] py-[0.625rem] px-[0.875rem] w-[9.75rem] ${
+                type === "inventory" ? "text-orange bg-orange-light-100" : ""
               }`}
-              onClick={() => setType('inventory')}
+              onClick={() => setType("inventory")}
             >
               Inventory
             </button>
           </div>
-          {type === 'details' ? (
+          {type === "details" ? (
             <>
               <div className="rounded-[12px] border border-solid border-grey-light p-4 relative mb-4">
                 <h6 className="mb-2 font-[700] text-[0.75rem] leading-[1rem]">
@@ -185,7 +185,7 @@ const WarehouseDetails = () => {
         </section>
       </AppLayout>
     </div>
-  )
-}
+  );
+};
 
-export default WarehouseDetails
+export default WarehouseDetails;
