@@ -90,7 +90,7 @@ const RetailerOrders = () => {
                       order.order_date
                         ? new Date(order.order_date)
                         : new Date(),
-                      'dd/M/yyy h:ma',
+                      'dd/M/yyy hh:ma',
                     )}
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
@@ -127,7 +127,7 @@ const RetailerOrders = () => {
                       order.order_date
                         ? new Date(order.order_date)
                         : new Date(),
-                      'dd/M/yyy h:ma',
+                      'dd/M/yyy hh:ma',
                     )}
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">

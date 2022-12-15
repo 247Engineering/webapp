@@ -1,38 +1,36 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import add from '../../../assets/images/add.svg'
-import search from '../../../assets/images/search.svg'
-import dots from '../../../assets/images/three-dots.svg'
-import distributor from '../../../assets/images/distributor-checked.svg'
+import add from "../../../assets/images/add.svg";
+import search from "../../../assets/images/search.svg";
+import dots from "../../../assets/images/three-dots.svg";
+import distributor from "../../../assets/images/distributor-checked.svg";
 
-import AppLayout from '../../../components/layouts/AppLayout'
-import SortSelect from '../../../components/forms/SortSelect'
-import TableLayout from '../../../components/tables/TableLayout'
+import AppLayout from "../../../components/layouts/AppLayout";
+import SortSelect from "../../../components/forms/SortSelect";
+import TableLayout from "../../../components/tables/TableLayout";
 
-import {
-  fetchWarehouses,
-} from '../../../store/features/distributor'
-import { AppDispatch, RootState } from '../../../store'
-import { DistributorState } from '../../../types'
-import * as ROUTES from '../../../routes'
+import { fetchWarehouses } from "../../../store/features/distributor";
+import { AppDispatch, RootState } from "../../../store";
+import { DistributorState } from "../../../types";
+import * as ROUTES from "../../../routes";
 
 const WarehouseLocations = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const { warehouses } = useSelector<RootState>(
-    ({ distributor }) => distributor,
-  ) as DistributorState
+    ({ distributor }) => distributor
+  ) as DistributorState;
 
-  const [sort, setSort] = useState('')
-  const [open, setOpen] = useState(false)
-  const [selected, setSelected] = useState('')
+  const [sort, setSort] = useState("");
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState("");
 
   useEffect(() => {
-    dispatch(fetchWarehouses())
-  }, [dispatch])
+    dispatch(fetchWarehouses());
+  }, [dispatch]);
 
   return (
     <div className="h-full" onClick={() => setOpen(false)}>
@@ -55,8 +53,8 @@ const WarehouseLocations = () => {
           <div className="flex items-center mb-8">
             <SortSelect
               options={[
-                'Value - highest to lowest',
-                'Value - lowest to highest',
+                "Value - highest to lowest",
+                "Value - lowest to highest",
               ]}
               value={sort}
               onChange={(value) => setSort(value)}
@@ -79,7 +77,14 @@ const WarehouseLocations = () => {
             <TableLayout>
               <tbody>
                 {warehouses?.map((warehouse, i) => (
-                  <tr key={i}>
+                  <tr
+                    key={i}
+                    onClick={() => {
+                      navigate(
+                        ROUTES.DISTRIBUTOR.WAREHOUSE_DETAILS_FOR(warehouse._id)
+                      );
+                    }}
+                  >
                     <td className="w-[15rem] p-2 pl-4 text-[0.75rem] leading-[1rem]">
                       <div className="flex items-center">
                         <img
@@ -117,8 +122,8 @@ const WarehouseLocations = () => {
                           alt="options"
                           className="w-1.5 h-5"
                           onClick={() => {
-                            setOpen(!open)
-                            setSelected(warehouse._id)
+                            setOpen(!open);
+                            setSelected(warehouse._id);
                           }}
                         />
                         {open && warehouse._id === selected ? (
@@ -126,7 +131,11 @@ const WarehouseLocations = () => {
                             <li
                               className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p"
                               onClick={() => {
-                                navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_DETAILS_FOR(warehouse._id))
+                                navigate(
+                                  ROUTES.DISTRIBUTOR.WAREHOUSE_DETAILS_FOR(
+                                    warehouse._id
+                                  )
+                                );
                               }}
                             >
                               View
@@ -186,7 +195,7 @@ const WarehouseLocations = () => {
         </section>
       </AppLayout>
     </div>
-  )
-}
+  );
+};
 
-export default WarehouseLocations
+export default WarehouseLocations;

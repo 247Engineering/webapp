@@ -41,7 +41,7 @@ const WarehouseDetails = () => {
     <div className="h-full" onClick={() => setOpen(false)}>
       <AppLayout>
         <header>
-          <BackButton text="Warehouse" />
+          <BackButton text="Warehouses" />
           <div className="flex justify-between mt-2 mb-7">
             <div>
               <h1 className="font-[700] text-[1.25rem] leading-[1.75rem] mb-2 text-black">

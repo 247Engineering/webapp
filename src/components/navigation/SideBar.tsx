@@ -1,95 +1,65 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
 
-import logo from '../../assets/images/24Seven2.svg'
-import dashboard from '../../assets/images/dashboard-icon.svg'
-import products from '../../assets/images/product-icon.svg'
-import orders from '../../assets/images/orders-icon.svg'
-import warehouses from '../../assets/images/warehouses-icon.svg'
-import operations from '../../assets/images/operations-icon.svg'
-import settings from '../../assets/images/settings-icon.svg'
+import logo from "../../assets/images/24Seven2.svg";
+import dashboard from "../../assets/images/dashboard-icon.svg";
+import products from "../../assets/images/product-icon.svg";
+import orders from "../../assets/images/orders-icon.svg";
+import warehouses from "../../assets/images/warehouses-icon.svg";
+import operations from "../../assets/images/operations-icon.svg";
+import settings from "../../assets/images/settings-icon.svg";
 
-import { useAuth } from '../../hooks/useAuth'
-import { AuthContextType } from '../../types'
-import * as ROUTES from '../../routes'
+import { useAuth } from "../../hooks/useAuth";
+import { AuthContextType } from "../../types";
+import * as ROUTES from "../../routes";
+
+const sideBarMap = {
+  DISTRIBUTOR: [
+    { link: ROUTES.DISTRIBUTOR.DASHBOARD, text: "Dashboard", image: dashboard },
+    {
+      link: ROUTES.DISTRIBUTOR.WAREHOUSES,
+      text: "Warehouses",
+      image: warehouses,
+    },
+    {
+      link: ROUTES.DISTRIBUTOR.DASHBOARD,
+      text: "Operations",
+      image: operations,
+    },
+    { link: ROUTES.DISTRIBUTOR.DASHBOARD, text: "Settings", image: settings },
+  ],
+  RETAILER: [
+    { link: ROUTES.RETAILER.DASHBOARD, text: "Products", image: products },
+    { link: ROUTES.RETAILER.ORDERS, text: "Orders", image: orders },
+    { link: ROUTES.RETAILER.DASHBOARD, text: "Operations", image: operations },
+    { link: ROUTES.RETAILER.DASHBOARD, text: "Settings", image: settings },
+  ],
+};
 
 const SideBar = ({ show }: { show: boolean }) => {
-  const { logout, user } = useAuth() as AuthContextType
+  const { logout, user } = useAuth() as AuthContextType;
   const userType =
-    user?.type === 'warehouse' ? 'DISTRIBUTOR' : user?.type.toUpperCase()
+    user?.type === "warehouse" ? "DISTRIBUTOR" : user?.type.toUpperCase();
+
   return user ? (
     <aside
       className={`absolute top-0 bottom-0 z-50 min-h-screen w-full max-w-[16.875rem] bg-[#461A53] p-4 text-white font-[700] text-[0.875rem] leading-[1.25rem] ease-in-out transition-all duration-300 ${
-        show ? 'translate-x-0' : 'translate-x-[-16.875rem]'
+        show ? "translate-x-0" : "translate-x-[-16.875rem]"
       }`}
     >
       <img src={logo} alt="logo" className="mb-8" />
-      <Link
-        to={ROUTES[userType as 'DISTRIBUTOR' | 'RETAILER'].DASHBOARD}
-        className="px-2 py-3.5 flex flex-items"
-      >
-        <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
-          <img src={dashboard} alt="dashboard" />
-        </div>
-        <p>Dashboard</p>
-      </Link>
-      <Link
-        to={
-          user.type === 'retailer'
-            ? ROUTES.RETAILER.DASHBOARD
-            : ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS
-        }
-        className="px-2 py-3.5 flex flex-items"
-      >
-        <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
-          <img src={products} alt="products" />
-        </div>
-        <p>Products</p>
-      </Link>
-      <Link
-        to={
-          user.type === 'retailer'
-            ? ROUTES.RETAILER.ORDERS
-            : ROUTES.DISTRIBUTOR.DASHBOARD
-        }
-        className="px-2 py-3.5 flex flex-items"
-      >
-        <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
-          <img src={orders} alt="orders" />
-        </div>
-        <p>Orders</p>
-      </Link>
-      <Link
-        to={
-          user.type === 'retailer'
-            ? ROUTES.RETAILER.DASHBOARD
-            : ROUTES.DISTRIBUTOR.WAREHOUSES
-        }
-        className="px-2 py-3.5 flex flex-items"
-      >
-        <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
-          <img src={warehouses} alt="warehouses" />
-        </div>
-        <p>Warehouses</p>
-      </Link>
-      <Link
-        to={ROUTES[userType as 'DISTRIBUTOR' | 'RETAILER'].DASHBOARD}
-        className="px-2 py-3.5 flex flex-items"
-      >
-        <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
-          <img src={operations} alt="operations" />
-        </div>
-        <p>Operations</p>
-      </Link>
-      <Link
-        to={ROUTES[userType as 'DISTRIBUTOR' | 'RETAILER'].DASHBOARD}
-        className="px-2 py-3.5 flex flex-items"
-      >
-        <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
-          <img src={settings} alt="settings" />
-        </div>
-        <p>Settings</p>
-      </Link>
+      {sideBarMap[userType as "DISTRIBUTOR" | "RETAILER"].map((item) => (
+        <Link
+          key={item.text}
+          to={item.link}
+          className="px-2 py-3.5 flex flex-items"
+        >
+          <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
+            <img src={item.image} alt="dashboard" />
+          </div>
+          <p>{item.text}</p>
+        </Link>
+      ))}
       <div className="px-2 py-3.5 flex flex-items" onClick={() => logout()}>
         <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
           {/* <img src={settings} alt="settings" /> */}
@@ -97,7 +67,7 @@ const SideBar = ({ show }: { show: boolean }) => {
         <p>Logout</p>
       </div>
     </aside>
-  ) : null
-}
+  ) : null;
+};
 
-export default SideBar
+export default SideBar;

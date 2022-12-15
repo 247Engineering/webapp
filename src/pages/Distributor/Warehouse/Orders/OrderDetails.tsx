@@ -1,82 +1,82 @@
-import React, { useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { format } from 'date-fns'
+import React, { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { format } from "date-fns";
 
-import image from '../../../../assets/images/image.svg'
+import image from "../../../../assets/images/image.svg";
 
-import AppLayout from '../../../../components/layouts/AppLayout'
-import TableLayout from '../../../../components/tables/TableLayout'
-import Status from '../../../../components/miscellaneous/Status'
-import ButtonSubmit from '../../../../components/forms/ButtonSubmit'
-import Map from '../../../../components/miscellaneous/Map'
-import BackButton from '../../../../components/forms/BackButton'
+import AppLayout from "../../../../components/layouts/AppLayout";
+import TableLayout from "../../../../components/tables/TableLayout";
+import Status from "../../../../components/miscellaneous/Status";
+import ButtonSubmit from "../../../../components/forms/ButtonSubmit";
+import Map from "../../../../components/miscellaneous/Map";
+import BackButton from "../../../../components/forms/BackButton";
 
 import {
   fetchWarehouseOrder,
   updateWarehouseOrder,
-} from '../../../../store/features/distributor'
-import { AppDispatch, RootState } from '../../../../store'
-import { DistributorState, OrderStatus } from '../../../../types'
-import * as ROUTES from '../../../../routes'
+} from "../../../../store/features/distributor";
+import { AppDispatch, RootState } from "../../../../store";
+import { DistributorState, OrderStatus } from "../../../../types";
+import * as ROUTES from "../../../../routes";
 
 const OrderDetails = () => {
-  const navigate = useNavigate()
-  const { warehouse, order: orderId } = useParams()
+  const navigate = useNavigate();
+  const { warehouse, order: orderId } = useParams();
 
-  const dispatch = useDispatch<AppDispatch>()
-  const { order } = useSelector<RootState>(
-    ({ distributor }) => distributor,
-  ) as DistributorState
+  const dispatch = useDispatch<AppDispatch>();
+  const { order, loading } = useSelector<RootState>(
+    ({ distributor }) => distributor
+  ) as DistributorState;
 
   useEffect(() => {
     dispatch(
       fetchWarehouseOrder({
         warehouse: warehouse as string,
         order: orderId as string,
-      }),
-    )
-  }, [dispatch, warehouse, orderId])
+      })
+    );
+  }, [dispatch, warehouse, orderId]);
 
   const statusMap = {
     PENDING: {
-      statusText: 'Pending order',
-      statusClassName: 'bg-pumpkin-light text-pumpkin',
-      buttonText: 'Confirm order',
-      nextStatus: 'CONFIRMED',
+      statusText: "Pending order",
+      statusClassName: "bg-pumpkin-light text-pumpkin",
+      buttonText: "Confirm order",
+      nextStatus: "CONFIRMED",
       goToConfirm: false,
     },
     CONFIRMED: {
-      statusText: 'Order confirmed',
-      statusClassName: 'bg-[#E9D9F1] text-[#461A53]',
-      buttonText: 'Ready for pickup',
-      nextStatus: 'PICKED',
+      statusText: "Order confirmed",
+      statusClassName: "bg-[#E9D9F1] text-[#461A53]",
+      buttonText: "Ready for pickup",
+      nextStatus: "PICKUP",
       goToConfirm: false,
     },
     PICKUP: {
-      statusText: 'Order confirmed',
-      statusClassName: 'bg-[#E9D9F1] text-[#461A53]',
-      buttonText: 'Confirm pickup',
-      nextStatus: 'DELIVERY',
-      goToConfirm: order?.delivery_type === 'RT_PICKUP' ? true : false,
+      statusText: "Order confirmed",
+      statusClassName: "bg-[#E9D9F1] text-[#461A53]",
+      buttonText: "Confirm pickup",
+      nextStatus: "DELIVERY",
+      goToConfirm: order?.delivery_type === "RT_PICKUP" ? true : false,
     },
     DELIVERY: {
-      statusText: 'Out for delivery',
-      statusClassName: 'bg-pumpkin-light text-pumpkins',
+      statusText: "Out for delivery",
+      statusClassName: "bg-pumpkin-light text-pumpkin",
       buttonText: null,
       nextStatus: null,
       goToConfirm: false,
     },
     COMPLETED: {
-      statusText: 'Order completed',
-      statusClassName: 'bg-green-light text-green',
+      statusText: "Order completed",
+      statusClassName: "bg-green-light text-green",
       buttonText: null,
       nextStatus: null,
       goToConfirm: false,
     },
-  }
+  };
 
-  const orderStatus = statusMap[(order?.status || 'PENDING') as OrderStatus]
+  const orderStatus = statusMap[(order?.status || "PENDING") as OrderStatus];
 
   return (
     <>
@@ -84,17 +84,17 @@ const OrderDetails = () => {
         <header>
           <BackButton text="Orders" />
           <h1 className="font-[700] text-[1.25rem] leading-[1.75rem] my-2 text-black">
-            Order #{order?.order_id.replace('ORD_', '')}
+            Order #{order?.order_id.replace("ORD_", "")}
           </h1>
           <p className="p mb-2 text-black-100">
             {format(
               order?.order_date ? new Date(order.order_date) : new Date(),
-              'dd/M/yyy',
-            )}{' '}
-            at{' '}
+              "dd/M/yyy"
+            )}{" "}
+            at{" "}
             {format(
               order?.order_date ? new Date(order.order_date) : new Date(),
-              'h:Ma',
+              "h:Ma"
             )}
           </p>
           <div className="flex">
@@ -154,9 +154,9 @@ const OrderDetails = () => {
               <div className="text-[0.75rem] leading-[1rem]">
                 <h6 className="font-[700] mb-2">Shipping address</h6>
                 <p className="max-w-[8.75rem] capitalize">
-                  {order?.delivery_type === 'WH_DELIVERY'
+                  {order?.delivery_type === "WH_DELIVERY"
                     ? order.address
-                    : 'Retailer Pickup'}
+                    : "Retailer Pickup"}
                 </p>
               </div>
               <div className="text-[0.75rem] leading-[1rem]">
@@ -169,21 +169,23 @@ const OrderDetails = () => {
           </div>
           {orderStatus.buttonText ? (
             <ButtonSubmit
+              loading={loading}
+              disabled={loading}
               text={orderStatus.buttonText}
               onClick={() =>
                 orderStatus.goToConfirm
                   ? navigate(
                       ROUTES.DISTRIBUTOR.WAREHOUSE_ORDER_CONFIRM_FOR(
                         warehouse as string,
-                        orderId as string,
-                      ),
+                        orderId as string
+                      )
                     )
                   : dispatch(
                       updateWarehouseOrder({
                         order: orderId as string,
                         warehouse: warehouse as string,
                         status: orderStatus.nextStatus,
-                      }),
+                      })
                     )
               }
             />
@@ -191,7 +193,7 @@ const OrderDetails = () => {
         </section>
       </AppLayout>
     </>
-  )
-}
+  );
+};
 
-export default OrderDetails
+export default OrderDetails;

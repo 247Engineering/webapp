@@ -1,51 +1,51 @@
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import { format } from 'date-fns'
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import { format } from "date-fns";
 
-import orderProgress from '../../../assets/images/order-progress.svg'
-import orderProgressComplete from '../../../assets/images/order-progress-complete.svg'
-import collectedProgress from '../../../assets/images/collected-progress.svg'
-import collectedProgressComplete from '../../../assets/images/collected-progress-complete.svg'
-import deliveryProgress from '../../../assets/images/delivery-progress.svg'
-import deliveryProgressComplete from '../../../assets/images/delivery-progress-complete.svg'
-import pickupProgress from '../../../assets/images/pickup-progress.svg'
-import pickupProgressComplete from '../../../assets/images/pickup-progress-complete.svg'
-import warehouse from '../../../assets/images/warehouse-marker.svg'
+import orderProgress from "../../../assets/images/order-progress.svg";
+import orderProgressComplete from "../../../assets/images/order-progress-complete.svg";
+import collectedProgress from "../../../assets/images/collected-progress.svg";
+import collectedProgressComplete from "../../../assets/images/collected-progress-complete.svg";
+import deliveryProgress from "../../../assets/images/delivery-progress.svg";
+import deliveryProgressComplete from "../../../assets/images/delivery-progress-complete.svg";
+import pickupProgress from "../../../assets/images/pickup-progress.svg";
+import pickupProgressComplete from "../../../assets/images/pickup-progress-complete.svg";
+import warehouse from "../../../assets/images/warehouse-marker.svg";
 
-import AppLayout from '../../../components/layouts/AppLayout'
-import ButtonSubmit from '../../../components/forms/ButtonSubmit'
-import OtpInput from '../../../components/forms/OtpInput'
-import Map from '../../../components/miscellaneous/Map'
-import OrderSummary from '../../../components/miscellaneous/OrderSummary'
-import IconProgressBar from '../../../components/miscellaneous/IconProgressBar'
+import AppLayout from "../../../components/layouts/AppLayout";
+import ButtonSubmit from "../../../components/forms/ButtonSubmit";
+import OtpInput from "../../../components/forms/OtpInput";
+import Map from "../../../components/miscellaneous/Map";
+import OrderSummary from "../../../components/miscellaneous/OrderSummary";
+import IconProgressBar from "../../../components/miscellaneous/IconProgressBar";
 
-import { RootState, AppDispatch } from '../../../store'
-import { fetchSingleOrder } from '../../../store/features/retailer'
-import { RetailerState, OrderStatus } from '../../../types'
-import * as ROUTES from '../../../routes'
+import { RootState, AppDispatch } from "../../../store";
+import { fetchSingleOrder } from "../../../store/features/retailer";
+import { RetailerState, OrderStatus } from "../../../types";
+import * as ROUTES from "../../../routes";
 
 const RetailerOrderStatus = () => {
-  const { order: orderId } = useParams()
+  const { order: orderId } = useParams();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const { order } = useSelector<RootState>(
-    ({ retailer }) => retailer,
-  ) as RetailerState
+    ({ retailer }) => retailer
+  ) as RetailerState;
 
   useEffect(() => {
-    dispatch(fetchSingleOrder(orderId as string))
-  }, [dispatch, orderId])
+    dispatch(fetchSingleOrder(orderId as string));
+  }, [dispatch, orderId]);
 
   const statusMap = {
     PENDING: {
-      title: 'Awaiting confirmation',
-      text: 'We are checking your order',
+      title: "Awaiting confirmation",
+      text: "We are checking your order",
       deliveryDate: false,
       images: [
         orderProgress,
         pickupProgress,
-        deliveryProgress,
+        ...(order?.delivery_type === "WH_DELIVERY" ? [deliveryProgress] : []),
         collectedProgress,
       ],
       step: 0,
@@ -53,13 +53,13 @@ const RetailerOrderStatus = () => {
       button: false,
     },
     CONFIRMED: {
-      title: 'Order confirmed',
-      text: 'We are preparing your order',
+      title: "Order confirmed",
+      text: "We are preparing your order",
       deliveryDate: true,
       images: [
         orderProgressComplete,
         pickupProgress,
-        deliveryProgress,
+        ...(order?.delivery_type === "WH_DELIVERY" ? [deliveryProgress] : []),
         collectedProgress,
       ],
       step: 0,
@@ -67,22 +67,22 @@ const RetailerOrderStatus = () => {
       button: false,
     },
     PICKUP: {
-      title: 'Order picked up',
-      text: 'Mike A has picked up your order',
+      title: "Order picked up",
+      text: "Mike A has picked up your order",
       deliveryDate: true,
       images: [
         orderProgressComplete,
         pickupProgressComplete,
-        deliveryProgress,
+        ...(order?.delivery_type === "WH_DELIVERY" ? [deliveryProgress] : []),
         collectedProgress,
       ],
       step: 1,
-      totalSteps: 3,
+      totalSteps: order?.delivery_type === "WH_DELIVERY" ? 3 : 2,
       button: false,
     },
     DELIVERY: {
-      title: 'Out for delivery',
-      text: 'Mike A is headed to your address ',
+      title: "Out for delivery",
+      text: "Mike A is headed to your address ",
       deliveryDate: true,
       images: [
         orderProgressComplete,
@@ -95,22 +95,24 @@ const RetailerOrderStatus = () => {
       button: false,
     },
     COMPLETED: {
-      title: 'Order complete',
-      text: 'Your order was checked and recieved ',
+      title: "Order complete",
+      text: "Your order was checked and recieved ",
       deliveryDate: true,
       images: [
         orderProgressComplete,
         pickupProgressComplete,
-        deliveryProgressComplete,
+        ...(order?.delivery_type === "WH_DELIVERY"
+          ? [deliveryProgressComplete]
+          : []),
         collectedProgressComplete,
       ],
       step: 3,
       totalSteps: 3,
       button: false,
     },
-  }
+  };
 
-  const orderStatus = statusMap[(order?.status || 'PENDING') as OrderStatus]
+  const orderStatus = statusMap[(order?.status || "PENDING") as OrderStatus];
 
   return (
     <>
@@ -118,7 +120,7 @@ const RetailerOrderStatus = () => {
         cart
         hideLogo
         hideName
-        secondaryNav={`Order #${order?.id}`}
+        secondaryNav={`Order #${order?.order_id.replace("ORD_", "")}`}
         secondaryNavBack="Orders"
         back={ROUTES.RETAILER.ORDERS}
       >
@@ -146,7 +148,7 @@ const RetailerOrderStatus = () => {
                   Delivery date
                 </h4>
                 <p className="text-black-100 text-[0.75rem] leading-[1rem]">
-                  {format(order?.delivery_date || new Date(), 'E io, MMM')}
+                  {format(order?.delivery_date || new Date(), "E io, MMM")}
                 </p>
               </div>
             ) : null}
@@ -158,12 +160,18 @@ const RetailerOrderStatus = () => {
               images={orderStatus.images}
             />
           </div>
-          {order?.status === 'DELIVERY' ? (
+          {order?.status === "DELIVERY" ||
+          (order?.status === "PICKUP" &&
+            order?.delivery_type === "RT_PICKUP") ? (
             <div className="mb-8">
               <h4 className="font-[700] text-[1rem] leading-[1.5rem] mb-6">
                 Confirmation OTP
               </h4>
-              <OtpInput value="7654" onChange={() => {}} disabled />
+              <OtpInput
+                value={order?.pickup_code || ""}
+                onChange={() => {}}
+                disabled
+              />
             </div>
           ) : null}
           <OrderSummary
@@ -193,7 +201,7 @@ const RetailerOrderStatus = () => {
         </section>
       </AppLayout>
     </>
-  )
-}
+  );
+};
 
-export default RetailerOrderStatus
+export default RetailerOrderStatus;

@@ -145,6 +145,22 @@ export const updateWarehouseOrder = createAsyncThunk(
   },
 )
 
+export const confirmOrderPickup = createAsyncThunk(
+  'distributor/confirmOrderPickup',
+  async (body: {
+    order_doc_id: string
+    warehouse_id: string
+    pickup_code: string
+  }) => {
+    return await request({
+      url: "warehouse/confirm-pickup",
+      method: 'post',
+      body,
+      user: 'distributor',
+    })
+  },
+)
+
 export const distributorSlice = createSlice({
   name: 'distributor',
   initialState,
@@ -197,6 +213,7 @@ export const distributorSlice = createSlice({
             break
           case 'distributor/fetchWarehouseOrder/fulfilled':
           case 'distributor/updateWarehouseOrder/fulfilled':
+          case 'distributor/confirmOrderPickup/fulfilled':
             state.order = action.payload.data
             break
           case 'distributor/fetchWarehouseOrders/fulfilled':

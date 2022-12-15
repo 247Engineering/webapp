@@ -1,18 +1,18 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import AppLayout from '../../../components/layouts/AppLayout'
-import OtpInput from '../../../components/forms/OtpInput'
-import ButtonSubmit from '../../../components/forms/ButtonSubmit'
+import AppLayout from "../../../components/layouts/AppLayout";
+import OtpInput from "../../../components/forms/OtpInput";
+import ButtonSubmit from "../../../components/forms/ButtonSubmit";
 
 const ConfirmPickup = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [otp, setOtp] = useState('4444')
+  const [otp, setOtp] = useState("4444");
 
-  const onChange = (value: string) => setOtp(value)
+  const onChange = (value: string) => setOtp(value);
 
-  const handleSubmit = () => {}
+  const handleSubmit = () => {};
 
   return (
     <div className="h-full">
@@ -27,11 +27,7 @@ const ConfirmPickup = () => {
         </header>
         <section className="mt-8 h-full flex flex-col text-black">
           <form onSubmit={handleSubmit}>
-            <OtpInput
-              value={otp}
-              onChange={onChange}
-              className="justify-center"
-            />
+            <OtpInput value={otp} onChange={onChange} />
             <ButtonSubmit
               text="Submit"
               disabled={true}
@@ -42,7 +38,7 @@ const ConfirmPickup = () => {
         </section>
       </AppLayout>
     </div>
-  )
-}
+  );
+};
 
-export default ConfirmPickup
+export default ConfirmPickup;

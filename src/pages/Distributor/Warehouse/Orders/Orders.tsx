@@ -1,34 +1,35 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { format } from "date-fns";
 
-import location from '../../../../assets/images/location.svg'
-import search from '../../../../assets/images/search.svg'
+import location from "../../../../assets/images/location.svg";
+import search from "../../../../assets/images/search.svg";
 
-import AppLayout from '../../../../components/layouts/AppLayout'
-import SortSelect from '../../../../components/forms/SortSelect'
-import TableLayout from '../../../../components/tables/TableLayout'
-import TableFooter from '../../../../components/tables/TableFooter'
+import AppLayout from "../../../../components/layouts/AppLayout";
+import SortSelect from "../../../../components/forms/SortSelect";
+import TableLayout from "../../../../components/tables/TableLayout";
+import TableFooter from "../../../../components/tables/TableFooter";
 
-import { fetchWarehouseOrders } from '../../../../store/features/distributor'
-import { AppDispatch, RootState } from '../../../../store'
-import { DistributorState } from '../../../../types'
-import * as ROUTES from '../../../../routes'
+import { fetchWarehouseOrders } from "../../../../store/features/distributor";
+import { AppDispatch, RootState } from "../../../../store";
+import { DistributorState } from "../../../../types";
+import * as ROUTES from "../../../../routes";
 
 const Orders = () => {
-  const navigate = useNavigate()
-  const { warehouse: warehouseId } = useParams()
+  const navigate = useNavigate();
+  const { warehouse: warehouseId } = useParams();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const { orders, warehouse } = useSelector<RootState>(
-    ({ distributor }) => distributor,
-  ) as DistributorState
+    ({ distributor }) => distributor
+  ) as DistributorState;
 
-  const [sort, setSort] = useState('')
+  const [sort, setSort] = useState("");
 
   useEffect(() => {
-    dispatch(fetchWarehouseOrders(warehouseId as string))
-  }, [dispatch, warehouseId])
+    dispatch(fetchWarehouseOrders(warehouseId as string));
+  }, [dispatch, warehouseId]);
 
   return (
     <>
@@ -41,7 +42,7 @@ const Orders = () => {
                 src={location}
                 className="w-[1.563rem] h-[1.25rem] inline"
                 alt="location icon"
-              />{' '}
+              />{" "}
               {warehouse?.warehouse.address}
             </p>
           </div>
@@ -50,8 +51,8 @@ const Orders = () => {
           <div className="flex items-center mb-[1.875rem]">
             <SortSelect
               options={[
-                'Value - highest to lowest',
-                'Value - lowest to highest',
+                "Value - highest to lowest",
+                "Value - lowest to highest",
               ]}
               value={sort}
               onChange={(value) => setSort(value)}
@@ -80,14 +81,24 @@ const Orders = () => {
                 <tr
                   key={order.id}
                   onClick={() =>
-                    navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_ORDER_FOR(warehouseId as string, order.id))
+                    navigate(
+                      ROUTES.DISTRIBUTOR.WAREHOUSE_ORDER_FOR(
+                        warehouseId as string,
+                        order.id
+                      )
+                    )
                   }
                 >
                   <td className="w-[9.5rem] overflow-hidden text-ellipsis p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple">
-                    {order.order_id.replace('ORD_', '')}
+                    {order.order_id.replace("ORD_", "")}
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                    10/10/2022 13:00PM
+                    {format(
+                      order.order_date
+                        ? new Date(order.order_date)
+                        : new Date(),
+                      "dd/M/yyy hh:ma"
+                    )}
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
                     Ebeano Supermarket Chevron
@@ -100,7 +111,7 @@ const Orders = () => {
         </section>
       </AppLayout>
     </>
-  )
-}
+  );
+};
 
-export default Orders
+export default Orders;
