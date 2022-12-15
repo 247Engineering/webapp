@@ -31,7 +31,6 @@ const sideBarMap = {
   RETAILER: [
     { link: ROUTES.RETAILER.DASHBOARD, text: "Products", image: products },
     { link: ROUTES.RETAILER.ORDERS, text: "Orders", image: orders },
-    { link: ROUTES.RETAILER.DASHBOARD, text: "Operations", image: operations },
     { link: ROUTES.RETAILER.DASHBOARD, text: "Settings", image: settings },
   ],
 };
@@ -47,7 +46,7 @@ const SideBar = ({ show }: { show: boolean }) => {
         show ? "translate-x-0" : "translate-x-[-16.875rem]"
       }`}
     >
-      <img src={logo} alt="logo" className="mb-8" />
+      <img src={logo} alt="logo" className="mb-8 w-[7.813rem] h-[2rem]" />
       {sideBarMap[userType as "DISTRIBUTOR" | "RETAILER"].map((item) => (
         <Link
           key={item.text}

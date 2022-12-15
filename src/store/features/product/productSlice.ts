@@ -68,7 +68,7 @@ export const fetchSingleProduct = createAsyncThunk(
     return await request({
       url: `/product/get-product/${id}`,
       method: 'get',
-      user: 'distributor',
+      user: 'retailer',
     })
   },
 )

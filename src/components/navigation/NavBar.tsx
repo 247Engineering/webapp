@@ -1,19 +1,25 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import React from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import hamburger from '../../assets/images/hamburger.svg'
-import close from '../../assets/images/close.svg'
-import logo from '../../assets/images/24Seven.svg'
-import locationIcon from '../../assets/images/location.svg'
-import navbarSearch from '../../assets/images/navbar-search.svg'
-import cartIcon from '../../assets/images/cart.svg'
+import hamburger from "../../assets/images/hamburger.svg";
+import close from "../../assets/images/close.svg";
+import logo from "../../assets/images/24Seven.svg";
+import locationIcon from "../../assets/images/location.svg";
+import navbarSearch from "../../assets/images/navbar-search.svg";
+import cartIcon from "../../assets/images/cart.svg";
 
-import BackButton from '../forms/BackButton'
+import BackButton from "../forms/BackButton";
 
-import { AppLayoutProps, AuthState, RetailerState } from '../../types'
-import { RootState } from '../../store'
-import * as ROUTES from '../../routes'
+import {
+  AppLayoutProps,
+  AuthState,
+  RetailerState,
+  AuthContextType,
+} from "../../types";
+import { RootState } from "../../store";
+import * as ROUTES from "../../routes";
+import { useAuth } from "../../hooks/useAuth";
 
 const NavBar = ({
   alternate,
@@ -26,22 +32,26 @@ const NavBar = ({
   setShowSideBar,
   secondaryNav,
   secondaryNavBack,
-  back
+  back,
 }: AppLayoutProps) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { firstName, lastName } = useSelector<RootState>(
-    ({ auth }) => auth,
-  ) as AuthState
+    ({ auth }) => auth
+  ) as AuthState;
   const { cartItems } = useSelector<RootState>(
-    ({ retailer }) => retailer,
-  ) as RetailerState
+    ({ retailer }) => retailer
+  ) as RetailerState;
+
+  const { user } = useAuth() as AuthContextType;
+  const userType =
+    user?.type === "warehouse" ? "DISTRIBUTOR" : user?.type.toUpperCase();
 
   return (
     <section className="sticky top-0 left-0 right-0 bg-white z-40">
       <nav
         className={`flex justify-between items-center p-4 main text-black ${
-          alternate ? 'alt' : ''
+          alternate ? "alt" : ""
         }`}
       >
         <div className="flex items-center">
@@ -59,14 +69,15 @@ const NavBar = ({
                 alt="hamburger icon"
                 className="w-[1.313rem] h-[1.125rem]"
                 onClick={() => {
-                  if (setShowSideBar) setShowSideBar(true)
+                  if (setShowSideBar) setShowSideBar(true);
                 }}
               />
               {!hideLogo ? (
                 <img
                   src={logo}
                   alt="logo"
-                  className="max-h-[1.5rem] max-w-[6.563rem] ml-1"
+                  className="ml-1 w-[7.813rem] h-[2rem]"
+                  onClick={() => navigate(ROUTES[userType as keyof typeof ROUTES].DASHBOARD)}
                 />
               ) : null}
               {location ? (
@@ -103,8 +114,8 @@ const NavBar = ({
           ) : null}
           {!hideName ? (
             <div className="bg-orange-light text-orange text-[1rem] leading-[1.5rem] flex items-center justify-center rounded-full w-[2rem] h-[2rem] uppercase">
-              {firstName ? firstName[0] : 'A'}
-              {lastName ? lastName[0] : 'B'}
+              {firstName ? firstName[0] : "A"}
+              {lastName ? lastName[0] : "B"}
             </div>
           ) : null}
         </div>
@@ -118,7 +129,7 @@ const NavBar = ({
         </div>
       ) : null}
     </section>
-  )
-}
+  );
+};
 
-export default NavBar
+export default NavBar;

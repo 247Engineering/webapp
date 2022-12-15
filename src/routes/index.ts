@@ -58,9 +58,10 @@ export const RETAILER = {
   ORDER_STATUS_FOR: (order: string) => `/retailer/orders/${order}/status`,
 }
 
-export const RIDER = {}
+// export const RIDER = {}
 
 export const AUTH = {
+  DASHBOARD: 'auth/account-select',
   ACCOUNT_SELECT: 'auth/account-select',
   RESET_PASSWORD: 'auth/reset-password',
   SIGNIN: 'auth/signin',

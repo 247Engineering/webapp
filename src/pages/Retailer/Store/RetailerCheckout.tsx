@@ -56,9 +56,7 @@ const RetailerCheckout = () => {
       placeOrder({
         location: location as Address,
         delivery_instructions: instructions,
-        ...(type === 'delivery'
-          ? { delivery_options: deliveryOptionMap[deliveryOption] }
-          : { pickup_options: deliveryOptionMap[deliveryOption] }),
+        delivery_options: deliveryOptionMap[deliveryOption] 
       }),
     )
   }
