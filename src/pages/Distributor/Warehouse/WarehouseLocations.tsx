@@ -13,7 +13,8 @@ import TableLayout from "../../../components/tables/TableLayout";
 
 import { fetchWarehouses } from "../../../store/features/distributor";
 import { AppDispatch, RootState } from "../../../store";
-import { DistributorState } from "../../../types";
+import { DistributorState, AuthContextType } from "../../../types";
+import { useAuth } from "../../../hooks/useAuth";
 import * as ROUTES from "../../../routes";
 
 const WarehouseLocations = () => {
@@ -27,6 +28,8 @@ const WarehouseLocations = () => {
   const [sort, setSort] = useState("");
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("");
+
+  const { user } = useAuth() as AuthContextType;
 
   useEffect(() => {
     dispatch(fetchWarehouses());
@@ -42,12 +45,14 @@ const WarehouseLocations = () => {
               View and manage all your warehouses
             </p>
           </div>
-          <button
-            className="button-add rounded-[12px] bg-orange text-white w-[3rem] h-[3rem]"
-            onClick={() => navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_FORM)}
-          >
-            <img src={add} alt="add" className="w-[0.75rem] h-[0.75rem]" />
-          </button>
+          {user.type === "distributor" ? (
+            <button
+              className="button-add rounded-[12px] bg-orange text-white w-[3rem] h-[3rem]"
+              onClick={() => navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_FORM)}
+            >
+              <img src={add} alt="add" className="w-[0.75rem] h-[0.75rem]" />
+            </button>
+          ) : null}
         </header>
         <section className="mt-6 text-black">
           <div className="flex items-center mb-8">
@@ -72,125 +77,205 @@ const WarehouseLocations = () => {
           </div>
           <div className="mb-10">
             <h5 className="font-[700] text-[1rem] leading-[1.5rem] mb-6">
-              Open ({warehouses?.length})
+              Open ({warehouses?.filter((w) => w.created).length})
             </h5>
             <TableLayout>
               <tbody>
-                {warehouses?.map((warehouse, i) => (
-                  <tr
-                    key={i}
-                    onClick={() => {
-                      navigate(
-                        ROUTES.DISTRIBUTOR.WAREHOUSE_DETAILS_FOR(warehouse._id)
-                      );
-                    }}
-                  >
-                    <td className="w-[15rem] p-2 pl-4 text-[0.75rem] leading-[1rem]">
-                      <div className="flex items-center">
-                        <img
-                          src={distributor}
-                          alt="warehouse icon"
-                          className="h-[2rem] w-[2rem] mr-2"
-                        />
-                        <div className="flex flex-col justify-between capitalize">
-                          <h6 className="hover:text-purple font-[700]">
-                            {warehouse.name}
-                          </h6>
-                          <p>365 Adeola Odeku Street</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
-                      <div>
-                        <p className="font-[700]">Open</p>
-                        <p>Closes 22:00 Mon-Sat</p>
-                      </div>
-                    </td>
-                    <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
-                      <div>
-                        <p className="font-[700]">N5,000,000</p>
-                        <p>Sales</p>
-                      </div>
-                    </td>
-                    <td className="w-10 p-2">
-                      <div
-                        className="flex items-center justify-center relative"
-                        onClick={(e) => e.stopPropagation()}
+                {warehouses?.map(
+                  (warehouse, i) =>
+                    warehouse.created && (
+                      <tr
+                        key={i}
+                        onClick={() => {
+                          navigate(
+                            user.type === "warehouse"
+                              ? ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS_FOR(
+                                  warehouse._id
+                                )
+                              : ROUTES.DISTRIBUTOR.WAREHOUSE_DETAILS_FOR(
+                                  warehouse._id
+                                )
+                          );
+                        }}
                       >
-                        <img
-                          src={dots}
-                          alt="options"
-                          className="w-1.5 h-5"
-                          onClick={() => {
-                            setOpen(!open);
-                            setSelected(warehouse._id);
-                          }}
-                        />
-                        {open && warehouse._id === selected ? (
-                          <ul className="rounded-[8px] shadow-sm py-2 w-[11.125rem] absolute top-[-5px] right-[23px] z-10 bg-white">
-                            <li
-                              className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p"
+                        <td className="w-[15rem] p-2 pl-4 text-[0.75rem] leading-[1rem]">
+                          <div className="flex items-center">
+                            <img
+                              src={distributor}
+                              alt="warehouse icon"
+                              className="h-[2rem] w-[2rem] mr-2"
+                            />
+                            <div className="flex flex-col justify-between capitalize">
+                              <h6 className="hover:text-purple font-[700]">
+                                {warehouse.name}
+                              </h6>
+                              <p>365 Adeola Odeku Street</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
+                          <div>
+                            <p className="font-[700]">Open</p>
+                            <p>Closes 22:00 Mon-Sat</p>
+                          </div>
+                        </td>
+                        <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
+                          <div>
+                            <p className="font-[700]">N5,000,000</p>
+                            <p>Sales</p>
+                          </div>
+                        </td>
+                        <td className="w-10 p-2">
+                          <div
+                            className="flex items-center justify-center relative"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <img
+                              src={dots}
+                              alt="options"
+                              className="w-1.5 h-5"
                               onClick={() => {
-                                navigate(
-                                  ROUTES.DISTRIBUTOR.WAREHOUSE_DETAILS_FOR(
-                                    warehouse._id
-                                  )
-                                );
+                                setOpen(!open);
+                                setSelected(warehouse._id);
                               }}
-                            >
-                              View
-                            </li>
-                            <li className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p">
-                              Delete
-                            </li>
-                          </ul>
-                        ) : null}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                            />
+                            {open && warehouse._id === selected ? (
+                              <ul className="rounded-[8px] shadow-sm py-2 w-[11.125rem] absolute top-[-5px] right-[23px] z-10 bg-white">
+                                {user.type === "distributor" ? (
+                                  <>
+                                    <li
+                                      className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p"
+                                      onClick={() => {
+                                        navigate(
+                                          ROUTES.DISTRIBUTOR.WAREHOUSE_DETAILS_FOR(
+                                            warehouse._id
+                                          )
+                                        );
+                                      }}
+                                    >
+                                      View
+                                    </li>
+                                    <li className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p">
+                                      Delete
+                                    </li>
+                                  </>
+                                ) : (
+                                  <>
+                                    <li
+                                      className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p"
+                                      onClick={() => {
+                                        navigate(
+                                          ROUTES.DISTRIBUTOR.WAREHOUSE_ORDERS_FOR(
+                                            warehouse._id
+                                          )
+                                        );
+                                      }}
+                                    >
+                                      View Orders
+                                    </li>
+                                    <li
+                                      className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p"
+                                      onClick={() => {
+                                        navigate(
+                                          ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS_FOR(
+                                            warehouse._id
+                                          )
+                                        );
+                                      }}
+                                    >
+                                      View Products
+                                    </li>
+                                  </>
+                                )}
+                              </ul>
+                            ) : null}
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                )}
               </tbody>
             </TableLayout>
           </div>
           <div>
             <h5 className="font-[700] text-[1rem] leading-[1.5rem] mb-6">
-              Closed (0)
+              Closed ({warehouses?.filter((w) => !w.created).length})
             </h5>
-            {/* <TableLayout>
+            <TableLayout>
               <tbody>
-                {warehouses?.map((warehouse, i) => (
-                  <tr key={i}>
-                    <td className="w-[15rem] p-2 pl-4 text-[0.75rem] leading-[1rem]">
-                      <div className="flex items-center">
-                        <img
-                          src={distributor}
-                          alt="warehouse icon"
-                          className="h-[2rem] w-[2rem] mr-2"
-                        />
-                        <div className="flex flex-col justify-between capitalize">
-                          <h6 className="hover:text-purple font-[700]">
-                            {warehouse.name}
-                          </h6>
-                          <p>365 Adeola Odeku Street</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
-                      <div>
-                        <p className="font-[700]">Open</p>
-                        <p>Closes 22:00 Mon-Sat</p>
-                      </div>
-                    </td>
-                    <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
-                      <div>
-                        <p className="font-[700]">N5,000,000</p>
-                        <p>Sales</p>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {warehouses?.map(
+                  (warehouse, i) =>
+                    !warehouse.created && (
+                      <tr key={i}>
+                        <td className="w-[15rem] p-2 pl-4 text-[0.75rem] leading-[1rem]">
+                          <div className="flex items-center">
+                            <img
+                              src={distributor}
+                              alt="warehouse icon"
+                              className="h-[2rem] w-[2rem] mr-2"
+                            />
+                            <div className="flex flex-col justify-between capitalize">
+                              <h6 className="hover:text-purple font-[700]">
+                                {warehouse.name}
+                              </h6>
+                              <p>365 Adeola Odeku Street</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
+                          <div>
+                            <p className="font-[700]">Open</p>
+                            <p>Closes 22:00 Mon-Sat</p>
+                          </div>
+                        </td>
+                        <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
+                          <div>
+                            <p className="font-[700]">N5,000,000</p>
+                            <p>Sales</p>
+                          </div>
+                        </td>
+                        {user.type === "distributor" ? (
+                          <td className="w-10 p-2">
+                            <div
+                              className="flex items-center justify-center relative"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <img
+                                src={dots}
+                                alt="options"
+                                className="w-1.5 h-5"
+                                onClick={() => {
+                                  setOpen(!open);
+                                  setSelected(warehouse._id);
+                                }}
+                              />
+                              {open && warehouse._id === selected ? (
+                                <ul className="rounded-[8px] shadow-sm py-2 w-[11.125rem] absolute top-[-5px] right-[23px] z-10 bg-white">
+                                  <li
+                                    className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p"
+                                    // onClick={() => {
+                                    //   navigate(
+                                    //     ROUTES.DISTRIBUTOR.WAREHOUSE_DETAILS_FOR(
+                                    //       warehouse._id
+                                    //     )
+                                    //   );
+                                    // }}
+                                  >
+                                    View
+                                  </li>
+                                  <li className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p">
+                                    Delete
+                                  </li>
+                                </ul>
+                              ) : null}
+                            </div>
+                          </td>
+                        ) : null}
+                      </tr>
+                    )
+                )}
               </tbody>
-            </TableLayout> */}
+            </TableLayout>
           </div>
         </section>
       </AppLayout>
