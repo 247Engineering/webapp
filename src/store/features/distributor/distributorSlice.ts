@@ -177,7 +177,7 @@ export const confirmOrderPickup = createAsyncThunk(
     pickup_code: string;
   }) => {
     return await request({
-      url: "warehouse/confirm-pickup",
+      url: "/warehouse/confirm-pickup",
       method: "post",
       body,
       user: "distributor",
@@ -239,8 +239,11 @@ export const distributorSlice = createSlice({
             break;
           case "distributor/fetchWarehouseOrder/fulfilled":
           case "distributor/updateWarehouseOrder/fulfilled":
+            state.order = action.payload.data;
+            break;
           case "distributor/confirmOrderPickup/fulfilled":
             state.order = action.payload.data;
+            state.warehouseStamp = new Date().getTime();
             break;
           case "distributor/fetchWarehouseOrders/fulfilled":
             state.orders = action.payload.data;

@@ -15,6 +15,7 @@ import BackButton from "../../../../components/forms/BackButton";
 import {
   fetchWarehouseOrder,
   updateWarehouseOrder,
+  resetWarehouseStamp,
 } from "../../../../store/features/distributor";
 import { AppDispatch, RootState } from "../../../../store";
 import { DistributorState, OrderStatus } from "../../../../types";
@@ -36,6 +37,10 @@ const OrderDetails = () => {
         order: orderId as string,
       })
     );
+
+    return () => {
+      dispatch(resetWarehouseStamp());
+    };
   }, [dispatch, warehouse, orderId]);
 
   const statusMap = {

@@ -1,18 +1,54 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import AppLayout from "../../../components/layouts/AppLayout";
 import OtpInput from "../../../components/forms/OtpInput";
 import ButtonSubmit from "../../../components/forms/ButtonSubmit";
 
+import {
+  confirmOrderPickup,
+  resetWarehouseStamp,
+} from "../../../store/features/distributor";
+import { AppDispatch, RootState } from "../../../store";
+import { DistributorState } from "../../../types";
+import * as ROUTES from "../../../routes";
+
 const ConfirmPickup = () => {
   const navigate = useNavigate();
+  const { warehouse, order } = useParams();
 
-  const [otp, setOtp] = useState("4444");
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, warehouseStamp } = useSelector<RootState>(
+    ({ distributor }) => distributor
+  ) as DistributorState;
+
+  const [otp, setOtp] = useState("");
 
   const onChange = (value: string) => setOtp(value);
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    dispatch(
+      confirmOrderPickup({
+        order_doc_id: order as string,
+        warehouse_id: warehouse as string,
+        pickup_code: otp as string,
+      })
+    );
+  };
+
+  useEffect(() => {
+    if (warehouseStamp)
+      navigate(
+        ROUTES.DISTRIBUTOR.WAREHOUSE_ORDER_FOR(
+          warehouse as string,
+          order as string
+        )
+      );
+    return () => {
+      dispatch(resetWarehouseStamp());
+    };
+  }, [dispatch, navigate, warehouse, order, warehouseStamp]);
 
   return (
     <div className="h-full">
@@ -30,7 +66,8 @@ const ConfirmPickup = () => {
             <OtpInput value={otp} onChange={onChange} />
             <ButtonSubmit
               text="Submit"
-              disabled={true}
+              disabled={loading}
+              loading={loading}
               onClick={handleSubmit}
               className="mt-[100%]"
             />

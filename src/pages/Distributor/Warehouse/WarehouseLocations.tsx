@@ -98,7 +98,7 @@ const WarehouseLocations = () => {
                           );
                         }}
                       >
-                        <td className="w-[15rem] p-2 pl-4 text-[0.75rem] leading-[1rem]">
+                        <td className="w-[15rem] p-2 pl-4 text-[0.75rem] leading-[1rem] overflow-hidden text-ellipsis whitespace-nowrap">
                           <div className="flex items-center">
                             <img
                               src={distributor}
