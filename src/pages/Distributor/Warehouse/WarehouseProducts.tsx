@@ -37,7 +37,7 @@ const WarehouseProducts = () => {
     <div className="h-full" onClick={() => setOpen(false)}>
       <AppLayout>
         <header className="flex justify-between items-center">
-          <h1 className="h1 mb-2 text-black">Products</h1>
+          <h1 className="h1 text-black">Products</h1>
           <div className="relative" onClick={(e) => e.stopPropagation()}>
             <button
               className="button-add rounded-[10px] bg-orange text-white w-[2rem] h-[2rem]"
