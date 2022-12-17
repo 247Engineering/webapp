@@ -109,7 +109,10 @@ const WarehouseLocations = () => {
                               <h6 className="hover:text-purple font-[700]">
                                 {warehouse.name}
                               </h6>
-                              <p>365 Adeola Odeku Street</p>
+                              <p>
+                                {warehouse.formatted_address ||
+                                  "365 Adeola Odeku Street"}
+                              </p>
                             </div>
                           </div>
                         </td>
