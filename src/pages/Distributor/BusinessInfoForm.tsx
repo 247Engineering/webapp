@@ -45,7 +45,6 @@ const BusinessInfo = () => {
       [business, address, city, country, state, cac].every((data) => !!data),
     [business, address, city, country, state, cac]
   );
-  console.log({ canSubmit, business, address, city, country, state, cac });
 
   useEffect(() => {
     if ([business, address, city, country, state, cac].some((data) => !!data)) {
