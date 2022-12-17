@@ -1,40 +1,46 @@
-import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
-import AppLayout from '../../../components/layouts/AppLayout'
-import Input from '../../../components/forms/Input'
-import ButtonSubmit from '../../../components/forms/ButtonSubmit'
+import AppLayout from "../../../components/layouts/AppLayout";
+import Input from "../../../components/forms/Input";
+import ButtonSubmit from "../../../components/forms/ButtonSubmit";
 
-import { DistributorState } from '../../../types'
-import { AppDispatch, RootState } from '../../../store'
+import { DistributorState } from "../../../types";
+import { AppDispatch, RootState } from "../../../store";
 import {
+  changeWarehouseManager,
   resetWarehouseStamp,
-} from '../../../store/features/distributor'
-import * as ROUTES from '../../../routes'
+} from "../../../store/features/distributor";
+import * as ROUTES from "../../../routes";
 
-const WarehouseForm = () => {
-  const navigate = useNavigate()
+const ChangeWarehouseManager = () => {
+  const navigate = useNavigate();
+  const { warehouse } = useParams();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const { loading, warehouseStamp } = useSelector<RootState>(
-    ({ distributor }) => distributor,
-  ) as DistributorState
-  const [email, setEmail] = useState('')
+    ({ distributor }) => distributor
+  ) as DistributorState;
+  const [email, setEmail] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    // dispatch(
-    //   addWarehouse({ name: warehouse, location: location as Address, email }),
-    // )
-  }
+    e.preventDefault();
+    dispatch(
+      changeWarehouseManager({ email, warehouse_id: warehouse as string })
+    );
+  };
 
   useEffect(() => {
-    if (warehouseStamp) navigate(ROUTES.DISTRIBUTOR.WAREHOUSES)
-    return () => {
-      dispatch(resetWarehouseStamp())
+    if (warehouseStamp) {
+      navigate(ROUTES.DISTRIBUTOR.WAREHOUSES);
+      toast.success("an invite has been sent to the warehouse manager");
     }
-  })
+    return () => {
+      dispatch(resetWarehouseStamp());
+    };
+  });
 
   return (
     <div className="h-full">
@@ -44,7 +50,7 @@ const WarehouseForm = () => {
             Change warehouse manager
           </h1>
           <p className="p text-black-100">
-            By taking this action you will revoke{' '}
+            By taking this action you will revoke{" "}
             <span className="font-[700]">Funpe Martins</span> role as warehouse
             manager for <span className="font-[700]">Femadons VI</span>
           </p>
@@ -70,7 +76,7 @@ const WarehouseForm = () => {
         </section>
       </AppLayout>
     </div>
-  )
-}
+  );
+};
 
-export default WarehouseForm
+export default ChangeWarehouseManager;

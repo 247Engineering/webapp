@@ -1,47 +1,64 @@
-import React, { useState, useMemo, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useMemo, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
-import AppLayout from '../../../components/layouts/AppLayout'
-import Input from '../../../components/forms/Input'
-import ButtonSubmit from '../../../components/forms/ButtonSubmit'
-import LocationInput from '../../../components/forms/LocationInput'
+import AppLayout from "../../../components/layouts/AppLayout";
+import Input from "../../../components/forms/Input";
+import ButtonSubmit from "../../../components/forms/ButtonSubmit";
+import LocationInput from "../../../components/forms/LocationInput";
 
-import { DistributorState, Address } from '../../../types'
-import { AppDispatch, RootState } from '../../../store'
-import { resetWarehouseStamp } from '../../../store/features/distributor'
-import * as ROUTES from '../../../routes'
+import { DistributorState, Address } from "../../../types";
+import { AppDispatch, RootState } from "../../../store";
+import {
+  editWarehouse,
+  resetWarehouseStamp,
+} from "../../../store/features/distributor";
+import * as ROUTES from "../../../routes";
 
-const WarehouseForm = () => {
-  const navigate = useNavigate()
+const WarehouseFormEdit = () => {
+  const navigate = useNavigate();
+  const { warehouse: warehouseId } = useParams();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const { loading, warehouseStamp } = useSelector<RootState>(
-    ({ distributor }) => distributor,
-  ) as DistributorState
+    ({ distributor }) => distributor
+  ) as DistributorState;
 
-  const [warehouse, setWarehouse] = useState('')
-  const [location, setLocation] = useState<Address | null>(null)
-  const [locationDropdown, setLocationDropdown] = useState(false)
+  // const [name, setName] = useState(warehouse?.warehouse.name || "");
+  // const [location, setLocation] = useState<Address | null>(
+  //   warehouse?.warehouse.location || null
+  // );
+  const [name, setName] = useState("");
+  const [location, setLocation] = useState<Address | null>(null);
+  const [locationDropdown, setLocationDropdown] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    // dispatch(
-    //   addWarehouse({ name: warehouse, location: location as Address }),
-    // )
-  }
+    e.preventDefault();
+    dispatch(
+      editWarehouse({
+        ...(name && { name }),
+        ...(location && { location }),
+        warehouse: warehouseId as string,
+      })
+    );
+  };
 
   const canSubmit = useMemo(
-    () => [warehouse, location].every((data) => !!data),
-    [warehouse, location],
-  )
+    () => [name, location].some((data) => !!data),
+    [name, location]
+  );
 
   useEffect(() => {
-    if (warehouseStamp) navigate(ROUTES.DISTRIBUTOR.WAREHOUSES)
-    return () => {
-      dispatch(resetWarehouseStamp())
+    // dispatch(fetchWarehouse(warehouseId as string));
+    if (warehouseStamp) {
+      navigate(ROUTES.DISTRIBUTOR.WAREHOUSES);
+      toast.success("warehouse details have been updated");
     }
-  })
+    return () => {
+      dispatch(resetWarehouseStamp());
+    };
+  }, [dispatch, navigate, warehouseStamp]);
 
   return (
     <div onClick={() => setLocationDropdown(false)} className="h-full">
@@ -59,8 +76,8 @@ const WarehouseForm = () => {
             <div className="mb-4">
               <Input
                 label="Warehouse name"
-                value={warehouse}
-                onChange={setWarehouse}
+                value={name}
+                onChange={setName}
                 type="text"
               />
             </div>
@@ -83,7 +100,7 @@ const WarehouseForm = () => {
         </section>
       </AppLayout>
     </div>
-  )
-}
+  );
+};
 
-export default WarehouseForm
+export default WarehouseFormEdit;

@@ -9,6 +9,8 @@ import BusinessOwner from '../pages/Distributor/BusinessOwner'
 import BusinessOwnerForm from '../pages/Distributor/BusinessOwnerForm'
 import BusinessOwnerReview from '../pages/Distributor/BusinessOwnerReview'
 import WarehouseForm from '../pages/Distributor/Warehouse/WarehouseForm'
+import WarehouseFormEdit from '../pages/Distributor/Warehouse/WarehouseFormEdit'
+import ChangeWarehouseManager from '../pages/Distributor/Warehouse/ChangeWarehouseManager'
 import WarehouseLocations from '../pages/Distributor/Warehouse/WarehouseLocations'
 import WarehouseSignUp from '../pages/Distributor/Onboarding/Warehouse/SignUp'
 import WarehouseProducts from '../pages/Distributor/Warehouse/WarehouseProducts'
@@ -93,6 +95,18 @@ export const authedDistributorRoutes = [
   {
     path: ROUTES.DISTRIBUTOR.WAREHOUSE_FORM,
     element: <WarehouseForm />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.WAREHOUSE_EDIT,
+    element: <WarehouseFormEdit />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.WAREHOUSE_CHANGE_MANAGER,
+    element: <ChangeWarehouseManager />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS,
+    element: <WarehouseProducts />,
   },
   {
     path: ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS,

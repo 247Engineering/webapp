@@ -66,18 +66,6 @@ const WarehouseDetails = () => {
                     <li className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p">
                       Enable
                     </li>
-                    <li
-                      className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p"
-                      onClick={() =>
-                        navigate(
-                          ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCT_FORM_FOR(
-                            warehouseId as string
-                          )
-                        )
-                      }
-                    >
-                      Add product
-                    </li>
                   </ul>
                 ) : null}
               </button>
@@ -87,7 +75,7 @@ const WarehouseDetails = () => {
         <section>
           <div className="p-1 bg-grey-light-200 rounded-[10px] flex items-center justify-between font-[700] text-[0.875rem] leading-[1.25rem] mb-8">
             <button
-              className={`flex items-center justify-center text-black-100 rounded-[8px] py-[0.625rem] px-[0.875rem] w-[9.75rem] ${
+              className={`flex items-center justify-center text-black-100 rounded-[8px] py-[0.625rem] px-[0.875rem] w-[50%] ${
                 type === "details" ? "text-orange bg-orange-light-100" : ""
               }`}
               onClick={() => setType("details")}
@@ -95,7 +83,7 @@ const WarehouseDetails = () => {
               Warehouse details
             </button>
             <button
-              className={`flex items-center justify-center text-black-100 rounded-[8px] py-[0.625rem] px-[0.875rem] w-[9.75rem] ${
+              className={`flex items-center justify-center text-black-100 rounded-[8px] py-[0.625rem] px-[0.875rem] w-[50%] ${
                 type === "inventory" ? "text-orange bg-orange-light-100" : ""
               }`}
               onClick={() => setType("inventory")}
@@ -119,7 +107,13 @@ const WarehouseDetails = () => {
                   className="absolute w-[1.25rem] h-[1.25rem] top-[1.25rem] right-[1.25rem]"
                   src={edit}
                   alt="edit"
-                  onClick={() => {}}
+                  onClick={() =>
+                    navigate(
+                      ROUTES.DISTRIBUTOR.WAREHOUSE_CHANGE_MANAGER_FOR(
+                        warehouseId as string
+                      )
+                    )
+                  }
                 />
               </div>
               <div className="rounded-[12px] border border-solid border-grey-light p-4 relative mb-4">
@@ -143,7 +137,13 @@ const WarehouseDetails = () => {
                   className="absolute w-[1.25rem] h-[1.25rem] top-[1.25rem] right-[1.25rem]"
                   src={edit}
                   alt="edit"
-                  onClick={() => {}}
+                  onClick={() =>
+                    navigate(
+                      ROUTES.DISTRIBUTOR.WAREHOUSE_EDIT_FOR(
+                        warehouseId as string
+                      )
+                    )
+                  }
                 />
               </div>
             </>

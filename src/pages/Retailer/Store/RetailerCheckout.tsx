@@ -81,7 +81,7 @@ const RetailerCheckout = () => {
         <section>
           <div className="p-1 bg-grey-light-200 rounded-[10px] flex items-center justify-between font-[700] text-[0.875rem] leading-[1.25rem] mb-8">
             <button
-              className={`flex items-center justify-center text-black-100 rounded-[8px] p-[0.625rem] w-[9.75rem] ${
+              className={`flex items-center justify-center text-black-100 rounded-[8px] p-[0.625rem] w-[50%] ${
                 type === 'delivery' ? 'text-orange bg-orange-light-100' : ''
               }`}
               onClick={() => setType('delivery')}
@@ -89,7 +89,7 @@ const RetailerCheckout = () => {
               Delivery
             </button>
             <button
-              className={`flex items-center justify-center text-black-100 rounded-[8px] p-[0.625rem] w-[9.75rem] ${
+              className={`flex items-center justify-center text-black-100 rounded-[8px] p-[0.625rem] w-[50%] ${
                 type === 'pickup' ? 'text-orange bg-orange-light-100' : ''
               }`}
               onClick={() => {
