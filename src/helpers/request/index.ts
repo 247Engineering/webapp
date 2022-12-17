@@ -106,7 +106,7 @@ const request = async ({
   } catch (err: any) {
     const error = err.response?.data?.message || 'something went wrong'
     if (err.statusCode !== 401 && err.message !== 'Unauthorised')
-      toast.error(error)
+      toast.error(error.toLowerCase())
     throw new Error(error)
   }
 }
