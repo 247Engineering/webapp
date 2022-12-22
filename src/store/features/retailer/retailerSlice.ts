@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-import { CartItem, RetailerState } from '../../../types'
+import { Address, CartItem, RetailerState } from '../../../types'
 import request from '../../../helpers/request'
 import { isRejectedAction, isPendingAction, isFulfilledAction } from '../utils'
 import { RootState } from '../..'
@@ -23,7 +23,7 @@ export const addBusinessInfo = createAsyncThunk(
       lname: string
       email: string
       business_name: string
-      address: string
+      address: Address
     },
     { getState },
   ) => {
