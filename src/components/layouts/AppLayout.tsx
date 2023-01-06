@@ -15,7 +15,7 @@ const AppLayout = ({ children, ...props }: AppLayoutProps) => {
       }`}
     >
       <SideBar show={showSidebar} />
-      <NavBar {...props} setShowSideBar={setShowSidebar} />
+      <NavBar {...props} setShowSideBar={setShowSidebar} showSideBar={showSidebar} />
       <main className="pt-8 pb-12 px-4" onClick={() => setShowSidebar(false)}>
         {children}
       </main>

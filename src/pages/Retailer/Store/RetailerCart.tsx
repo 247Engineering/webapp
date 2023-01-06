@@ -23,8 +23,8 @@ const RetailerCart = () => {
     <>
       <AppLayout
         cart
-        hideLogo
-        hideName
+        // hideLogo
+        // hideName
         secondaryNav="Cart"
         secondaryNavBack="Store"
         back={ROUTES.RETAILER.DASHBOARD}

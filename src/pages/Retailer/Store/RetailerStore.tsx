@@ -1,30 +1,35 @@
-import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import searchIcon from '../../../assets/images/input-search.svg'
+import searchIcon from "../../../assets/images/input-search.svg";
 
-import AppLayout from '../../../components/layouts/AppLayout'
-import ProductItem from '../../../components/miscellaneous/ProductItem'
+import AppLayout from "../../../components/layouts/AppLayout";
+import ProductItem from "../../../components/miscellaneous/ProductItem";
 
-import { AppDispatch, RootState } from '../../../store'
-import { ProductState } from '../../../types'
-import { fetchAllProducts } from '../../../store/features/product'
+import { AppDispatch, RootState } from "../../../store";
+import { ProductState } from "../../../types";
+import { fetchAllProducts } from "../../../store/features/product";
 
 const RetailerShop = () => {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const { products } = useSelector<RootState>(
-    ({ product }) => product,
-  ) as ProductState
+    ({ product }) => product
+  ) as ProductState;
 
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    dispatch(fetchAllProducts())
-  }, [dispatch])
+    dispatch(fetchAllProducts());
+  }, [dispatch]);
 
   return (
     <>
-      <AppLayout location="Victoria Island" cart search hideLogo hideName>
+      <AppLayout
+        location="Victoria Island"
+        cart
+        search
+        // hideLogo hideName
+      >
         <div className="relative mt-[-1.5rem] mb-10">
           <input
             className="w-full p-[0.625rem] pl-[2.25rem] flex items-center justify-center p text-black-100 rounded-[8px] border border-solid border-grey-light"
@@ -52,7 +57,7 @@ const RetailerShop = () => {
                   ? Math.round(
                       ((product.price - product.discount_price) /
                         product.price) *
-                        100,
+                        100
                     )
                   : undefined
               }
@@ -61,7 +66,7 @@ const RetailerShop = () => {
         </section>
       </AppLayout>
     </>
-  )
-}
+  );
+};
 
-export default RetailerShop
+export default RetailerShop;

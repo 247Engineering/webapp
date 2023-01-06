@@ -118,8 +118,8 @@ const RetailerOrderStatus = () => {
     <>
       <AppLayout
         cart
-        hideLogo
-        hideName
+        // hideLogo
+        // hideName
         secondaryNav={`Order #${order?.order_id.replace("ORD_", "")}`}
         secondaryNavBack="Orders"
         back={ROUTES.RETAILER.ORDERS}

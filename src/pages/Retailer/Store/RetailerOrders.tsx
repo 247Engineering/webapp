@@ -38,7 +38,7 @@ const RetailerOrders = () => {
   const [sort, setSort] = useState('')
   return (
     <>
-      <AppLayout cart hideName>
+      <AppLayout cart>
         <header>
           <h1 className="h1 text-black">Orders</h1>
         </header>

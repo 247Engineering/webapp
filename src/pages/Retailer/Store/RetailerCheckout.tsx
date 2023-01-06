@@ -72,8 +72,8 @@ const RetailerCheckout = () => {
     <div onClick={() => setLocationDropdown(false)} className="h-full">
       <AppLayout
         cart
-        hideLogo
-        hideName
+        // hideLogo
+        // hideName
         secondaryNav="Checkout"
         secondaryNavBack="Cart"
         back={ROUTES.RETAILER.CART}

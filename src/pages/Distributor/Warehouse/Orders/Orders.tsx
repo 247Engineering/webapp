@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 
-import location from "../../../../assets/images/location.svg";
 import search from "../../../../assets/images/search.svg";
 
 import AppLayout from "../../../../components/layouts/AppLayout";
@@ -15,13 +14,14 @@ import { fetchWarehouseOrders } from "../../../../store/features/distributor";
 import { AppDispatch, RootState } from "../../../../store";
 import { DistributorState } from "../../../../types";
 import * as ROUTES from "../../../../routes";
+import MultiSelectCheckbox from "../../../../components/forms/MultiSelectCheckbox";
 
 const Orders = () => {
   const navigate = useNavigate();
   const { warehouse: warehouseId } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { orders, warehouse } = useSelector<RootState>(
+  const { orders } = useSelector<RootState>(
     ({ distributor }) => distributor
   ) as DistributorState;
 
@@ -34,18 +34,17 @@ const Orders = () => {
   return (
     <>
       <AppLayout>
+        <MultiSelectCheckbox
+          items={[
+            { name: "Warehouse 1", _id: 1 },
+            { name: "Warehouse 2", _id: 2 },
+            { name: "Warehouse 3", _id: 3 },
+          ]}
+          type="warehouses"
+          className="mb-4"
+        />
         <header>
-          <div>
-            <h1 className="h1 mb-2 text-black">Orders</h1>
-            <p className="p text-black-100 capitalize">
-              <img
-                src={location}
-                className="w-[1.563rem] h-[1.25rem] inline"
-                alt="location icon"
-              />{" "}
-              {warehouse?.warehouse.address}
-            </p>
-          </div>
+          <h1 className="h1 text-black">Orders</h1>
         </header>
         <section className="mt-6 text-black">
           <div className="flex items-center mb-[1.875rem]">

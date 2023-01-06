@@ -56,8 +56,8 @@ const RetailerPayment = () => {
     <div>
       <AppLayout
         cart
-        hideLogo
-        hideName
+        // hideLogo
+        // hideName
         secondaryNav="Make Payment"
         secondaryNavBack="Checkout"
         back={ROUTES.RETAILER.CHECKOUT}

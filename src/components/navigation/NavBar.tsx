@@ -8,12 +8,12 @@ import logo from "../../assets/images/24Seven.svg";
 import locationIcon from "../../assets/images/location.svg";
 import navbarSearch from "../../assets/images/navbar-search.svg";
 import cartIcon from "../../assets/images/cart.svg";
+import profile from "../../assets/images/profile.svg";
 
 import BackButton from "../forms/BackButton";
 
 import {
   AppLayoutProps,
-  AuthState,
   RetailerState,
   AuthContextType,
 } from "../../types";
@@ -25,20 +25,17 @@ const NavBar = ({
   alternate,
   onClose,
   hideLogo,
-  hideName,
   location,
   search,
   cart,
   setShowSideBar,
+  showSideBar,
   secondaryNav,
   secondaryNavBack,
   back,
 }: AppLayoutProps) => {
   const navigate = useNavigate();
 
-  const { firstName, lastName } = useSelector<RootState>(
-    ({ auth }) => auth
-  ) as AuthState;
   const { cartItems } = useSelector<RootState>(
     ({ retailer }) => retailer
   ) as RetailerState;
@@ -64,20 +61,14 @@ const NavBar = ({
             />
           ) : (
             <>
-              <img
-                src={hamburger}
-                alt="hamburger icon"
-                className="w-[1.313rem] h-[1.125rem]"
-                onClick={() => {
-                  if (setShowSideBar) setShowSideBar(true);
-                }}
-              />
               {!hideLogo ? (
                 <img
                   src={logo}
                   alt="logo"
                   className="ml-1 w-[7.813rem] h-[2rem]"
-                  onClick={() => navigate(ROUTES[userType as keyof typeof ROUTES].DASHBOARD)}
+                  onClick={() =>
+                    navigate(ROUTES[userType as keyof typeof ROUTES].DASHBOARD)
+                  }
                 />
               ) : null}
               {location ? (
@@ -93,17 +84,26 @@ const NavBar = ({
             </>
           )}
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center px-[0.625rem]">
+          {!alternate ? (
+            <img
+              src={profile}
+              alt="profile icon"
+              onClick={() => {
+                navigate("/dashboard");
+              }}
+            />
+          ) : null}
           {search ? (
             <img
               src={navbarSearch}
-              className="w-[2rem] h-[2rem]"
+              className="w-[2rem] h-[2rem] ml-7"
               alt="search"
             />
           ) : null}
           {cart ? (
             <div
-              className="flex items-center justify-center rounded-full w-[2rem] h-[2rem] ml-2 mr-[0.75rem] bg-orange-light-100 relative"
+              className="flex items-center justify-center rounded-full w-[2rem] h-[2rem] ml-7 mr-[0.75rem] bg-orange-light-100 relative"
               onClick={() => navigate(ROUTES.RETAILER.CART)}
             >
               <img src={cartIcon} alt="cart" />
@@ -112,11 +112,15 @@ const NavBar = ({
               </span>
             </div>
           ) : null}
-          {!hideName ? (
-            <div className="bg-orange-light text-orange text-[1rem] leading-[1.5rem] flex items-center justify-center rounded-full w-[2rem] h-[2rem] uppercase">
-              {firstName ? firstName[0] : "A"}
-              {lastName ? lastName[0] : "B"}
-            </div>
+          {!alternate ? (
+            <img
+              src={hamburger}
+              alt="hamburger icon"
+              className="ml-7"
+              onClick={() => {
+                if (setShowSideBar) setShowSideBar(!showSideBar);
+              }}
+            />
           ) : null}
         </div>
       </nav>
