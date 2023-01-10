@@ -10,7 +10,10 @@ import SortSelect from "../../../../components/forms/SortSelect";
 import TableLayout from "../../../../components/tables/TableLayout";
 import TableFooter from "../../../../components/tables/TableFooter";
 
-import { fetchWarehouseOrders } from "../../../../store/features/distributor";
+import {
+  fetchWarehouseOrders,
+  fetchWarehouses,
+} from "../../../../store/features/distributor";
 import { AppDispatch, RootState } from "../../../../store";
 import { DistributorState } from "../../../../types";
 import * as ROUTES from "../../../../routes";
@@ -21,7 +24,7 @@ const Orders = () => {
   const { warehouse: warehouseId } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { orders } = useSelector<RootState>(
+  const { orders, warehouses } = useSelector<RootState>(
     ({ distributor }) => distributor
   ) as DistributorState;
 
@@ -29,19 +32,17 @@ const Orders = () => {
 
   useEffect(() => {
     dispatch(fetchWarehouseOrders(warehouseId as string));
+    dispatch(fetchWarehouses());
   }, [dispatch, warehouseId]);
 
   return (
     <>
       <AppLayout>
         <MultiSelectCheckbox
-          items={[
-            { name: "Warehouse 1", _id: 1 },
-            { name: "Warehouse 2", _id: 2 },
-            { name: "Warehouse 3", _id: 3 },
-          ]}
+          items={warehouses || []}
           type="warehouses"
           className="mb-4"
+          onChange={() => {}}
         />
         <header>
           <h1 className="h1 text-black">Orders</h1>

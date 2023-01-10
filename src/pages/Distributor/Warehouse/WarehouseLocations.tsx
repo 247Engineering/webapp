@@ -109,19 +109,19 @@ const WarehouseLocations = () => {
                               <h6 className="hover:text-purple font-[700]">
                                 {warehouse.name}
                               </h6>
-                              <p>
+                              <p className="max-w-[10rem] overflow-hidden text-ellipsis">
                                 {warehouse.formatted_address ||
                                   "365 Adeola Odeku Street"}
                               </p>
                             </div>
                           </div>
                         </td>
-                        <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
+                        {/* <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
                           <div>
                             <p className="font-[700]">Open</p>
                             <p>Closes 22:00 Mon-Sat</p>
                           </div>
-                        </td>
+                        </td> */}
                         <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
                           <div>
                             <p className="font-[700]">N5,000,000</p>
@@ -221,16 +221,19 @@ const WarehouseLocations = () => {
                               <h6 className="hover:text-purple font-[700]">
                                 {warehouse.name}
                               </h6>
-                              <p>365 Adeola Odeku Street</p>
+                              <p className="max-w-[10rem] overflow-hidden text-ellipsis">
+                                {warehouse.formatted_address ||
+                                  "365 Adeola Odeku Street"}
+                              </p>
                             </div>
                           </div>
                         </td>
-                        <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
+                        {/* <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
                           <div>
                             <p className="font-[700]">Open</p>
                             <p>Closes 22:00 Mon-Sat</p>
                           </div>
-                        </td>
+                        </td> */}
                         <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
                           <div>
                             <p className="font-[700]">N5,000,000</p>

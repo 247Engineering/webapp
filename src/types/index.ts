@@ -122,6 +122,8 @@ export interface MultiSelectCheckboxProps {
   items: any[];
   type: string
   className?: string;
+  onChange: (value: any) => void
+  isMultiSelect?: boolean
 }
 
 export interface SortSelectProps {

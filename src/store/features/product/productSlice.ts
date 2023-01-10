@@ -31,7 +31,7 @@ const initialState: ProductState = {
 
 export const fetchProducts = createAsyncThunk(
   'product/fetchProducts',
-  async () => {
+  async (warehouse?: string) => {
     return await request({
       url: `/product/get-products`,
       method: 'get',

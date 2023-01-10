@@ -1,41 +1,56 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import add from '../../../assets/images/add.svg'
-import search from '../../../assets/images/search.svg'
-import image from '../../../assets/images/image.svg'
+import add from "../../../assets/images/add.svg";
+import search from "../../../assets/images/search.svg";
+import image from "../../../assets/images/image.svg";
 
-import SortSelect from '../../../components/forms/SortSelect'
-import AppLayout from '../../../components/layouts/AppLayout'
-import TableLayout from '../../../components/tables/TableLayout'
-import TableFooter from '../../../components/tables/TableFooter'
+import SortSelect from "../../../components/forms/SortSelect";
+import AppLayout from "../../../components/layouts/AppLayout";
+import TableLayout from "../../../components/tables/TableLayout";
+import TableFooter from "../../../components/tables/TableFooter";
+import MultiSelectCheckbox from "../../../components/forms/MultiSelectCheckbox";
 
-import { fetchProducts } from '../../../store/features/product'
-import { AppDispatch, RootState } from '../../../store'
-import { ProductState } from '../../../types'
-import * as ROUTES from '../../../routes'
+import { fetchProducts } from "../../../store/features/product";
+import { fetchWarehouses } from "../../../store/features/distributor";
+import { AppDispatch, RootState } from "../../../store";
+import { DistributorState, ProductState } from "../../../types";
+import * as ROUTES from "../../../routes";
 
 const WarehouseProducts = () => {
-  const navigate = useNavigate()
-  const { warehouse } = useParams()
+  const navigate = useNavigate();
+  const { warehouse } = useParams();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const { products } = useSelector<RootState>(
-    ({ product }) => product,
-  ) as ProductState
+    ({ product }) => product
+  ) as ProductState;
+  const { warehouses } = useSelector<RootState>(
+    ({ distributor }) => distributor
+  ) as DistributorState;
 
-  const [sort, setSort] = useState('')
-  const [checked, setChecked] = useState(false)
-  const [open, setOpen] = useState(false)
+  const [sort, setSort] = useState("");
+  const [checked, setChecked] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchProducts())
-  }, [dispatch])
+    dispatch(fetchProducts(warehouse));
+    dispatch(fetchWarehouses());
+  }, [dispatch, warehouse]);
 
   return (
     <div className="h-full" onClick={() => setOpen(false)}>
       <AppLayout>
+        <MultiSelectCheckbox
+          items={warehouses || []}
+          type="warehouses"
+          isMultiSelect={false}
+          className="mb-4"
+          onChange={(warehouse) => {
+            navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS_FOR(warehouse));
+          }}
+        />
         <header className="flex justify-between items-center">
           <h1 className="h1 text-black">Products</h1>
           <div className="relative" onClick={(e) => e.stopPropagation()}>
@@ -52,8 +67,8 @@ const WarehouseProducts = () => {
                   onClick={() =>
                     navigate(
                       ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCT_FORM_FOR(
-                        warehouse as string,
-                      ),
+                        warehouse as string
+                      )
                     )
                   }
                 >
@@ -70,8 +85,8 @@ const WarehouseProducts = () => {
           <div className="flex items-center mb-8">
             <SortSelect
               options={[
-                'Value - highest to lowest',
-                'Value - lowest to highest',
+                "Value - highest to lowest",
+                "Value - lowest to highest",
               ]}
               value={sort}
               onChange={(value) => setSort(value)}
@@ -106,7 +121,7 @@ const WarehouseProducts = () => {
                       type="checkbox"
                       checked={checked}
                       onChange={() => {
-                        setChecked(!checked)
+                        setChecked(!checked);
                       }}
                       className="h-[0.938rem] w-[0.938rem]"
                     />
@@ -125,7 +140,7 @@ const WarehouseProducts = () => {
                         type="checkbox"
                         checked={checked}
                         onChange={() => {
-                          setChecked(!checked)
+                          setChecked(!checked);
                         }}
                         className="h-[0.938rem] w-[0.938rem]"
                       />
@@ -154,7 +169,7 @@ const WarehouseProducts = () => {
         </section>
       </AppLayout>
     </div>
-  )
-}
+  );
+};
 
-export default WarehouseProducts
+export default WarehouseProducts;
