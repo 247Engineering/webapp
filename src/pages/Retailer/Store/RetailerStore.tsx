@@ -28,7 +28,7 @@ const RetailerShop = () => {
         location="Victoria Island"
         cart
         search
-        // hideLogo hideName
+        hideLogo
       >
         <div className="relative mt-[-1.5rem] mb-10">
           <input

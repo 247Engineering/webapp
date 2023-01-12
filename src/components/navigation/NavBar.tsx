@@ -12,11 +12,7 @@ import profile from "../../assets/images/profile.svg";
 
 import BackButton from "../forms/BackButton";
 
-import {
-  AppLayoutProps,
-  RetailerState,
-  AuthContextType,
-} from "../../types";
+import { AppLayoutProps, RetailerState, AuthContextType } from "../../types";
 import { RootState } from "../../store";
 import * as ROUTES from "../../routes";
 import { useAuth } from "../../hooks/useAuth";
@@ -72,7 +68,7 @@ const NavBar = ({
                 />
               ) : null}
               {location ? (
-                <div className="p flex items-center bg-grey rounded-[50px] py-[0.375rem] pr-[0.875rem] pl-[0.532rem] ml-[0.594rem]">
+                <div className="p flex items-center bg-grey rounded-[50px] py-[0.375rem] pr-[0.875rem] pl-[0.532rem] ml-[0.594rem] max-w-[8.875rem]">
                   <img
                     src={locationIcon}
                     className="w-[0.936rem] h-[1.248rem] mr-[0.657rem]"
@@ -103,11 +99,15 @@ const NavBar = ({
           ) : null}
           {cart ? (
             <div
-              className="flex items-center justify-center rounded-full w-[2rem] h-[2rem] ml-7 mr-[0.75rem] bg-orange-light-100 relative"
+              className="flex items-center justify-center rounded-full w-[2rem] h-[2rem] ml-7 relative"
               onClick={() => navigate(ROUTES.RETAILER.CART)}
             >
-              <img src={cartIcon} alt="cart" />
-              <span className="absolute left-[23px] top-[-9px] text-white bg-orange font-[700] text-[0.625rem] leading-[0.875rem] rounded-[100px] px-1 py-[2px]">
+              <img
+                src={cartIcon}
+                alt="cart"
+                className="w-[1.25rem] h-[1.125rem]"
+              />
+              <span className="absolute left-[16px] top-[-5px] text-white bg-orange font-[700] text-[0.625rem] leading-[0.875rem] rounded-[100px] px-1 py-[2px]">
                 {cartItems.reduce((acc, curr) => acc + curr.quantity, 0)}
               </span>
             </div>

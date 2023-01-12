@@ -91,26 +91,53 @@ export const validateOtp = createAsyncThunk(
   }
 );
 
-export const requestPasswordReset = createAsyncThunk(
-  "auth/resetPassword",
-  async (body: { email: string }) => {
+export const validatePasswordResetOtp = createAsyncThunk(
+  "auth/validatePasswordResetOtp",
+  async (body: { reset_token: string; otp: string }) => {
     return await request({
-      url: "/auth/reset",
+      url: "/auth/validate-reset",
       method: "put",
       body,
-      user: "distributor",
+      user: "retailer",
+    });
+  }
+);
+
+export const requestPasswordReset = createAsyncThunk(
+  "auth/requestPasswordReset",
+  async ({
+    user,
+    ...body
+  }: {
+    email?: string;
+    phone?: string;
+    user: UserType;
+  }) => {
+    return await request({
+      url: `/auth/reset${user === "retailer" ? "-password" : ""}`,
+      method: "put",
+      body,
+      user,
     });
   }
 );
 
 export const resetPassword = createAsyncThunk(
   "auth/resetPassword",
-  async (body: { token: string; password: string }) => {
+  async ({
+    user,
+    ...body
+  }: {
+    reset_token?: string;
+    token?: string;
+    password: string;
+    user?: UserType;
+  }) => {
     return await request({
       url: "/auth/change-password",
       method: "put",
       body,
-      user: "distributor",
+      user,
     });
   }
 );
@@ -173,7 +200,13 @@ export const authSlice = createSlice({
           case "auth/resetPassword/fulfilled":
           case "auth/requestPasswordReset/fulfilled":
           case "auth/createWarehouseUser/fulfilled":
+          case "auth/validatePasswordResetOtp/fulfilled":
             state.resetPasswordStamp = new Date().getTime();
+            if (
+              action.meta.arg.user === "retailer" &&
+              action.type === "auth/requestPasswordReset/fulfilled"
+            )
+              state.resetPasswordStamp = action.payload.reset_token;
             break;
         }
 

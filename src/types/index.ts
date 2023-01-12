@@ -20,7 +20,7 @@ export interface AuthState {
   id: string | null;
   type: UserType | null;
   loading: boolean;
-  resetPasswordStamp: number | null;
+  resetPasswordStamp: number | string | null;
   businessName: string | null;
   stepsCompleted: number;
 }
