@@ -22,9 +22,7 @@ export const DISTRIBUTOR = {
   WAREHOUSE_DETAILS: "/distributor/warehouses/:warehouse",
   WAREHOUSE_DETAILS_FOR: (warehouse: string) =>
     `/distributor/warehouses/${warehouse}`,
-  WAREHOUSE_ORDERS: "/distributor/warehouses/:warehouse/orders",
-  WAREHOUSE_ORDERS_FOR: (warehouse: string) =>
-    `/distributor/warehouses/${warehouse}/orders`,
+  WAREHOUSE_ORDERS: "/distributor/warehouses/orders",
   WAREHOUSE_ORDER: "/distributor/warehouses/:warehouse/orders/:order",
   WAREHOUSE_ORDER_FOR: (warehouse: string, order: string) =>
     `/distributor/warehouses/${warehouse}/orders/${order}`,

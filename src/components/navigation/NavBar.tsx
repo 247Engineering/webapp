@@ -74,7 +74,9 @@ const NavBar = ({
                     className="w-[0.936rem] h-[1.248rem] mr-[0.657rem]"
                     alt="location"
                   />
-                  {location}
+                  <span className="text-ellipsis whitespace-nowrap overflow-hidden">
+                    {location}
+                  </span>
                 </div>
               ) : null}
             </>

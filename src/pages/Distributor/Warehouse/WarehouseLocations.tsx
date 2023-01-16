@@ -168,9 +168,7 @@ const WarehouseLocations = () => {
                                       className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p"
                                       onClick={() => {
                                         navigate(
-                                          ROUTES.DISTRIBUTOR.WAREHOUSE_ORDERS_FOR(
-                                            warehouse._id
-                                          )
+                                          ROUTES.DISTRIBUTOR.WAREHOUSE_ORDERS
                                         );
                                       }}
                                     >

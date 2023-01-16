@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 
@@ -21,7 +21,6 @@ import MultiSelectCheckbox from "../../../../components/forms/MultiSelectCheckbo
 
 const Orders = () => {
   const navigate = useNavigate();
-  const { warehouse: warehouseId } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
   const { orders, warehouses } = useSelector<RootState>(
@@ -29,11 +28,14 @@ const Orders = () => {
   ) as DistributorState;
 
   const [sort, setSort] = useState("");
+  const [warehouseIds, setWarehouseIds] = useState(() =>
+    warehouses?.map((warehouse) => warehouse._id).join(",")
+  );
 
   useEffect(() => {
-    dispatch(fetchWarehouseOrders(warehouseId as string));
+    if (warehouseIds) dispatch(fetchWarehouseOrders(warehouseIds));
     dispatch(fetchWarehouses());
-  }, [dispatch, warehouseId]);
+  }, [dispatch, warehouseIds]);
 
   return (
     <>
@@ -42,7 +44,9 @@ const Orders = () => {
           items={warehouses || []}
           type="warehouses"
           className="mb-4"
-          onChange={() => {}}
+          onChange={(ids) => {
+            setWarehouseIds(ids.join(","));
+          }}
         />
         <header>
           <h1 className="h1 text-black">Orders</h1>
@@ -83,7 +87,7 @@ const Orders = () => {
                   onClick={() =>
                     navigate(
                       ROUTES.DISTRIBUTOR.WAREHOUSE_ORDER_FOR(
-                        warehouseId as string,
+                        order.warehouse_id,
                         order.id
                       )
                     )

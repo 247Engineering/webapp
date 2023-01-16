@@ -8,7 +8,10 @@ import ProductItem from "../../../components/miscellaneous/ProductItem";
 
 import { AppDispatch, RootState } from "../../../store";
 import { ProductState } from "../../../types";
-import { fetchAllProducts } from "../../../store/features/product";
+import {
+  fetchAllProducts,
+  searchStoreProducts,
+} from "../../../store/features/product";
 
 const RetailerShop = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,17 +22,16 @@ const RetailerShop = () => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    dispatch(fetchAllProducts());
-  }, [dispatch]);
+    if (search) {
+      dispatch(searchStoreProducts(search));
+    } else {
+      dispatch(fetchAllProducts());
+    }
+  }, [dispatch, search]);
 
   return (
     <>
-      <AppLayout
-        location="Victoria Island"
-        cart
-        search
-        hideLogo
-      >
+      <AppLayout location="Victoria Island" cart search hideLogo>
         <div className="relative mt-[-1.5rem] mb-10">
           <input
             className="w-full p-[0.625rem] pl-[2.25rem] flex items-center justify-center p text-black-100 rounded-[8px] border border-solid border-grey-light"

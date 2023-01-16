@@ -129,9 +129,9 @@ export const fetchWarehouse = createAsyncThunk(
 
 export const fetchWarehouseOrders = createAsyncThunk(
   "distributor/fetchWarehouseOrders",
-  async (warehouse: string) => {
+  async (warehouses: string) => {
     return await request({
-      url: `/warehouse/orders/${warehouse}`,
+      url: `/warehouse/orders?warehouse_ids=${warehouses}`,
       method: "get",
       user: "distributor",
     });
