@@ -319,7 +319,7 @@ td:not(.rdp-cell) {
 
 /* react-toastify */
 .Toastify__toast--success {
-  background-color: #e34b31 !important;
+  background-color: #80CBA6 !important;
   font-weight: 700 !important;
   font-size: 0.75rem !important;
   line-height: 1rem !important;

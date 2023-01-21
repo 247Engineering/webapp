@@ -8,6 +8,7 @@ import orders from "../../assets/images/orders-icon.svg";
 import warehouses from "../../assets/images/warehouses-icon.svg";
 import operations from "../../assets/images/operations-icon.svg";
 import settings from "../../assets/images/settings-icon.svg";
+import logoutIcon from "../../assets/images/logout.svg";
 
 import { useAuth } from "../../hooks/useAuth";
 import { AuthContextType } from "../../types";
@@ -61,7 +62,7 @@ const SideBar = ({ show }: { show: boolean }) => {
       ))}
       <div className="px-2 py-3.5 flex flex-items" onClick={() => logout()}>
         <div className="w-[1.25rem] h-[1.25rem] flex items-center justify-center mr-2">
-          {/* <img src={settings} alt="settings" /> */}
+          <img src={logoutIcon} alt="logout" />
         </div>
         <p>Logout</p>
       </div>

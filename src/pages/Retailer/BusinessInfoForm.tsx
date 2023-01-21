@@ -45,8 +45,8 @@ const BusinessInfo = () => {
   };
 
   const canSubmit = useMemo(
-    () => [fname, lname, businessName, email, location].every((data) => !!data),
-    [fname, lname, businessName, email, location]
+    () => [fname, lname, businessName, location].every((data) => !!data),
+    [fname, lname, businessName, location]
   );
 
   useEffect(() => {

@@ -12,10 +12,11 @@ const MultiSelectCheckbox = ({
   type,
   onChange,
   isMultiSelect = true,
+  selected,
 }: MultiSelectCheckboxProps) => {
   const [show, setShow] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>(
-    isMultiSelect ? items.map((item) => item._id) : []
+    isMultiSelect ? items.map((item) => item._id) : [selected]
   );
   const allItemsSelected = selectedItems.length === items.length;
   const selectedItem = items.find((item) => item._id === selectedItems[0]);
@@ -96,7 +97,7 @@ const MultiSelectCheckbox = ({
             }}
             disabled={!selectedItems.length}
           >
-            Select {type}
+            Select {isMultiSelect ? type : type.slice(0, -1)}
           </button>
           <button
             className="flex justify-center items-center p-[0.875rem] text-purple rounded-[12px] w-full"

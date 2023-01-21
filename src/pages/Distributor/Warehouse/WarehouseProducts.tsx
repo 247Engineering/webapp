@@ -50,6 +50,7 @@ const WarehouseProducts = () => {
           onChange={(warehouse) => {
             navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS_FOR(warehouse));
           }}
+          selected={warehouse}
         />
         <header className="flex justify-between items-center">
           <h1 className="h1 text-black">Products</h1>
