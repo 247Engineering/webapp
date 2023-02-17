@@ -224,12 +224,7 @@ export const authSlice = createSlice({
           case "auth/requestPasswordReset/fulfilled":
           case "auth/createWarehouseUser/fulfilled":
           case "auth/validatePasswordResetOtp/fulfilled":
-            state.resetPasswordStamp = new Date().getTime();
-            if (
-              action.meta.arg.user === "retailer" &&
-              action.type === "auth/requestPasswordReset/fulfilled"
-            )
-              state.resetPasswordStamp = action.payload.reset_token;
+            state.resetPasswordStamp = action.payload.reset_token || new Date().getTime();
             break;
         }
 
