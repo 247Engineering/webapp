@@ -64,7 +64,14 @@ export const RETAILER = {
   ORDER_STATUS_FOR: (order: string) => `/retailer/orders/${order}/status`,
 };
 
-// export const RIDER = {}
+export const LOGISTICS = {
+  SIGNUP: "/logistics/signup",
+  SIGNIN: "/logistics/signin",
+  FORGOT_PASSWORD: "/logistics/forgot-password",
+  VERIFY_OTP: "/logistics/verify-otp",
+  BUSINESS_INFO_FORM: "/logistics/vehicle-info/form",
+  DASHBOARD: "/logistics/dashboard",
+};
 
 export const AUTH = {
   DASHBOARD: "/auth/account-select",

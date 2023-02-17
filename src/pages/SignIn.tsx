@@ -1,49 +1,49 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import ButtonSubmit from '../components/forms/ButtonSubmit'
-import ButtonText from '../components/forms/ButtonText'
-import Input from '../components/forms/Input'
-import LandingLayout from '../components/layouts/LandingLayout'
-import PhoneNumberInput from '../components/forms/PhoneNumberInput'
+import ButtonSubmit from "../components/forms/ButtonSubmit";
+import ButtonText from "../components/forms/ButtonText";
+import Input from "../components/forms/Input";
+import LandingLayout from "../components/layouts/LandingLayout";
+import PhoneNumberInput from "../components/forms/PhoneNumberInput";
 
-import { useAuth } from '../hooks/useAuth'
-import { signin } from '../store/features/auth'
-import { AppDispatch, RootState } from '../store'
-import { AuthContextType, AuthState, SignInProps } from '../types'
-import * as ROUTES from '../routes'
+import { useAuth } from "../hooks/useAuth";
+import { signin } from "../store/features/auth";
+import { AppDispatch, RootState } from "../store";
+import { AuthContextType, AuthState, SignInProps } from "../types";
+import * as ROUTES from "../routes";
 
 const SignIn = ({ type, forgotPassword }: SignInProps) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const { loading, id } = useSelector<RootState>(
-    ({ auth }) => auth,
-  ) as AuthState
-  const { login } = useAuth() as AuthContextType
+    ({ auth }) => auth
+  ) as AuthState;
+  const { login } = useAuth() as AuthContextType;
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [mobile, setMobile] = useState('')
-  const [callingCode, setCallingCode] = useState('+234')
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [callingCode, setCallingCode] = useState("+234");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     dispatch(
       signin({
-        ...(type === 'retailer'
-          ? { phone: (callingCode + mobile).replace('+', '') }
+        ...(type === "retailer" || type === "logistics"
+          ? { phone: (callingCode + mobile).replace("+", "") }
           : { email }),
         password,
         type,
-      }),
-    )
-  }
+      })
+    );
+  };
 
   useEffect(() => {
-    if (id) login({ id, type })
-  }, [id, login, type])
+    if (id) login({ id, type });
+  }, [id, login, type]);
 
   return (
     <LandingLayout>
@@ -54,7 +54,7 @@ const SignIn = ({ type, forgotPassword }: SignInProps) => {
       <section className="mt-10">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            {type === 'retailer' ? (
+            {(type === "retailer" || type === "logistics") ? (
               <PhoneNumberInput
                 code={callingCode}
                 setCode={setCallingCode}
@@ -81,7 +81,7 @@ const SignIn = ({ type, forgotPassword }: SignInProps) => {
           <ButtonText
             text="Forgot Password?"
             onClick={() => {
-              navigate(forgotPassword)
+              navigate(forgotPassword);
             }}
             className="mb-12"
           />
@@ -93,11 +93,11 @@ const SignIn = ({ type, forgotPassword }: SignInProps) => {
             loading={loading}
           />
           <p className="p text-center">
-            Don't have an account?{' '}
+            Don't have an account?{" "}
             <ButtonText
               text="Sign up"
               onClick={() => {
-                navigate(ROUTES.AUTH.ACCOUNT_SELECT)
+                navigate(ROUTES.AUTH.ACCOUNT_SELECT);
               }}
               className="font-[400]"
             />
@@ -108,7 +108,7 @@ const SignIn = ({ type, forgotPassword }: SignInProps) => {
         Terms of use. Privacy policy
       </a>
     </LandingLayout>
-  )
-}
+  );
+};
 
-export default SignIn
+export default SignIn;

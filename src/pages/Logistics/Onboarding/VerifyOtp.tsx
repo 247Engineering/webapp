@@ -37,20 +37,20 @@ const VerifyOtp = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!passwordResetToken) {
-      dispatch(validateOtp({ phone: phone as string, otp, user: "retailer" }));
+      dispatch(validateOtp({ phone: phone as string, otp, user: "logistics" }));
     } else {
       dispatch(
         validatePasswordResetOtp({
           reset_token: passwordResetToken as string,
           otp,
-          user: "retailer",
+          user: "logistics"
         })
       );
     }
   };
 
   useEffect(() => {
-    if (id) login({ id, type: "retailer" });
+    if (id) login({ id, type: "logistics" });
   }, [id, login]);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const VerifyOtp = () => {
         pathname: ROUTES.AUTH.RESET_PASSWORD,
         search: createSearchParams({
           token: passwordResetToken as string,
-          user: "retailer",
+          user: "logistics"
         }).toString(),
       });
     }

@@ -77,14 +77,14 @@ const AccountSelect = () => {
             className="mb-4"
           />
           <OnboardingRadio
-            id="delivery"
+            id="logistics"
             name="account-select"
-            value="delivery"
+            value="logistics"
             img={delivery}
             imgChecked={deliveryChecked}
             textPrimary="Delivery Rider"
             textSecondary="Deliver goods to appropriate destinations"
-            checked={type === 'delivery'}
+            checked={type === 'logistics'}
             onChange={handleChange}
             className="mb-6"
           />

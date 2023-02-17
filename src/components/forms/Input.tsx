@@ -82,7 +82,7 @@ const Input = ({
           <img
             src={eye}
             alt="toggle show password"
-            className="w-[1.25rem] h-[1.25rem] absolute top-[0.813rem] right-[0.625rem]"
+            className="w-[1.25rem] h-[1.25rem] absolute top-[0.95rem] right-[0.625rem]"
             onClick={() => setType(type === 'password' ? 'text' : 'password')}
           />
         ) : null}

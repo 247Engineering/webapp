@@ -22,6 +22,11 @@ const retailerStep = {
   2: ROUTES.RETAILER.DASHBOARD,
 }
 
+const logisticsStep = {
+  1: ROUTES.LOGISTICS.BUSINESS_INFO_FORM,
+  2: ROUTES.LOGISTICS.DASHBOARD,
+}
+
 export const AuthProvider = ({ children }: any) => {
   const navigate = useNavigate()
 
@@ -45,6 +50,9 @@ export const AuthProvider = ({ children }: any) => {
         case 'retailer':
           dispatch(fetchCart())
           navigate(retailerStep[step as 1 | 2], { replace: true })
+          break
+        case 'logistics':
+          navigate(logisticsStep[step as 1 | 2], { replace: true })
           break
       }
     },

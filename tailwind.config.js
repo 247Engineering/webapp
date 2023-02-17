@@ -16,11 +16,13 @@ module.exports = {
         "grey-light": "rgba(0, 0, 0, 0.12)",
         "grey-light-100": "rgba(0, 0, 0, 0.08)",
         "grey-light-200": "#F6F7F8",
+        "grey-light-300": "#D9D9D9",
         black: "rgba(0, 0, 0, 0.87)",
         "black-100": "rgba(0, 0, 0, 0.6)",
         pumpkin: "#FA9200",
         "pumpkin-light": "#FFF2E0",
         error: "#EF9AA8",
+        red: "#E53451",
       },
       boxShadow: {
         sm: "0px 8px 16px rgba(0, 0, 0, 0.12)",

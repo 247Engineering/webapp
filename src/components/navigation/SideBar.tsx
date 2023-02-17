@@ -34,6 +34,10 @@ const sideBarMap = {
     { link: ROUTES.RETAILER.ORDERS, text: "Orders", image: orders },
     { link: ROUTES.RETAILER.DASHBOARD, text: "Settings", image: settings },
   ],
+  LOGISTICS: [
+    { link: ROUTES.LOGISTICS.DASHBOARD, text: "Dashboard", image: dashboard },
+    { link: ROUTES.LOGISTICS.DASHBOARD, text: "Settings", image: settings },
+  ],
 };
 
 const SideBar = ({ show }: { show: boolean }) => {

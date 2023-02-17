@@ -5,30 +5,36 @@ import UnauthedLayout from '../components/layouts/UnauthedLayout'
 
 import AccountSelect from '../pages/AccountSelect'
 import ResetPassword from '../pages/ResetPassword'
-// import Current from '../pages/Distributor/Warehouse/ConfirmPickup'
+import Current from '../pages/Logistics/OrderStatus'
 
 import {
   unAuthedDistributorRoutes,
   authedDistributorRoutes,
 } from './distributor'
 import { unAuthedRetailerRoutes, authedRetailerRoutes } from './retailer'
+import { unAuthedLogisticsRoutes, authedLogisticsRoutes } from './logistics'
 
 import * as ROUTES from '../routes'
+import { RouteObj } from '../types'
 
 export default function App() {
   return (
     <Routes>
       <Route element={<UnauthedLayout />}>
-        {/* <Route path="/" element={<Current />} /> */}
+        <Route path="/" element={<Current />} />
         <Route path="/" element={<AccountSelect />} />
         <Route path={ROUTES.AUTH.ACCOUNT_SELECT} element={<AccountSelect />} />
         <Route path={ROUTES.AUTH.RESET_PASSWORD} element={<ResetPassword />} />
 
-        {unAuthedDistributorRoutes.map((route) => (
+        {unAuthedDistributorRoutes.map((route: RouteObj) => (
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
 
-        {unAuthedRetailerRoutes.map((route) => (
+        {unAuthedRetailerRoutes.map((route: RouteObj) => (
+          <Route key={route.path} path={route.path} element={route.element} />
+        ))}
+        
+        {unAuthedLogisticsRoutes.map((route: RouteObj) => (
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
 
@@ -39,11 +45,15 @@ export default function App() {
       </Route>
 
       <Route element={<AuthedLayout />}>
-        {authedDistributorRoutes.map((route) => (
+        {authedDistributorRoutes.map((route: RouteObj) => (
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
 
-        {authedRetailerRoutes.map((route) => (
+        {authedRetailerRoutes.map((route: RouteObj) => (
+          <Route key={route.path} path={route.path} element={route.element} />
+        ))}
+        
+        {authedLogisticsRoutes.map((route: RouteObj) => (
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
       </Route>

@@ -33,7 +33,7 @@ const ResetPassword = () => {
       resetPassword({
         password,
         user: userType as UserType,
-        ...(userType === "retailer"
+        ...(userType === "retailer" || userType === "logistics"
           ? {
               reset_token: token as string,
             }

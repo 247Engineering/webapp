@@ -8,6 +8,7 @@ import logo from "../../assets/images/24Seven.svg";
 import locationIcon from "../../assets/images/location.svg";
 import navbarSearch from "../../assets/images/navbar-search.svg";
 import cartIcon from "../../assets/images/cart.svg";
+import boxIcon from "../../assets/images/box.svg";
 import profile from "../../assets/images/profile.svg";
 
 import BackButton from "../forms/BackButton";
@@ -24,6 +25,7 @@ const NavBar = ({
   location,
   search,
   cart,
+  logistics,
   setShowSideBar,
   showSideBar,
   secondaryNav,
@@ -48,39 +50,28 @@ const NavBar = ({
         }`}
       >
         <div className="flex items-center">
-          {alternate ? (
+          {!hideLogo ? (
             <img
-              src={close}
-              alt="close icon"
-              className="w-[1rem] h-[1rem]"
-              onClick={onClose}
+              src={logo}
+              alt="logo"
+              className="ml-1 w-[7.813rem] h-[2rem]"
+              onClick={() =>
+                navigate(ROUTES[userType as keyof typeof ROUTES].DASHBOARD)
+              }
             />
-          ) : (
-            <>
-              {!hideLogo ? (
-                <img
-                  src={logo}
-                  alt="logo"
-                  className="ml-1 w-[7.813rem] h-[2rem]"
-                  onClick={() =>
-                    navigate(ROUTES[userType as keyof typeof ROUTES].DASHBOARD)
-                  }
-                />
-              ) : null}
-              {location ? (
-                <div className="p flex items-center bg-grey rounded-[50px] py-[0.375rem] pr-[0.875rem] pl-[0.532rem] ml-[0.594rem] max-w-[8.875rem]">
-                  <img
-                    src={locationIcon}
-                    className="w-[0.936rem] h-[1.248rem] mr-[0.657rem]"
-                    alt="location"
-                  />
-                  <span className="text-ellipsis whitespace-nowrap overflow-hidden">
-                    {location}
-                  </span>
-                </div>
-              ) : null}
-            </>
-          )}
+          ) : null}
+          {location ? (
+            <div className="p flex items-center bg-grey rounded-[50px] py-[0.375rem] pr-[0.875rem] pl-[0.532rem] ml-[0.594rem] max-w-[8.875rem]">
+              <img
+                src={locationIcon}
+                className="w-[0.936rem] h-[1.248rem] mr-[0.657rem]"
+                alt="location"
+              />
+              <span className="text-ellipsis whitespace-nowrap overflow-hidden">
+                {location}
+              </span>
+            </div>
+          ) : null}
         </div>
         <div className="flex items-center px-[0.625rem]">
           {!alternate ? (
@@ -114,6 +105,21 @@ const NavBar = ({
               </span>
             </div>
           ) : null}
+          {logistics ? (
+            <div
+              className="flex items-center justify-center rounded-full w-[2rem] h-[2rem] ml-7 relative"
+              onClick={() => navigate(ROUTES.RETAILER.CART)}
+            >
+              <img
+                src={boxIcon}
+                alt="cart"
+                className="w-[1.5rem] h-[1.5rem]"
+              />
+              <span className="absolute left-[16px] top-[-5px] text-white bg-orange font-[700] text-[0.625rem] leading-[0.875rem] rounded-[100px] px-1 py-[2px]">
+                {cartItems.reduce((acc, curr) => acc + curr.quantity, 0)}
+              </span>
+            </div>
+          ) : null}
           {!alternate ? (
             <img
               src={hamburger}
@@ -122,6 +128,14 @@ const NavBar = ({
               onClick={() => {
                 if (setShowSideBar) setShowSideBar(!showSideBar);
               }}
+            />
+          ) : null}
+          {alternate ? (
+            <img
+              src={close}
+              alt="close icon"
+              className="w-[1rem] h-[1rem]"
+              onClick={onClose}
             />
           ) : null}
         </div>

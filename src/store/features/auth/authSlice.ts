@@ -13,6 +13,7 @@ const initialState: AuthState = {
   loading: false,
   resetPasswordStamp: null,
   businessName: null,
+  vehicleNumber: null,
   stepsCompleted: 1,
 };
 
@@ -45,6 +46,18 @@ export const retailerSignup = createAsyncThunk(
   }
 );
 
+export const logisticsSignup = createAsyncThunk(
+  "auth/logisticsSignup",
+  async (body: { phone: string; password: string }) => {
+    return await request({
+      url: "/auth/register",
+      method: "post",
+      body,
+      user: "logistics",
+    });
+  }
+);
+
 export const createWarehouseUser = createAsyncThunk(
   "auth/createWarehouseUser",
   async (body: {
@@ -68,37 +81,44 @@ export const signin = createAsyncThunk(
     phone?: string;
     email?: string;
     password: string;
-    type?: UserType;
+    type: UserType;
   }) => {
     return await request({
       url: "/auth/login",
       method: "post",
       body,
-      user: body.phone ? "retailer" : "distributor",
+      user: body.type === "warehouse" ? "distributor" : body.type,
     });
   }
 );
 
 export const validateOtp = createAsyncThunk(
   "auth/validateOtp",
-  async (body: { phone: string; otp: string }) => {
+  async ({ user, ...body }: { phone: string; otp: string; user: UserType }) => {
     return await request({
       url: "/auth/validate-otp",
       method: "post",
       body,
-      user: "retailer",
+      user,
     });
   }
 );
 
 export const validatePasswordResetOtp = createAsyncThunk(
   "auth/validatePasswordResetOtp",
-  async (body: { reset_token: string; otp: string }) => {
+  async ({
+    user,
+    ...body
+  }: {
+    reset_token: string;
+    otp: string;
+    user: UserType;
+  }) => {
     return await request({
       url: "/auth/validate-reset",
       method: "put",
       body,
-      user: "retailer",
+      user,
     });
   }
 );
@@ -114,7 +134,9 @@ export const requestPasswordReset = createAsyncThunk(
     user: UserType;
   }) => {
     return await request({
-      url: `/auth/reset${user === "retailer" ? "-password" : ""}`,
+      url: `/auth/reset${
+        user === "retailer" || user === "logistics" ? "-password" : ""
+      }`,
       method: "put",
       body,
       user,
@@ -131,7 +153,7 @@ export const resetPassword = createAsyncThunk(
     reset_token?: string;
     token?: string;
     password: string;
-    user?: UserType;
+    user: UserType;
   }) => {
     return await request({
       url: "/auth/change-password",
@@ -189,6 +211,7 @@ export const authSlice = createSlice({
             state.id = action.payload.user_id;
             break;
           case "auth/retailerSignup/fulfilled":
+          case "auth/logisticsSignup/fulfilled":
             state.resetPasswordStamp = new Date().getTime();
             state.phone = action.meta.arg.phone;
 

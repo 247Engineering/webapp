@@ -1,4 +1,4 @@
-export type UserType = "distributor" | "warehouse" | "retailer";
+export type UserType = "distributor" | "warehouse" | "retailer" | "logistics";
 
 export interface UserContext {
   firstName?: string;
@@ -22,6 +22,7 @@ export interface AuthState {
   loading: boolean;
   resetPasswordStamp: number | string | null;
   businessName: string | null;
+  vehicleNumber: string | null;
   stepsCompleted: number;
 }
 
@@ -120,11 +121,11 @@ export interface CheckboxProps {
 
 export interface MultiSelectCheckboxProps {
   items: any[];
-  type: string
+  type: string;
   className?: string;
-  onChange: (value: any) => void
-  isMultiSelect?: boolean
-  selected?: string
+  onChange: (value: any) => void;
+  isMultiSelect?: boolean;
+  selected?: string;
 }
 
 export interface SortSelectProps {
@@ -202,6 +203,7 @@ export interface AppLayoutProps {
   location?: string;
   search?: boolean;
   cart?: boolean;
+  logistics?: boolean;
   hideName?: boolean;
   children?: any;
   onClose?: () => void;
@@ -210,6 +212,7 @@ export interface AppLayoutProps {
   secondaryNav?: string;
   secondaryNavBack?: string;
   back?: string;
+  noPadding?: boolean;
 }
 
 export interface WeightInputProps {
@@ -347,4 +350,15 @@ export interface OtpInputProps {
   onChange: (value: string) => void;
   className?: string;
   disabled?: boolean;
+}
+
+export interface RouteObj {
+  path: string;
+  element: any;
+}
+
+export interface LogisticsState {
+  vehicleNumber: string | null;
+  loading: boolean;
+  stepsCompleted: number;
 }
