@@ -41,7 +41,7 @@ const ForgotPassword = () => {
     if (resetPasswordStamp) {
       toast.success("an otp has been sent to your phone number");
       navigate({
-        pathname: ROUTES.RETAILER.VERIFY_OTP,
+        pathname: ROUTES.LOGISTICS.VERIFY_OTP,
         search: createSearchParams({
           token: resetPasswordStamp as string,
         }).toString(),
@@ -82,7 +82,7 @@ const ForgotPassword = () => {
             <ButtonText
               text="Return to Log in"
               onClick={() => {
-                navigate(ROUTES.RETAILER.SIGNIN);
+                navigate(ROUTES.LOGISTICS.SIGNIN);
               }}
             />
           </div>
