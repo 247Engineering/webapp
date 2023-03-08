@@ -47,29 +47,39 @@ const WarehouseProduct = ({
     searchResult,
     loading,
     productStamp,
-    viewedProduct
+    viewedProduct,
   } = product;
-  console.log({viewedProduct})
+  console.log({ viewedProduct });
 
   const [dropdown, setDropdown] = useState(false);
   const [name, setName] = useState(viewedProduct?.name || "");
-  const [description, setDescription] = useState(viewedProduct?.description || "");
+  const [description, setDescription] = useState(
+    viewedProduct?.description || ""
+  );
   const [price, setPrice] = useState(viewedProduct?.price || 0);
   const [discountedPrice, setDiscountedPrice] = useState(
     viewedProduct?.discount_price || 0
   );
-  const [costPerItem, setCostPerItem] = useState(viewedProduct?.cost_per_item || 0);
+  const [costPerItem, setCostPerItem] = useState(
+    viewedProduct?.cost_per_item || 0
+  );
   const [trackQuantity, setTrackQuantity] = useState(
     viewedProduct?.trackQuantity || false
   );
   const [quantity, setQuantity] = useState(viewedProduct?.quantity || 0);
-  const [weightValue, setWeightValue] = useState(viewedProduct?.weight?.value || 0);
+  const [weightValue, setWeightValue] = useState(
+    viewedProduct?.weight?.value || 0
+  );
   const [weightUnit, setWeightUnit] = useState(
     String(viewedProduct?.weight?.type) || "0"
   );
   const [category, setCategory] = useState(viewedProduct?.category || "");
-  const [subCategory, setSubCategory] = useState(viewedProduct?.sub_category || "");
-  const [manufacturer, setManufacturer] = useState(viewedProduct?.manufacturer || "");
+  const [subCategory, setSubCategory] = useState(
+    viewedProduct?.sub_category || ""
+  );
+  const [manufacturer, setManufacturer] = useState(
+    viewedProduct?.manufacturer || ""
+  );
 
   const [images, dispatchImage] = useReducer(
     productImageReducer,
@@ -124,7 +134,7 @@ const WarehouseProduct = ({
             manufacturer: manufacturer,
             images,
             warehouse_id: warehouse as string,
-            product: productId as string
+            product: productId as string,
           })
         )
       : dispatch(
@@ -194,6 +204,27 @@ const WarehouseProduct = ({
       dispatch(reset());
     };
   }, [dispatch, navigate, productStamp, warehouse]);
+
+  useEffect(() => {
+    if (viewedProduct) {
+      setName(viewedProduct.name);
+      setDescription(viewedProduct.description);
+      setPrice(viewedProduct.price);
+      setDiscountedPrice(viewedProduct.discount_price || 0);
+      setCostPerItem(viewedProduct.cost_per_item);
+      setTrackQuantity(viewedProduct?.trackQuantity || true);
+      setQuantity(viewedProduct.quantity);
+      setWeightValue(viewedProduct.weight?.value || 0);
+      setWeightUnit(String(viewedProduct.weight?.type) || "0");
+      setCategory(viewedProduct.category);
+      setSubCategory(viewedProduct.sub_category);
+      setManufacturer(viewedProduct.manufacturer);
+      dispatchImage({
+        type: "replace",
+        payload: viewedProduct.images,
+      });
+    }
+  }, [viewedProduct]);
 
   return (
     <div className="h-full" onClick={() => setDropdown(false)}>
