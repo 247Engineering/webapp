@@ -49,7 +49,6 @@ const WarehouseProduct = ({
     productStamp,
     viewedProduct,
   } = product;
-  console.log({ viewedProduct });
 
   const [dropdown, setDropdown] = useState(false);
   const [name, setName] = useState(viewedProduct?.name || "");
