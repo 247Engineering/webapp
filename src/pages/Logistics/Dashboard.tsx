@@ -34,14 +34,15 @@ const Dashboard = () => {
   document.cookie = `Authorization=Bearer ${tokens?.access_token}; path=/`;
 
   const response = useWebSocket(
-    `${process.env.REACT_APP_BASE_URL?.replace("http", "ws")}/orders`,
+    // `${process.env.REACT_APP_BASE_URL?.replace("http", "ws")}/orders`,
+    `wss://echo.websocket.org`,
     {
       share: true,
       filter: () => false,
       onMessage: (message) => console.log({ message }),
       onOpen: (event) => console.log({ event }),
       onClose: (event) => console.log({ event }),
-      protocols: ["http", "https"],
+      protocols: "http",
     }
   );
   console.log({ socket: response });

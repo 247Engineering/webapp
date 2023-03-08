@@ -110,8 +110,7 @@ const WarehouseLocations = () => {
                                 {warehouse.name}
                               </h6>
                               <p className="max-w-[10rem] overflow-hidden text-ellipsis">
-                                {warehouse.formatted_address ||
-                                  "365 Adeola Odeku Street"}
+                                {warehouse.formatted_address || "N/A"}
                               </p>
                             </div>
                           </div>
@@ -124,7 +123,9 @@ const WarehouseLocations = () => {
                         </td> */}
                         <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
                           <div>
-                            <p className="font-[700]">N5,000,000</p>
+                            <p className="font-[700]">
+                              N{warehouse.sales?.toLocaleString() || "/A"}
+                            </p>
                             <p>Sales</p>
                           </div>
                         </td>
@@ -220,8 +221,7 @@ const WarehouseLocations = () => {
                                 {warehouse.name}
                               </h6>
                               <p className="max-w-[10rem] overflow-hidden text-ellipsis">
-                                {warehouse.formatted_address ||
-                                  "365 Adeola Odeku Street"}
+                                {warehouse.formatted_address || "N/A"}
                               </p>
                             </div>
                           </div>
@@ -234,7 +234,9 @@ const WarehouseLocations = () => {
                         </td> */}
                         <td className="w-[14.375rem] p-2 text-[0.75rem] leading-[1rem]">
                           <div>
-                            <p className="font-[700]">N5,000,000</p>
+                            <p className="font-[700]">
+                              N{warehouse.sales?.toLocaleString() || "/A"}
+                            </p>
                             <p>Sales</p>
                           </div>
                         </td>
