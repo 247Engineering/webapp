@@ -142,7 +142,7 @@ export const addProduct = createAsyncThunk(
     name: string;
     description: string;
     price: number;
-    discount_price: number;
+    discount_price?: number;
     cost_per_item: number;
     sku: string;
     quantity: number;
@@ -156,6 +156,32 @@ export const addProduct = createAsyncThunk(
     return await request({
       url: "/product/add",
       method: "post",
+      body,
+      user: "distributor",
+    });
+  }
+);
+
+export const editProduct = createAsyncThunk(
+  "product/editProduct",
+  async ({product, ...body}: {
+    name: string;
+    description: string;
+    price: number;
+    discount_price?: number;
+    cost_per_item: number;
+    quantity: number;
+    weight: { type: number; value: number };
+    sub_category: string;
+    category: string;
+    manufacturer: string;
+    images: string[];
+    warehouse_id: string;
+    product: string
+  }) => {
+    return await request({
+      url: `/product/edit/${product}`,
+      method: "put",
       body,
       user: "distributor",
     });
@@ -213,6 +239,7 @@ export const productSlice = createSlice({
             state.manufacturers = action.payload.manufacturers;
             break;
           case "product/addProduct/fulfilled":
+          case "product/editProduct/fulfilled":
             state.productStamp = new Date().getTime();
             break;
         }

@@ -19,6 +19,10 @@ export const DISTRIBUTOR = {
   WAREHOUSE_PRODUCT_FORM: "/distributor/warehouses/:warehouse/products/form",
   WAREHOUSE_PRODUCT_FORM_FOR: (warehouse: string) =>
     `/distributor/warehouses/${warehouse}/products/form`,
+  WAREHOUSE_PRODUCT_EDIT:
+    "/distributor/warehouses/:warehouse/products/:product/edit",
+  WAREHOUSE_PRODUCT_EDIT_FOR: (warehouse: string, product: string) =>
+    `/distributor/warehouses/${warehouse}/products/${product}/edit`,
   WAREHOUSE_DETAILS: "/distributor/warehouses/:warehouse",
   WAREHOUSE_DETAILS_FOR: (warehouse: string) =>
     `/distributor/warehouses/${warehouse}`,

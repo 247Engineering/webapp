@@ -308,6 +308,7 @@ export interface RetailerState {
   orderId: string | null;
   orders: any[];
   order: any;
+  warehouse: any
 }
 
 export type CartItem = {

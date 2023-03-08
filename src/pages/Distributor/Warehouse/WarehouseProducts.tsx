@@ -147,7 +147,14 @@ const WarehouseProducts = () => {
                       />
                     </div>
                   </td>
-                  <td className="w-[11.938rem] px-4 py-2">
+                  <td
+                    className="w-[11.938rem] px-4 py-2"
+                    onClick={() => {
+                      navigate(
+                        ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCT_EDIT_FOR(warehouse as string, product._id)
+                      );
+                    }}
+                  >
                     <div className="flex items-center">
                       <img
                         src={product.images[0] || image}

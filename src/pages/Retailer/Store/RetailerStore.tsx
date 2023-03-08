@@ -7,7 +7,7 @@ import AppLayout from "../../../components/layouts/AppLayout";
 import ProductItem from "../../../components/miscellaneous/ProductItem";
 
 import { AppDispatch, RootState } from "../../../store";
-import { ProductState } from "../../../types";
+import { ProductState, RetailerState } from "../../../types";
 import {
   fetchAllProducts,
   searchStoreProducts,
@@ -18,6 +18,9 @@ const RetailerShop = () => {
   const { products } = useSelector<RootState>(
     ({ product }) => product
   ) as ProductState;
+  const { warehouse } = useSelector<RootState>(
+    ({ retailer }) => retailer
+  ) as RetailerState;
 
   const [search, setSearch] = useState("");
 
@@ -31,7 +34,7 @@ const RetailerShop = () => {
 
   return (
     <>
-      <AppLayout location="Victoria Island" cart search hideLogo>
+      <AppLayout location={warehouse?.name || "Victoria Island"} cart search hideLogo>
         <div className="relative mt-[-1.5rem] mb-10">
           <input
             className="w-full p-[0.625rem] pl-[2.25rem] flex items-center justify-center p text-black-100 rounded-[8px] border border-solid border-grey-light"
