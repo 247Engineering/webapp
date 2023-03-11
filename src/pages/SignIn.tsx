@@ -27,7 +27,7 @@ const SignIn = ({ type, forgotPassword }: SignInProps) => {
   const [password, setPassword] = useState("");
   const [mobile, setMobile] = useState("");
   const [callingCode, setCallingCode] = useState("+234");
-  const [isValidMobile, setIsValidMobile] = useState(false);
+  const [isValidMobile, setIsValidMobile] = useState(true);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

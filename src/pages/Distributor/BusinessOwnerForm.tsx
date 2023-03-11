@@ -21,7 +21,7 @@ const BusinessInfo = () => {
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
   const [file, setFile] = useState<string | ArrayBuffer | null>("");
-  const [isValidMobile, setIsValidMobile] = useState(false);
+  const [isValidMobile, setIsValidMobile] = useState(true);
 
   const handleSubmit = (
     e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>

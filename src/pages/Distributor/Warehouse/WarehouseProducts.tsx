@@ -31,7 +31,7 @@ const WarehouseProducts = () => {
   ) as DistributorState;
 
   const [sort, setSort] = useState("");
-  const [checked, setChecked] = useState(false);
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -120,9 +120,13 @@ const WarehouseProducts = () => {
                   <div className="flex justify-center items-center">
                     <input
                       type="checkbox"
-                      checked={checked}
+                      checked={checkedItems.length === products.length}
                       onChange={() => {
-                        setChecked(!checked);
+                        setCheckedItems(
+                          checkedItems.length === products.length
+                            ? []
+                            : products.map((p) => p._id)
+                        );
                       }}
                       className="h-[0.938rem] w-[0.938rem]"
                     />
@@ -139,9 +143,15 @@ const WarehouseProducts = () => {
                     <div className="flex justify-center items-center">
                       <input
                         type="checkbox"
-                        checked={checked}
+                        checked={checkedItems.includes(product._id)}
                         onChange={() => {
-                          setChecked(!checked);
+                          setCheckedItems((prevItems) =>
+                            prevItems.includes(product._id)
+                              ? prevItems.filter(
+                                  (prevItem) => prevItem !== product._id
+                                )
+                              : [...prevItems, product._id]
+                          );
                         }}
                         className="h-[0.938rem] w-[0.938rem]"
                       />
@@ -151,7 +161,10 @@ const WarehouseProducts = () => {
                     className="w-[11.938rem] px-4 py-2"
                     onClick={() => {
                       navigate(
-                        ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCT_EDIT_FOR(warehouse as string, product._id)
+                        ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCT_EDIT_FOR(
+                          warehouse as string,
+                          product._id
+                        )
                       );
                     }}
                   >

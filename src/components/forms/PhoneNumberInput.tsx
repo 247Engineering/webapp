@@ -28,7 +28,6 @@ const PhoneNumberInput = ({
         : e.target.value
     );
     setIsValid(phoneNumber?.isValid() as boolean);
-    console.log({ phoneNumber, isoCode });
   };
 
   return (

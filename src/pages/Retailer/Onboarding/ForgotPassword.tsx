@@ -26,7 +26,7 @@ const ForgotPassword = () => {
 
   const [callingCode, setCallingCode] = useState("+234");
   const [mobile, setMobile] = useState("");
-  const [isValidMobile, setIsValidMobile] = useState(false);
+  const [isValidMobile, setIsValidMobile] = useState(true);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

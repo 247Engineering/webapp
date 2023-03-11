@@ -29,7 +29,7 @@ const SignUp = () => {
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const [checked, setChecked] = useState(false);
-  const [isValidMobile, setIsValidMobile] = useState(false);
+  const [isValidMobile, setIsValidMobile] = useState(true);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
