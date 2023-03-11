@@ -1,20 +1,35 @@
-import React from 'react'
-import { Country } from 'country-state-city'
-import { PhoneNumberInputProps } from '../../types'
+import React, { useState } from "react";
+import { Country } from "country-state-city";
+import parsePhoneNumber, { CountryCode } from "libphonenumber-js";
+import { PhoneNumberInputProps } from "../../types";
 
 const PhoneNumberInput = ({
   code,
   setCode,
   mobile,
   setMobile,
+  setIsValid,
 }: PhoneNumberInputProps) => {
+  const [isoCode, setIsoCode] = useState("NG");
+
   const handleCountryCodeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setCode(e.target.value)
-  }
+    let country = Country.getAllCountries().find(
+      (country) => `+${country.phonecode}` === e.target.value
+    );
+    setCode(e.target.value);
+    setIsoCode(country?.isoCode as string);
+  };
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMobile(e.target.value)
-  }
+    let phoneNumber = parsePhoneNumber(e.target.value, isoCode as CountryCode);
+    setMobile(
+      e.target.value.startsWith("0")
+        ? e.target.value.replace("0", "")
+        : e.target.value
+    );
+    setIsValid(phoneNumber?.isValid() as boolean);
+    console.log({ phoneNumber, isoCode });
+  };
 
   return (
     <>
@@ -31,7 +46,7 @@ const PhoneNumberInput = ({
                 <option value={`+${country.phonecode}`} key={country.isoCode}>
                   {country.flag} {`+${country.phonecode}`}
                 </option>
-              ),
+              )
           )}
         </select>
         <input
@@ -42,7 +57,7 @@ const PhoneNumberInput = ({
         />
       </div>
     </>
-  )
-}
+  );
+};
 
-export default PhoneNumberInput
+export default PhoneNumberInput;

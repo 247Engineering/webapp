@@ -29,6 +29,7 @@ const SignUp = () => {
   const [mobile, setMobile] = useState('')
   const [password, setPassword] = useState('')
   const [checked, setChecked] = useState(false)
+  const [isValidMobile, setIsValidMobile] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -64,6 +65,7 @@ const SignUp = () => {
               setCode={setCallingCode}
               setMobile={setMobile}
               mobile={mobile}
+              setIsValid={setIsValidMobile}
             />
           </div>
           <div className="mb-[1.875rem]">
@@ -93,7 +95,7 @@ const SignUp = () => {
             text="Sign up"
             onClick={handleSubmit}
             className="mb-4"
-            disabled={loading || !checked}
+            disabled={loading || !checked || !isValidMobile}
             loading={loading}
           />
           <p className="p text-center">

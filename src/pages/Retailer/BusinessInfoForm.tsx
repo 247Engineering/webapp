@@ -97,7 +97,7 @@ const BusinessInfo = () => {
                 label="Email address"
                 value={email}
                 onChange={setEmail}
-                type="text"
+                type="email"
               />
             </div>
             <div className="mb-4">

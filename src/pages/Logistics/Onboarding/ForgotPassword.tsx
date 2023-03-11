@@ -26,6 +26,7 @@ const ForgotPassword = () => {
 
   const [callingCode, setCallingCode] = useState("+234");
   const [mobile, setMobile] = useState("");
+  const [isValidMobile, setIsValidMobile] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,13 +70,14 @@ const ForgotPassword = () => {
               setCode={setCallingCode}
               setMobile={setMobile}
               mobile={mobile}
+              setIsValid={setIsValidMobile}
             />
           </div>
           <ButtonSubmit
             text="Reset password"
             onClick={handleSubmit}
             className="mb-[1.875rem]"
-            disabled={loading || !mobile}
+            disabled={loading || !mobile || !isValidMobile}
             loading={loading}
           />
           <div className="text-center">

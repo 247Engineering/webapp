@@ -104,6 +104,7 @@ export interface PhoneNumberInputProps {
   mobile: string;
   setCode: (value: string) => void;
   setMobile: (value: string) => void;
+  setIsValid: (value: boolean) => void;
 }
 
 export interface StatusProps {

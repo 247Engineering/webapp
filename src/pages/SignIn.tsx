@@ -27,6 +27,7 @@ const SignIn = ({ type, forgotPassword }: SignInProps) => {
   const [password, setPassword] = useState("");
   const [mobile, setMobile] = useState("");
   const [callingCode, setCallingCode] = useState("+234");
+  const [isValidMobile, setIsValidMobile] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -54,12 +55,13 @@ const SignIn = ({ type, forgotPassword }: SignInProps) => {
       <section className="mt-10">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            {(type === "retailer" || type === "logistics") ? (
+            {type === "retailer" || type === "logistics" ? (
               <PhoneNumberInput
                 code={callingCode}
                 setCode={setCallingCode}
                 setMobile={setMobile}
                 mobile={mobile}
+                setIsValid={setIsValidMobile}
               />
             ) : (
               <Input
@@ -89,7 +91,9 @@ const SignIn = ({ type, forgotPassword }: SignInProps) => {
             text="Sign in"
             onClick={handleSubmit}
             className="mb-4"
-            disabled={loading || (!mobile && !email) || !password}
+            disabled={
+              loading || (!mobile && !email) || !password || !isValidMobile
+            }
             loading={loading}
           />
           <p className="p text-center">

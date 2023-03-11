@@ -56,7 +56,7 @@ const ForgotPassword = () => {
               label="Email address"
               value={email}
               onChange={setEmail}
-              type="text"
+              type="email"
             />
           </div>
           <ButtonSubmit

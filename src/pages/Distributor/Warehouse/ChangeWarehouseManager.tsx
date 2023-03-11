@@ -67,7 +67,7 @@ const ChangeWarehouseManager = () => {
                 label="Warehouse manager email"
                 value={email}
                 onChange={setEmail}
-                type="text"
+                type="email"
               />
             </div>
             <ButtonSubmit
