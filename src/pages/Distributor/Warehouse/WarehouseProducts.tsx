@@ -12,7 +12,11 @@ import TableLayout from "../../../components/tables/TableLayout";
 import TableFooter from "../../../components/tables/TableFooter";
 import MultiSelectCheckbox from "../../../components/forms/MultiSelectCheckbox";
 
-import { fetchProducts } from "../../../store/features/product";
+import {
+  fetchProducts,
+  toggleDisableProducts,
+  deleteProducts,
+} from "../../../store/features/product";
 import { fetchWarehouses } from "../../../store/features/distributor";
 import { AppDispatch, RootState } from "../../../store";
 import { DistributorState, ProductState } from "../../../types";
@@ -23,7 +27,7 @@ const WarehouseProducts = () => {
   const { warehouse } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { products } = useSelector<RootState>(
+  const { products, loading } = useSelector<RootState>(
     ({ product }) => product
   ) as ProductState;
   const { warehouses } = useSelector<RootState>(
@@ -31,8 +35,36 @@ const WarehouseProducts = () => {
   ) as DistributorState;
 
   const [sort, setSort] = useState("");
+  const [action, setAction] = useState("EDIT");
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
+
+  const applyChange = () => {
+    switch (action) {
+      case "ENABLE":
+      case "DISABLE":
+        dispatch(
+          toggleDisableProducts({
+            onSuccess: () => dispatch(fetchProducts(warehouse)),
+            warehouse: warehouse as string,
+            change_status: action,
+            product_ids: checkedItems,
+          })
+        );
+        break;
+      case "DELETE":
+        dispatch(
+          deleteProducts({
+            onSuccess: () => dispatch(fetchProducts(warehouse)),
+            products: checkedItems,
+          })
+        );
+        break;
+      default:
+        console.log("WIP");
+        break;
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchProducts(warehouse));
@@ -104,12 +136,20 @@ const WarehouseProducts = () => {
             </button>
           </div>
           <div className="flex items-center mb-2">
-            <select className="select product-select mr-2">
-              <option value="1">Bulk edit</option>
-              <option value="2">Delete</option>
-              <option value="3">Disable</option>
+            <select
+              className="select product-select mr-2"
+              onChange={(e) => setAction(e.target.value)}
+            >
+              <option value="EDIT">Bulk edit</option>
+              <option value="DELETE">Delete</option>
+              <option value="DISABLE">Disable</option>
+              <option value="ENABLE">Enable</option>
             </select>
-            <button className="flex justify-center items-center bg-orange text-white rounded-[10px] px-4 py-2 font-[700] text-[0.75rem] leading-[1rem]">
+            <button
+              className="flex justify-center items-center bg-orange text-white rounded-[10px] px-4 py-2 font-[700] text-[0.75rem] leading-[1rem]"
+              onClick={applyChange}
+              disabled={loading}
+            >
               Apply
             </button>
           </div>

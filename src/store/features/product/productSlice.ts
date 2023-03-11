@@ -164,7 +164,10 @@ export const addProduct = createAsyncThunk(
 
 export const editProduct = createAsyncThunk(
   "product/editProduct",
-  async ({product, ...body}: {
+  async ({
+    product,
+    ...body
+  }: {
     name: string;
     description: string;
     price: number;
@@ -177,13 +180,53 @@ export const editProduct = createAsyncThunk(
     manufacturer: string;
     images: string[];
     warehouse_id: string;
-    product: string
+    product: string;
   }) => {
     return await request({
       url: `/product/edit/${product}`,
       method: "put",
       body,
       user: "distributor",
+    });
+  }
+);
+
+export const toggleDisableProducts = createAsyncThunk(
+  "product/toggleDisableProducts",
+  async ({
+    onSuccess,
+    warehouse,
+    ...body
+  }: {
+    onSuccess: () => void;
+    warehouse: string;
+    change_status: string;
+    product_ids: string[];
+  }) => {
+    return await request({
+      url: `/product/change/${warehouse}`,
+      method: "put",
+      body,
+      user: "distributor",
+      onSuccess,
+    });
+  }
+);
+
+export const deleteProducts = createAsyncThunk(
+  "product/deleteProducts",
+  async ({
+    products,
+    onSuccess,
+  }: {
+    products: string[];
+    onSuccess: () => void;
+  }) => {
+    return await request({
+      url: `/product/delete`,
+      method: "delete",
+      user: "distributor",
+      onSuccess
     });
   }
 );
