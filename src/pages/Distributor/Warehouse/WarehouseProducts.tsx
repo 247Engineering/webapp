@@ -57,6 +57,7 @@ const WarehouseProducts = () => {
           deleteProducts({
             onSuccess: () => dispatch(fetchProducts(warehouse)),
             products: checkedItems,
+            warehouse: warehouse as string,
           })
         );
         break;

@@ -218,12 +218,14 @@ export const deleteProducts = createAsyncThunk(
   async ({
     products,
     onSuccess,
+    warehouse
   }: {
     products: string[];
     onSuccess: () => void;
+    warehouse: string;
   }) => {
     return await request({
-      url: `/product/delete`,
+      url: `/product/delete/${warehouse}`,
       method: "delete",
       user: "distributor",
       onSuccess
