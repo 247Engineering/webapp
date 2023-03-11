@@ -1,41 +1,41 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { format } from 'date-fns'
+import React, { useState, useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 
-import search from '../../../assets/images/search.svg'
+import search from "../../../assets/images/search.svg";
 
-import AppLayout from '../../../components/layouts/AppLayout'
-import SortSelect from '../../../components/forms/SortSelect'
-import TableLayout from '../../../components/tables/TableLayout'
+import AppLayout from "../../../components/layouts/AppLayout";
+import SortSelect from "../../../components/forms/SortSelect";
+import TableLayout from "../../../components/tables/TableLayout";
 
-import { RootState, AppDispatch } from '../../../store'
-import * as ROUTES from '../../../routes'
-import { RetailerState } from '../../../types'
-import { fetchOrders } from '../../../store/features/retailer'
+import { RootState, AppDispatch } from "../../../store";
+import * as ROUTES from "../../../routes";
+import { RetailerState } from "../../../types";
+import { fetchOrders } from "../../../store/features/retailer";
 
 const RetailerOrders = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const { orders } = useSelector<RootState>(
-    ({ retailer }) => retailer,
-  ) as RetailerState
+    ({ retailer }) => retailer
+  ) as RetailerState;
 
   const ongoingOrders = useMemo(
-    () => orders.filter((order) => order.status !== 'COMPLETED'),
-    [orders],
-  )
+    () => orders.filter((order) => order.status !== "COMPLETED"),
+    [orders]
+  );
   const completedOrders = useMemo(
-    () => orders.filter((order) => order.status === 'COMPLETED'),
-    [orders],
-  )
+    () => orders.filter((order) => order.status === "COMPLETED"),
+    [orders]
+  );
 
   useEffect(() => {
-    dispatch(fetchOrders())
-  }, [dispatch])
+    dispatch(fetchOrders());
+  }, [dispatch]);
 
-  const [sort, setSort] = useState('')
+  const [sort, setSort] = useState("");
   return (
     <>
       <AppLayout cart>
@@ -46,8 +46,8 @@ const RetailerOrders = () => {
           <div className="flex items-center mb-8">
             <SortSelect
               options={[
-                'Value - highest to lowest',
-                'Value - lowest to highest',
+                "Value - highest to lowest",
+                "Value - lowest to highest",
               ]}
               value={sort}
               onChange={(value) => setSort(value)}
@@ -83,18 +83,18 @@ const RetailerOrders = () => {
                   }
                 >
                   <td className="w-[9.5rem] overflow-hidden text-ellipsis p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple uppercase">
-                    {order.order_id.replace('ORD_', '')}
+                    {order.order_id.replace("ORD_", "")}
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
                     {format(
                       order.order_date
                         ? new Date(order.order_date)
                         : new Date(),
-                      'dd/M/yyy hh:ma',
+                      "dd/M/yyy hh:ma"
                     )}
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                    {order.address || 'Ebeano Supermarket Chevron'}
+                    {order.address || "N/A"}
                   </td>
                 </tr>
               ))}
@@ -127,11 +127,11 @@ const RetailerOrders = () => {
                       order.order_date
                         ? new Date(order.order_date)
                         : new Date(),
-                      'dd/M/yyy hh:ma',
+                      "dd/M/yyy hh:ma"
                     )}
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                    {order.address || 'Ebeano Supermarket Chevron'}
+                    {order.address || "N/A"}
                   </td>
                 </tr>
               ))}
@@ -140,7 +140,7 @@ const RetailerOrders = () => {
         </section>
       </AppLayout>
     </>
-  )
-}
+  );
+};
 
-export default RetailerOrders
+export default RetailerOrders;

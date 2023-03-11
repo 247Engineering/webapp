@@ -105,7 +105,7 @@ const Orders = () => {
                     )}
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                    Ebeano Supermarket Chevron
+                    {order.address || "N/A"}
                   </td>
                 </tr>
               ))}
