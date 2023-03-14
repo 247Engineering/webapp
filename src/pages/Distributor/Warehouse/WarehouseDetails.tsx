@@ -45,7 +45,7 @@ const WarehouseDetails = () => {
           <div className="flex justify-between mt-2 mb-7">
             <div>
               <h1 className="font-[700] text-[1.25rem] leading-[1.75rem] mb-2 text-black">
-                Femadons Victoria Island
+                {warehouse?.warehouse.name}
               </h1>
               <p className="p mb-2 text-black-100">10/10/2022 at 13:00PM</p>
             </div>
