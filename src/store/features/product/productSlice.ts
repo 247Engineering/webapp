@@ -226,7 +226,8 @@ export const deleteProducts = createAsyncThunk(
   }) => {
     return await request({
       url: `/product/delete/${warehouse}`,
-      method: "delete",
+      method: "put",
+      body: products,
       user: "distributor",
       onSuccess
     });
