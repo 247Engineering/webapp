@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import priority from '../../../assets/images/priority.svg'
-import priorityChecked from '../../../assets/images/priority-checked.svg'
+// import priority from '../../../assets/images/priority.svg'
+// import priorityChecked from '../../../assets/images/priority-checked.svg'
 import standard from '../../../assets/images/standard.svg'
 import standardChecked from '../../../assets/images/standard-checked.svg'
 import schedule from '../../../assets/images/schedule.svg'
-import scheduleChecked from '../../../assets/images/schedule-checked.svg'
+// import scheduleChecked from '../../../assets/images/schedule-checked.svg'
 
 import AppLayout from '../../../components/layouts/AppLayout'
 import ButtonSubmit from '../../../components/forms/ButtonSubmit'
@@ -126,7 +126,7 @@ const RetailerCheckout = () => {
               <h4 className="font-[700] text-[1rem] leading-[1.5rem] mt-8 mb-6">
                 Delivery options
               </h4>
-              <OnboardingRadio
+              {/* <OnboardingRadio
                 id="priority"
                 name="delivery"
                 value="priority"
@@ -137,7 +137,7 @@ const RetailerCheckout = () => {
                 checked={deliveryOption === 'priority'}
                 onChange={handleChange}
                 className="mb-4"
-              />
+              /> */}
               <OnboardingRadio
                 id="standard"
                 name="delivery"
@@ -150,7 +150,7 @@ const RetailerCheckout = () => {
                 onChange={handleChange}
                 className="mb-4"
               />
-              <OnboardingRadio
+              {/* <OnboardingRadio
                 id="schedule"
                 name="delivery"
                 value="schedule"
@@ -161,7 +161,7 @@ const RetailerCheckout = () => {
                 checked={deliveryOption === 'schedule'}
                 onChange={handleChange}
                 className="mb-8"
-              />
+              /> */}
             </>
           ) : (
             <>

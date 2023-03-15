@@ -14,36 +14,49 @@ import { useAuth } from "../../hooks/useAuth";
 import { AuthContextType } from "../../types";
 import * as ROUTES from "../../routes";
 
-const sideBarMap = {
-  DISTRIBUTOR: [
-    { link: ROUTES.DISTRIBUTOR.DASHBOARD, text: "Dashboard", image: dashboard },
-    {
-      link: ROUTES.DISTRIBUTOR.WAREHOUSES,
-      text: "Warehouses",
-      image: warehouses,
-    },
-    {
-      link: ROUTES.DISTRIBUTOR.DASHBOARD,
-      text: "Operations",
-      image: operations,
-    },
-    { link: ROUTES.DISTRIBUTOR.DASHBOARD, text: "Settings", image: settings },
-  ],
-  RETAILER: [
-    { link: ROUTES.RETAILER.DASHBOARD, text: "Products", image: products },
-    { link: ROUTES.RETAILER.ORDERS, text: "Orders", image: orders },
-    { link: ROUTES.RETAILER.DASHBOARD, text: "Settings", image: settings },
-  ],
-  LOGISTICS: [
-    { link: ROUTES.LOGISTICS.DASHBOARD, text: "Dashboard", image: dashboard },
-    { link: ROUTES.LOGISTICS.DASHBOARD, text: "Settings", image: settings },
-  ],
-};
-
 const SideBar = ({ show }: { show: boolean }) => {
   const { logout, user } = useAuth() as AuthContextType;
   const userType =
     user?.type === "warehouse" ? "DISTRIBUTOR" : user?.type.toUpperCase();
+
+  const sideBarMap = {
+    DISTRIBUTOR: [
+      {
+        link: ROUTES.DISTRIBUTOR.DASHBOARD,
+        text: "Dashboard",
+        image: dashboard,
+      },
+      {
+        link: ROUTES.DISTRIBUTOR.WAREHOUSES,
+        text: "Warehouses",
+        image: warehouses,
+      },
+      ...(user?.type === "warehouse"
+        ? [
+            {
+              link: ROUTES.DISTRIBUTOR.WAREHOUSE_ORDERS,
+              text: "Orders",
+              image: orders,
+            },
+          ]
+        : []),
+      {
+        link: ROUTES.DISTRIBUTOR.DASHBOARD,
+        text: "Operations",
+        image: operations,
+      },
+      { link: ROUTES.DISTRIBUTOR.DASHBOARD, text: "Settings", image: settings },
+    ],
+    RETAILER: [
+      { link: ROUTES.RETAILER.DASHBOARD, text: "Products", image: products },
+      { link: ROUTES.RETAILER.ORDERS, text: "Orders", image: orders },
+      { link: ROUTES.RETAILER.DASHBOARD, text: "Settings", image: settings },
+    ],
+    LOGISTICS: [
+      { link: ROUTES.LOGISTICS.DASHBOARD, text: "Dashboard", image: dashboard },
+      { link: ROUTES.LOGISTICS.DASHBOARD, text: "Settings", image: settings },
+    ],
+  };
 
   return user ? (
     <aside
