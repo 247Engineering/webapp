@@ -55,7 +55,7 @@ const RetailerShop = () => {
               id={product._id}
               image={product.images[0]}
               name={product.name}
-              minOrder={10}
+              minOrder={product.min_quantity || 10}
               price={product.price}
               discount={
                 product.discount_price

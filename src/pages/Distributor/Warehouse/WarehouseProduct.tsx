@@ -66,6 +66,9 @@ const WarehouseProduct = ({
     viewedProduct?.trackQuantity || false
   );
   const [quantity, setQuantity] = useState(viewedProduct?.quantity || 0);
+  const [minQuantity, setMinQuantity] = useState(
+    viewedProduct?.min_quantity || 10
+  );
   const [weightValue, setWeightValue] = useState(
     viewedProduct?.weight?.value || 0
   );
@@ -100,6 +103,7 @@ const WarehouseProduct = ({
       setDiscountedPrice(option.discount_price);
       setCostPerItem(option.cost_per_item);
       setQuantity(option.quantity);
+      setMinQuantity(option.min_quantity);
       setWeightValue(option?.weight?.value || 0);
       setWeightUnit(String(option?.weight?.type) || "0");
       setCategory(option.category);
@@ -123,6 +127,7 @@ const WarehouseProduct = ({
             price,
             ...(discountedPrice && { discount_price: discountedPrice }),
             cost_per_item: costPerItem,
+            ...(minQuantity && { min_quantity: +minQuantity }),
             quantity,
             weight: {
               type: +weightUnit,
@@ -144,6 +149,7 @@ const WarehouseProduct = ({
             ...(discountedPrice && { discount_price: discountedPrice }),
             cost_per_item: costPerItem,
             sku: product.sku as string,
+            min_quantity: +minQuantity,
             quantity,
             weight: {
               type: +weightUnit,
@@ -211,6 +217,7 @@ const WarehouseProduct = ({
       setCostPerItem(viewedProduct.cost_per_item);
       setTrackQuantity(viewedProduct?.trackQuantity || true);
       setQuantity(viewedProduct.quantity);
+      setMinQuantity(viewedProduct.min_quantity);
       setWeightValue(viewedProduct.weight?.value || 0);
       setWeightUnit(String(viewedProduct.weight?.type) || "0");
       setCategory(viewedProduct.category);
@@ -369,6 +376,15 @@ const WarehouseProduct = ({
                 onChange={setQuantity}
                 type="number"
                 placeholder="Enter quantity"
+              />
+            </div>
+            <div className="mb-4">
+              <Input
+                label="Minimum order quantity"
+                value={minQuantity}
+                onChange={setMinQuantity}
+                type="number"
+                placeholder="Enter minimum order quantity"
               />
             </div>
             <div className="mb-4">

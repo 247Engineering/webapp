@@ -315,6 +315,7 @@ export interface RetailerState {
 export type CartItem = {
   id: string;
   quantity: number;
+  minOrder: number;
   price: number;
   name: string;
   image: string;

@@ -57,30 +57,34 @@ const RetailerShopItem = () => {
               src={viewedProduct?.images[imageIndex] || image}
               alt="product"
             />
-            <img
-              className="absolute top-[45%] left-[1rem]"
-              src={slideLeft}
-              alt="slide left"
-              onClick={() =>
-                setImageIndex(
-                  imageIndex === 0
-                    ? (viewedProduct?.images.length || 1) - 1
-                    : imageIndex - 1
-                )
-              }
-            />
-            <img
-              className="absolute top-[45%] right-[1rem]"
-              src={slideRight}
-              alt="slide right"
-              onClick={() =>
-                setImageIndex(
-                  imageIndex === viewedProduct?.images.length - 1
-                    ? 0
-                    : imageIndex + 1
-                )
-              }
-            />
+            {viewedProduct?.images?.length > 1 ? (
+              <>
+                <img
+                  className="absolute top-[45%] left-[1rem]"
+                  src={slideLeft}
+                  alt="slide left"
+                  onClick={() =>
+                    setImageIndex(
+                      imageIndex === 0
+                        ? (viewedProduct?.images.length || 1) - 1
+                        : imageIndex - 1
+                    )
+                  }
+                />
+                <img
+                  className="absolute top-[45%] right-[1rem]"
+                  src={slideRight}
+                  alt="slide right"
+                  onClick={() =>
+                    setImageIndex(
+                      imageIndex === viewedProduct?.images.length - 1
+                        ? 0
+                        : imageIndex + 1
+                    )
+                  }
+                />
+              </>
+            ) : null}
           </div>
           <div className="mb-2">
             <Status
@@ -104,7 +108,7 @@ const RetailerShopItem = () => {
             Quantity
           </span>
           <OrderCounter
-            minOrder={10}
+            minOrder={viewedProduct?.min_quantity || 10}
             className="mb-4 mt-2"
             id={product as string}
             name={viewedProduct?.name}
@@ -133,6 +137,7 @@ const RetailerShopItem = () => {
                       price: viewedProduct?.price,
                       name: viewedProduct?.name,
                       image: viewedProduct?.images[0],
+                      minOrder: viewedProduct?.min_quantity || 10,
                     },
                     onSuccess: () =>
                       setQuantity((quantity: number) => quantity + 10),

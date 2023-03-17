@@ -78,6 +78,7 @@ const OrderCounter = ({
                         price,
                         name,
                         image,
+                        minOrder
                       },
                       onSuccess: () =>
                         setQuantity((quantity: number) => quantity - minOrder),
@@ -123,6 +124,7 @@ const OrderCounter = ({
                     price,
                     name,
                     image,
+                    minOrder
                   },
                   onSuccess: () => {},
                 }),
@@ -142,6 +144,7 @@ const OrderCounter = ({
                 price,
                 name,
                 image,
+                minOrder
               },
               onSuccess: () =>
                 setQuantity((quantity: number) => Number(quantity) + minOrder),

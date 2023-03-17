@@ -146,6 +146,7 @@ export const addProduct = createAsyncThunk(
     cost_per_item: number;
     sku: string;
     quantity: number;
+    min_quantity: number;
     weight: { type: number; value: number };
     sub_category: string;
     category: string;
@@ -174,12 +175,13 @@ export const editProduct = createAsyncThunk(
     discount_price?: number;
     cost_per_item: number;
     quantity: number;
+    min_quantity: number;
     weight: { type: number; value: number };
     sub_category: string;
     category: string;
     manufacturer: string;
     images: string[];
-    warehouse_id: string;
+    warehouse_id?: string;
     product: string;
   }) => {
     return await request({
