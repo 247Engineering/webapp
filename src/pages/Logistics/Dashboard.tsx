@@ -1,6 +1,6 @@
 import React from "react";
 // import { useDispatch, useSelector } from "react-redux";
-import useWebSocket from "react-use-websocket";
+import { useSocketIO } from "react-use-websocket";
 
 import noOrders from "../../assets/images/no-orders.svg";
 
@@ -33,16 +33,7 @@ const Dashboard = () => {
   const tokens = JSON.parse(localStorage.getItem("tokens") as string);
   document.cookie = `Authorization=Bearer ${tokens?.access_token}; path=/`;
 
-  const response = useWebSocket(
-    `${process.env.REACT_APP_BASE_URL?.replace("http", "ws")}/orders`,
-    {
-      share: true,
-      filter: () => false,
-      onMessage: (message) => console.log({ message }),
-      onOpen: (event) => console.log({ event }),
-      onClose: (event) => console.log({ event }),
-    }
-  );
+  const response = useSocketIO(`${process.env.REACT_APP_BASE_URL}/orders`);
   console.log({ socket: response });
 
   return (

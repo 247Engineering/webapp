@@ -25,7 +25,7 @@ const AccountSelect = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    navigate(ROUTES[type.toUpperCase() as keyof typeof ROUTES].SIGNUP)
+    navigate(ROUTES[type.toUpperCase() as keyof typeof ROUTES].SIGNIN)
   }
 
   return (

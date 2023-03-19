@@ -44,7 +44,7 @@ export const DISTRIBUTOR = {
 
 export const WAREHOUSE = {
   DASHBOARD: "/distributor/dashboard",
-  SIGNUP: "/distributor/warehouse-manager-login",
+  SIGNIN: "/distributor/warehouse-manager-login",
 };
 
 export const RETAILER = {
@@ -81,5 +81,5 @@ export const AUTH = {
   DASHBOARD: "/auth/account-select",
   ACCOUNT_SELECT: "/auth/account-select",
   RESET_PASSWORD: "/auth/reset-password",
-  SIGNUP: "/retailer/signin",
+  SIGNIN: "/retailer/signin",
 };

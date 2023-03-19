@@ -96,16 +96,18 @@ const SignIn = ({ type, forgotPassword }: SignInProps) => {
             }
             loading={loading}
           />
-          <p className="p text-center">
-            Don't have an account?{" "}
-            <ButtonText
-              text="Sign up"
-              onClick={() => {
-                navigate(ROUTES.AUTH.ACCOUNT_SELECT);
-              }}
-              className="font-[400]"
-            />
-          </p>
+          {type !== "warehouse" ? (
+            <p className="p text-center">
+              Don't have an account?{" "}
+              <ButtonText
+                text="Sign up"
+                onClick={() => {
+                  navigate(ROUTES.AUTH.ACCOUNT_SELECT);
+                }}
+                className="font-[400]"
+              />
+            </p>
+          ) : null}
         </form>
       </section>
       <a href="/" className="text-center mt-auto privacy-policy">
