@@ -74,7 +74,7 @@ const NavBar = ({
           ) : null}
         </div>
         <div className="flex items-center px-[0.625rem]">
-          {!alternate ? (
+          {/* {!alternate ? (
             <img
               src={profile}
               alt="profile icon"
@@ -82,7 +82,7 @@ const NavBar = ({
                 navigate("/dashboard");
               }}
             />
-          ) : null}
+          ) : null} */}
           {search ? (
             <img
               src={navbarSearch}
