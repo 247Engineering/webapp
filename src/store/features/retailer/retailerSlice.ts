@@ -119,7 +119,7 @@ export const placeOrder = createAsyncThunk(
   "retailer/placeOrder",
   async (
     order: {
-      location: { latitude: number; longitude: number };
+      location?: { latitude: number; longitude: number };
       delivery_instructions?: string;
       delivery_options: number;
       pickup_time?: string;

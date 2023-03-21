@@ -54,7 +54,7 @@ const RetailerCheckout = () => {
   const handleSubmit = () => {
     dispatch(
       placeOrder({
-        location: location as Address,
+        ...(location && { location }),
         delivery_instructions: instructions,
         delivery_options: deliveryOptionMap[deliveryOption],
       })
