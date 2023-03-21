@@ -174,6 +174,7 @@ const WarehouseProducts = () => {
                   </div>
                 </th>
                 <th className="w-[11.938rem]">Products</th>
+                <th className="w-[11.188rem]">Price</th>
                 <th className="w-[11.188rem]">SKU</th>
               </tr>
             </thead>
@@ -219,6 +220,9 @@ const WarehouseProducts = () => {
                         {product.name}
                       </p>
                     </div>
+                  </td>
+                  <td className="w-[11.188rem] p-4">
+                    N{product.price.toLocaleString()}
                   </td>
                   <td className="w-[11.188rem] p-4">{product.sku}</td>
                 </tr>

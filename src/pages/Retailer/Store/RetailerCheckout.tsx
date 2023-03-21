@@ -1,72 +1,72 @@
-import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 // import priority from '../../../assets/images/priority.svg'
 // import priorityChecked from '../../../assets/images/priority-checked.svg'
-import standard from '../../../assets/images/standard.svg'
-import standardChecked from '../../../assets/images/standard-checked.svg'
-import schedule from '../../../assets/images/schedule.svg'
+import standard from "../../../assets/images/standard.svg";
+import standardChecked from "../../../assets/images/standard-checked.svg";
+import schedule from "../../../assets/images/schedule.svg";
 // import scheduleChecked from '../../../assets/images/schedule-checked.svg'
 
-import AppLayout from '../../../components/layouts/AppLayout'
-import ButtonSubmit from '../../../components/forms/ButtonSubmit'
-import LocationInput from '../../../components/forms/LocationInput'
-import Input from '../../../components/forms/Input'
-import OnboardingRadio from '../../../components/forms/OnboardingRadio'
-import Map from '../../../components/miscellaneous/Map'
-import OrderSummary from '../../../components/miscellaneous/OrderSummary'
+import AppLayout from "../../../components/layouts/AppLayout";
+import ButtonSubmit from "../../../components/forms/ButtonSubmit";
+import LocationInput from "../../../components/forms/LocationInput";
+import Input from "../../../components/forms/Input";
+import OnboardingRadio from "../../../components/forms/OnboardingRadio";
+import Map from "../../../components/miscellaneous/Map";
+import OrderSummary from "../../../components/miscellaneous/OrderSummary";
 
-import { Address, DeliveryOptions, RetailerState } from '../../../types'
-import { AppDispatch, RootState } from '../../../store'
+import { Address, DeliveryOptions, RetailerState } from "../../../types";
+import { AppDispatch, RootState } from "../../../store";
 import {
   clearRetailerStamp,
   placeOrder,
-} from '../../../store/features/retailer'
-import * as ROUTES from '../../../routes'
+} from "../../../store/features/retailer";
+import * as ROUTES from "../../../routes";
 
 const deliveryOptionMap = {
   priority: 1,
   standard: 2,
   schedule: 3,
-}
+};
 
 const RetailerCheckout = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const { cartItems, loading, orderId, retailerStamp } = useSelector<RootState>(
-    ({ retailer }) => retailer,
-  ) as RetailerState
+    ({ retailer }) => retailer
+  ) as RetailerState;
 
-  const [location, setLocation] = useState<Address | null>(null)
-  const [locationDropdown, setLocationDropdown] = useState(false)
-  const [instructions, setInstructions] = useState('')
-  const [deliveryOption, setDeliveryOption] = useState<DeliveryOptions>(
-    'standard',
-  )
-  const [type, setType] = useState('delivery')
+  const [defaultAddress, setDefaultAddress] = useState(true);
+  const [location, setLocation] = useState<Address | null>(null);
+  const [locationDropdown, setLocationDropdown] = useState(false);
+  const [instructions, setInstructions] = useState("");
+  const [deliveryOption, setDeliveryOption] =
+    useState<DeliveryOptions>("standard");
+  const [type, setType] = useState("delivery");
 
   const handleChange = (value: DeliveryOptions) => {
-    setDeliveryOption(value)
-  }
+    setDeliveryOption(value);
+  };
 
   const handleSubmit = () => {
     dispatch(
       placeOrder({
         location: location as Address,
         delivery_instructions: instructions,
-        delivery_options: deliveryOptionMap[deliveryOption] 
-      }),
-    )
-  }
+        delivery_options: deliveryOptionMap[deliveryOption],
+      })
+    );
+  };
 
   useEffect(() => {
-    if (retailerStamp) navigate(ROUTES.RETAILER.PAYMENT_FOR(orderId as string))
+    if (retailerStamp) navigate(ROUTES.RETAILER.PAYMENT_FOR(orderId as string));
     return () => {
-      dispatch(clearRetailerStamp())
-    }
-  }, [retailerStamp, orderId, navigate, dispatch])
+      dispatch(clearRetailerStamp());
+    };
+  }, [retailerStamp, orderId, navigate, dispatch]);
 
   return (
     <div onClick={() => setLocationDropdown(false)} className="h-full">
@@ -82,37 +82,56 @@ const RetailerCheckout = () => {
           <div className="p-1 bg-grey-light-200 rounded-[10px] flex items-center justify-between font-[700] text-[0.875rem] leading-[1.25rem] mb-8">
             <button
               className={`flex items-center justify-center text-black-100 rounded-[8px] p-[0.625rem] w-[50%] ${
-                type === 'delivery' ? 'text-orange bg-orange-light-100' : ''
+                type === "delivery" ? "text-orange bg-orange-light-100" : ""
               }`}
-              onClick={() => setType('delivery')}
+              onClick={() => setType("delivery")}
             >
               Delivery
             </button>
             <button
               className={`flex items-center justify-center text-black-100 rounded-[8px] p-[0.625rem] w-[50%] ${
-                type === 'pickup' ? 'text-orange bg-orange-light-100' : ''
+                type === "pickup" ? "text-orange bg-orange-light-100" : ""
               }`}
               onClick={() => {
-                if (type === 'delivery' && deliveryOption === 'priority')
-                  setDeliveryOption('standard')
-                setType('pickup')
+                if (type === "delivery" && deliveryOption === "priority")
+                  setDeliveryOption("standard");
+                setType("pickup");
               }}
             >
               Pick-up
             </button>
           </div>
-          {type === 'delivery' ? (
+          {type === "delivery" ? (
             <>
               <h4 className="font-[700] text-[1rem] leading-[1.5rem] mb-6">
                 Address
               </h4>
               <div className="mb-4">
-                <LocationInput
-                  label="Location"
-                  setLocation={setLocation}
-                  dropdown={locationDropdown}
-                  setDropdown={setLocationDropdown}
-                />
+                {defaultAddress ? (
+                  <>
+                    <div className="mb-1">
+                      <Input
+                        label="Location"
+                        value="365 Chevron Drive, Lekki, Lagos"
+                        onChange={() => {}}
+                        disabled
+                      />
+                    </div>
+                    <span
+                      className="text-orange font-[700] text-[0.875rem] leading-[1.25rem]"
+                      onClick={() => setDefaultAddress(false)}
+                    >
+                      Change default address
+                    </span>
+                  </>
+                ) : (
+                  <LocationInput
+                    label="Location"
+                    setLocation={setLocation}
+                    dropdown={locationDropdown}
+                    setDropdown={setLocationDropdown}
+                  />
+                )}
               </div>
               <div>
                 <Input
@@ -146,7 +165,7 @@ const RetailerCheckout = () => {
                 imgChecked={standardChecked}
                 textPrimary="Standard"
                 textSecondary="24-48 hour delivery"
-                checked={deliveryOption === 'standard'}
+                checked={deliveryOption === "standard"}
                 onChange={handleChange}
                 className="mb-4"
               />
@@ -179,7 +198,7 @@ const RetailerCheckout = () => {
                 Femadons Depot - Victoria Island
               </h5>
               <p className="text-[0.875rem] leading[1.25rem] text-black-100 mb-8">
-                365, Adetokunbo Ademola Street, Victoria Island, Lagos{' '}
+                365, Adetokunbo Ademola Street, Victoria Island, Lagos{" "}
               </p>
               <h4 className="font-[700] text-[1rem] leading-[1.5rem] mb-6">
                 Pick-up time
@@ -192,7 +211,7 @@ const RetailerCheckout = () => {
                 imgChecked={standardChecked}
                 textPrimary="Standard"
                 textSecondary="24-48 hour delivery"
-                checked={deliveryOption === 'standard'}
+                checked={deliveryOption === "standard"}
                 onChange={handleChange}
                 className="mb-4"
               />
@@ -204,7 +223,7 @@ const RetailerCheckout = () => {
                 imgChecked={schedule}
                 textPrimary="Schedule"
                 textSecondary="Select a time"
-                checked={deliveryOption === 'schedule'}
+                checked={deliveryOption === "schedule"}
                 onChange={handleChange}
                 className="mb-8"
               />
@@ -215,7 +234,7 @@ const RetailerCheckout = () => {
             <div className="mb-6 flex items-center justify-between">
               <span className="text-[1rem] leading-[1.5rem]">Total</span>
               <span className="font-[700] text-[1.25rem] leading-[1.75rem]">
-                N{' '}
+                N{" "}
                 {cartItems
                   .reduce((acc, curr) => acc + curr.quantity * curr.price, 0)
                   .toLocaleString(undefined, {
@@ -225,7 +244,7 @@ const RetailerCheckout = () => {
               </span>
             </div>
             <ButtonSubmit
-              disabled={(type === 'delivery' && !location) || loading}
+              disabled={(type === "delivery" && !location) || loading}
               loading={loading}
               text="Place order"
               onClick={handleSubmit}
@@ -235,7 +254,7 @@ const RetailerCheckout = () => {
         </section>
       </AppLayout>
     </div>
-  )
-}
+  );
+};
 
-export default RetailerCheckout
+export default RetailerCheckout;
