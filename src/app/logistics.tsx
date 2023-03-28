@@ -3,6 +3,8 @@ import SignUp from "../pages/Logistics/Onboarding/SignUp";
 import ForgotPassword from "../pages/Logistics/Onboarding/ForgotPassword";
 import VerifyOtp from "../pages/Logistics/Onboarding/VerifyOtp";
 import VehicleInfo from "../pages/Logistics/VehicleInfoForm";
+import OrderStatus from "../pages/Logistics/OrderStatus";
+import OrderPrompt from "../pages/Logistics/OrderPrompt";
 
 import * as ROUTES from "../routes";
 import Dashboard from "../pages/Logistics/Dashboard";
@@ -39,5 +41,13 @@ export const authedLogisticsRoutes = [
   {
     path: ROUTES.LOGISTICS.BUSINESS_INFO_FORM,
     element: <VehicleInfo />,
+  },
+  {
+    path: ROUTES.LOGISTICS.ORDER_PROMPT,
+    element: <OrderPrompt />,
+  },
+  {
+    path: ROUTES.LOGISTICS.ORDER_STATUS,
+    element: <OrderStatus />,
   },
 ];

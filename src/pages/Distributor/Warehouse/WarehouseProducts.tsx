@@ -45,7 +45,7 @@ const WarehouseProducts = () => {
       case "DISABLE":
         dispatch(
           toggleDisableProducts({
-            onSuccess: () => dispatch(fetchProducts(warehouse)),
+            onSuccess: () => dispatch(fetchProducts(warehouse as string)),
             warehouse: warehouse as string,
             change_status: action,
             product_ids: checkedItems,
@@ -55,7 +55,7 @@ const WarehouseProducts = () => {
       case "DELETE":
         dispatch(
           deleteProducts({
-            onSuccess: () => dispatch(fetchProducts(warehouse)),
+            onSuccess: () => dispatch(fetchProducts(warehouse as string)),
             products: checkedItems,
             warehouse: warehouse as string,
           })
@@ -68,7 +68,7 @@ const WarehouseProducts = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchProducts(warehouse));
+    dispatch(fetchProducts(warehouse as string));
     dispatch(fetchWarehouses());
   }, [dispatch, warehouse]);
 

@@ -23,7 +23,7 @@ export const addBusinessInfo = createAsyncThunk(
     body: {
       fname: string;
       lname: string;
-      email: string;
+      email?: string;
       business_name: string;
       address: Address;
     },

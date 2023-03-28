@@ -1,21 +1,21 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import AuthedLayout from '../components/layouts/AuthedLayout'
-import UnauthedLayout from '../components/layouts/UnauthedLayout'
+import AuthedLayout from "../components/layouts/AuthedLayout";
+import UnauthedLayout from "../components/layouts/UnauthedLayout";
 
-import AccountSelect from '../pages/AccountSelect'
-import ResetPassword from '../pages/ResetPassword'
-// import Current from '../pages/Logistics/OrderStatus'
+import AccountSelect from "../pages/AccountSelect";
+import ResetPassword from "../pages/ResetPassword";
+// import Current from "../pages/Logistics/Summary";
 
 import {
   unAuthedDistributorRoutes,
   authedDistributorRoutes,
-} from './distributor'
-import { unAuthedRetailerRoutes, authedRetailerRoutes } from './retailer'
-import { unAuthedLogisticsRoutes, authedLogisticsRoutes } from './logistics'
+} from "./distributor";
+import { unAuthedRetailerRoutes, authedRetailerRoutes } from "./retailer";
+import { unAuthedLogisticsRoutes, authedLogisticsRoutes } from "./logistics";
 
-import * as ROUTES from '../routes'
-import { RouteObj } from '../types'
+import * as ROUTES from "../routes";
+import { RouteObj } from "../types";
 
 export default function App() {
   return (
@@ -33,7 +33,7 @@ export default function App() {
         {unAuthedRetailerRoutes.map((route: RouteObj) => (
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
-        
+
         {unAuthedLogisticsRoutes.map((route: RouteObj) => (
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
@@ -52,11 +52,11 @@ export default function App() {
         {authedRetailerRoutes.map((route: RouteObj) => (
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
-        
+
         {authedLogisticsRoutes.map((route: RouteObj) => (
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
       </Route>
     </Routes>
-  )
+  );
 }

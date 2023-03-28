@@ -45,6 +45,7 @@ export const DISTRIBUTOR = {
 export const WAREHOUSE = {
   DASHBOARD: "/distributor/dashboard",
   SIGNIN: "/distributor/warehouse-manager-login",
+  SIGNUP: "/auth/account-select",
 };
 
 export const RETAILER = {
@@ -75,11 +76,14 @@ export const LOGISTICS = {
   VERIFY_OTP: "/logistics/verify-otp",
   BUSINESS_INFO_FORM: "/logistics/vehicle-info/form",
   DASHBOARD: "/logistics/dashboard",
+  ORDER_PROMPT: "/logistics/order/prompt",
+  ORDER_STATUS: "/logistics/order/status",
 };
 
 export const AUTH = {
   DASHBOARD: "/auth/account-select",
   ACCOUNT_SELECT: "/auth/account-select",
+  SIGNUP: "/auth/account-select",
+  SIGNIN: "/auth/account-select",
   RESET_PASSWORD: "/auth/reset-password",
-  SIGNIN: "/retailer/signin",
 };

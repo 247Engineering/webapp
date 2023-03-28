@@ -102,7 +102,9 @@ const SignIn = ({ type, forgotPassword }: SignInProps) => {
               <ButtonText
                 text="Sign up"
                 onClick={() => {
-                  navigate(ROUTES.AUTH.ACCOUNT_SELECT);
+                  navigate(
+                    ROUTES[type.toUpperCase() as keyof typeof ROUTES].SIGNUP
+                  );
                 }}
                 className="font-[400]"
               />

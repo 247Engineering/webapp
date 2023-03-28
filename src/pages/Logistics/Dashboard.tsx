@@ -1,40 +1,91 @@
-import React from "react";
-// import { useDispatch, useSelector } from "react-redux";
-import { useSocketIO } from "react-use-websocket";
+import React, { useMemo, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { io, Socket } from "socket.io-client";
+import { toast } from "react-toastify";
 
 import noOrders from "../../assets/images/no-orders.svg";
 
 import AppLayout from "../../components/layouts/AppLayout";
 
-// import { AppDispatch, RootState } from "../../store";
-// import { ProductState } from "../../types";
-// import {
-//   fetchAllProducts,
-//   searchStoreProducts,
-// } from "../../store/features/product";
+import { AppDispatch, RootState } from "../../store";
+import { LogisticsState } from "../../types";
+import { setOrder } from "../../store/features/logistics";
+import * as ROUTES from "../../routes";
+import { refreshToken } from "../../helpers/request";
 
 const Dashboard = () => {
-  // const dispatch = useDispatch<AppDispatch>();
-  // const { products } = useSelector<RootState>(
-  //   ({ product }) => product
-  // ) as ProductState;
+  const tokens = useMemo(
+    () => JSON.parse(localStorage.getItem("tokens") as string),
+    []
+  );
 
-  // const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const { order } = useSelector<RootState>(
+    ({ product }) => product
+  ) as LogisticsState;
+  console.log({ order });
 
-  // useEffect(() => {
-  //   console.log({ products, setSearch });
-  //   if (search) {
-  //     dispatch(searchStoreProducts(search));
-  //   } else {
-  //     dispatch(fetchAllProducts());
-  //   }
-  // }, [dispatch, search, products]);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
-  const tokens = JSON.parse(localStorage.getItem("tokens") as string);
-  document.cookie = `Authorization=Bearer ${tokens?.access_token}; path=/`;
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshToken("logistics", tokens.refresh_token);
+    }, 60000);
 
-  const response = useSocketIO(`${process.env.REACT_APP_BASE_URL}/orders`);
-  console.log({ socket: response });
+    return () => {
+      clearInterval(interval);
+    };
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    const findOrder = async (response: any) => {
+      console.log({ findOrderResponse: response });
+      dispatch(
+        setOrder({
+          data: JSON.parse(response.data),
+          onSuccess: () => navigate(ROUTES.LOGISTICS.ORDER_PROMPT),
+        })
+      );
+    };
+
+    if (!navigator.geolocation) {
+      toast.error("Geolocation is not supported by this browser!");
+      return;
+    }
+    navigator.geolocation.getCurrentPosition((position) => {
+      let currentSocket = socket;
+      const newSocket = io(`${process.env.REACT_APP_BASE_URL}/orders`, {
+        auth: {
+          token: tokens?.access_token,
+        },
+      });
+      setSocket(newSocket);
+      currentSocket = newSocket;
+
+      currentSocket.on("connect", () => {
+        console.log("connected");
+      });
+      currentSocket.on("disconnect", () => {
+        console.log("disconnected");
+      });
+
+      console.log({ position, currentSocket });
+      currentSocket.emit("requestOrder", {
+        lat: position.coords.latitude,
+        lon: position.coords.longitude,
+      });
+      currentSocket.on("foundOrder", findOrder);
+    });
+
+    return () => {
+      socket?.disconnect();
+      socket?.off("foundOrder", findOrder);
+    };
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <>

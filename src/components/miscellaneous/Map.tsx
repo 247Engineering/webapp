@@ -19,7 +19,7 @@ const Map = ({ center, lat, lng, markers }: MapProps) => {
       <GoogleMapReact
         bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_KEY as string }}
         defaultCenter={center}
-        defaultZoom={15}
+        defaultZoom={10}
       >
         {markers?.map(({ lat, lng, img }) => (
           <Marker key={img} lat={lat} lng={lng} img={img} />

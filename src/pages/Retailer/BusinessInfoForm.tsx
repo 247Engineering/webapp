@@ -37,7 +37,7 @@ const BusinessInfo = () => {
       addBusinessInfo({
         fname,
         lname,
-        email,
+        ...(email && { email }),
         address: location as Address,
         business_name: businessName,
       })

@@ -50,7 +50,7 @@ const PhoneNumberInput = ({
         </select>
         <input
           className="w-2/3 phone-number-input"
-          type="text"
+          type="number"
           onChange={handlePhoneNumberChange}
           value={mobile}
         />

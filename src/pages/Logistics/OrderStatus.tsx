@@ -1,34 +1,66 @@
-import React, { useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 // import marker from "../../assets/images/arrow-marker.svg";
 // import warehouse from "../../assets/images/warehouse-logistics.svg";
 // import arrow from "../../assets/images/arrow-sm.svg";
 // import box from "../../assets/images/box.svg";
 import pickup from "../../assets/images/pick-up.svg";
+import warehouseMarker from "../../assets/images/warehouse-marker.svg";
+import retailerMarker from "../../assets/images/retailer-marker.svg";
+import deliveryMarker from "../../assets/images/delivery-marker.svg";
 
 import AppLayout from "../../components/layouts/AppLayout";
 import Map from "../../components/miscellaneous/Map";
 import MapModal from "../../components/miscellaneous/MapModal";
 import OtpInput from "../../components/forms/OtpInput";
 
-// import { AppDispatch, RootState } from "../../store";
-// import { ProductState } from "../../types";
-// import {
-//   fetchAllProducts,
-//   searchStoreProducts,
-// } from "../../store/features/product";
+import { RootState } from "../../store";
+import { LogisticsState } from "../../types";
+// import { updateOrderStatus } from "../../store/features/logistics";
 
-const OrderPrompt = () => {
-  const [otp, setOtp] = useState("");
+// const statusMap = {
+//   ENROUTE: {
+//     theme: "orange",
+//     button: "I have arrived",
+//   },
+//   ARRIVED: {
+//     theme: "orange",
+//     button: "Order picked up",
+//   },
+//   PICKED: {
+//     theme: "purple",
+//     button: "I have arrived",
+//   },
+//   DELIVERED: {
+//     theme: "orange",
+//     button: "I have arrived",
+//   },
+// };
+
+const OrderStatus = () => {
   // const dispatch = useDispatch<AppDispatch>();
-  // const { products } = useSelector<RootState>(
-  //   ({ product }) => product
-  // ) as ProductState;
+  const { order } = useSelector<RootState>(
+    ({ logistics }) => logistics
+  ) as LogisticsState;
+
+  const [otp, setOtp] = useState("");
+  const [position, setPosition] = useState<{
+    lat: number;
+    lon: number;
+  } | null>(null);
 
   const onChange = (value: string) => setOtp(value);
 
-  // useEffect(() => {}, []);
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      setPosition({
+        lat: position.coords.latitude,
+        lon: position.coords.longitude,
+      });
+    });
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <>
@@ -36,12 +68,30 @@ const OrderPrompt = () => {
         <div className="flex flex-col h-full relative">
           <div className="flex-grow">
             <Map
-              center={{ lat: 9.0765, lng: 7.3986 }}
-              lat={9.0765}
-              lng={7.3986}
+              center={{
+                lat: order?.location?.latitude || 9.0765,
+                lng: order?.location?.longitude || 7.3986,
+              }}
+              markers={[
+                {
+                  lat: position?.lat as number,
+                  lng: position?.lon as number,
+                  img: deliveryMarker,
+                },
+                {
+                  lat: order?.location?.latitude || 9.0765,
+                  lng: order?.location?.longitude || 7.3986,
+                  img: warehouseMarker,
+                },
+                {
+                  lat: order?.location?.latitude || 9.0765,
+                  lng: order?.location?.longitude || 7.3986,
+                  img: retailerMarker,
+                },
+              ]}
             />
           </div>
-          <MapModal>
+          <MapModal onClose={true ? undefined : () => {}}>
             {/* <>
               <div className="px-4 pb-4 font-[700]">
                 <div className="flex justify-between items-center mb-6">
@@ -84,6 +134,30 @@ const OrderPrompt = () => {
                 </button>
               </div>
             </> */}
+            {/* <>
+              <div className="px-4 pb-4 mt-12">
+                <div className="flex justify-center items-center mb-6">
+                  <img src={pickup} alt="pick-up" />
+                </div>
+                <div className="flex flex-col items-center mb-6">
+                  <h4 className="text-[1.25rem] leading-[1.75rem] font-[700] mb-2 text-center">
+                    Confirm pick up
+                  </h4>
+                  <p className="text-[0.875rem] leading-[1.25rem] text-center">
+                    Ask warehouse manager for code to confirm pick up and
+                    continue this order.
+                  </p>
+                </div>
+                <OtpInput
+                  value={otp}
+                  onChange={onChange}
+                  className="justify-center mb-14"
+                />
+                <button className="w-full flex justify-center items-center p-[0.875rem] bg-orange text-white font-[700] text-[0.875rem] leading-[1.25rem] rounded-[12px]">
+                  Confirm
+                </button>
+              </div>
+            </> */}
             <>
               <div className="px-4 pb-4 mt-12">
                 <div className="flex justify-center items-center mb-6">
@@ -115,4 +189,4 @@ const OrderPrompt = () => {
   );
 };
 
-export default OrderPrompt;
+export default OrderStatus;

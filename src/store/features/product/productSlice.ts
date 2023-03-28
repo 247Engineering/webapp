@@ -31,9 +31,9 @@ const initialState: ProductState = {
 
 export const fetchProducts = createAsyncThunk(
   "product/fetchProducts",
-  async (warehouse?: string) => {
+  async (warehouse: string) => {
     return await request({
-      url: `/product/get-products`,
+      url: `/product/get-products/${warehouse}`,
       method: "get",
       user: "distributor",
     });
@@ -218,9 +218,9 @@ export const toggleDisableProducts = createAsyncThunk(
 export const deleteProducts = createAsyncThunk(
   "product/deleteProducts",
   async ({
-    products,
+    products: product_ids,
     onSuccess,
-    warehouse
+    warehouse,
   }: {
     products: string[];
     onSuccess: () => void;
@@ -229,9 +229,9 @@ export const deleteProducts = createAsyncThunk(
     return await request({
       url: `/product/delete/${warehouse}`,
       method: "put",
-      body: products,
+      body: { product_ids },
       user: "distributor",
-      onSuccess
+      onSuccess,
     });
   }
 );

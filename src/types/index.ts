@@ -146,8 +146,8 @@ export interface MapProps {
     lat: number;
     lng: number;
   };
-  lat: number;
-  lng: number;
+  lat?: number;
+  lng?: number;
   markers?: {
     lat: number;
     lng: number;
@@ -364,4 +364,14 @@ export interface LogisticsState {
   vehicleNumber: string | null;
   loading: boolean;
   stepsCompleted: number;
+  order: any;
+  orderStatus: any
+}
+
+export interface DeliverySummaryProps {
+  status: "Delivered" | "Cancelled";
+  id: string;
+  date: Date;
+  amount: number;
+  onClick?: () => void
 }

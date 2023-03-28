@@ -10,6 +10,8 @@ const initialState: LogisticsState = {
   vehicleNumber: null,
   stepsCompleted: 1,
   loading: false,
+  order: null,
+  orderStatus: "ENROUTE",
 };
 
 export const addVehicleInfo = createAsyncThunk(
@@ -32,13 +34,46 @@ export const addVehicleInfo = createAsyncThunk(
   }
 );
 
-export const distributorSlice = createSlice({
-  name: "distributor",
+export const updateOrderStatus = createAsyncThunk(
+  "logistics/updateOrderStatus",
+  async ({
+    order_status,
+    order,
+  }: {
+    order_status: "ARRIVED" | "PICKED" | "DELIVERED";
+    order: string;
+  }) => {
+    await request({
+      url: `order/update/${order}`,
+      method: "post",
+      body: { order_status },
+      user: "logistics",
+    });
+  }
+);
+
+export const logisticsSlice = createSlice({
+  name: "logistics",
   initialState,
   reducers: {
-    // resetWarehouseStamp: (state) => {
-    //   state.warehouseStamp = null;
-    // },
+    setOrder: (
+      state,
+      { payload }: { payload: { data: any; onSuccess: () => void } }
+    ) => {
+      state.order = { ...payload.data, status: "found" };
+      payload.onSuccess();
+    },
+    clearOrder: (state, { payload }: { payload: () => void }) => {
+      state.order = null;
+      payload();
+    },
+    updateOrder: (
+      state,
+      { payload }: { payload: { status: string; onSuccess: () => void } }
+    ) => {
+      state.order = { ...state.order, status: payload.status };
+      payload.onSuccess();
+    },
   },
   extraReducers(builder) {
     builder
@@ -56,6 +91,9 @@ export const distributorSlice = createSlice({
           case "logistics/addVehicleInfo/fulfilled":
             state.vehicleNumber = action.meta.arg.plate_number;
             break;
+          case "logistics/updateOrderStatus/fulfilled":
+            state.orderStatus = action.meta.arg.order_status;
+            break;
         }
 
         state.loading = false;
@@ -63,6 +101,6 @@ export const distributorSlice = createSlice({
   },
 });
 
-// export const {} = distributorSlice.actions;
+export const { setOrder, clearOrder, updateOrder } = logisticsSlice.actions;
 
-export default distributorSlice.reducer;
+export default logisticsSlice.reducer;
