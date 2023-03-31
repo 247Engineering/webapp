@@ -40,20 +40,25 @@ export const updateOrderStatus = createAsyncThunk(
     order_status,
     order,
     pickup_code,
-    onSuccess
+    delivery_code,
+    onSuccess,
   }: {
     order_status: "ARRIVED" | "PICKED" | "RT_DELIVERED" | "DELIVERED";
     order: string;
     pickup_code?: string;
     delivery_code?: string;
-    onSuccess?: () => void
+    onSuccess?: () => void;
   }) => {
     await request({
       url: `/order/update/${order}`,
       method: "put",
-      body: { order_status, ...(pickup_code && { pickup_code }) },
+      body: {
+        order_status,
+        ...(pickup_code && { pickup_code }),
+        ...(delivery_code && { delivery_code }),
+      },
       user: "logistics",
-      onSuccess
+      onSuccess,
     });
   }
 );

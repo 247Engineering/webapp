@@ -6,9 +6,11 @@ import MoonLoader from "react-spinners/MoonLoader";
 
 import marker from "../../assets/images/arrow-marker.svg";
 import warehouse from "../../assets/images/warehouse-logistics.svg";
+import retailer from "../../assets/images/retailer-plain.svg";
 import arrow from "../../assets/images/arrow-sm.svg";
 import box from "../../assets/images/box.svg";
 import pickup from "../../assets/images/pick-up.svg";
+import delivery from "../../assets/images/delivery-purple.svg";
 import warehouseMarker from "../../assets/images/warehouse-marker.svg";
 import retailerMarker from "../../assets/images/retailer-marker.svg";
 import deliveryMarker from "../../assets/images/delivery-marker.svg";
@@ -199,7 +201,11 @@ const OrderStatus = () => {
                   <div className="py-[0.969rem] px-[1.313rem] bg-grey rounded-[12px] flex justify-between items-center mb-4">
                     <div className="flex items-center">
                       <img
-                        src={warehouse}
+                        src={
+                          ["PICKED", "RT_DELIVERED"].includes(orderStatus)
+                            ? retailer
+                            : warehouse
+                        }
                         alt="warehouse"
                         className="mr-[0.604rem]"
                       />
@@ -236,7 +242,10 @@ const OrderStatus = () => {
               <>
                 <div className="px-4 pb-4 mt-12">
                   <div className="flex justify-center items-center mb-6">
-                    <img src={pickup} alt="pick-up" />
+                    <img
+                      src={orderStatus !== "RT_DELIVERED" ? pickup : delivery}
+                      alt="pick-up"
+                    />
                   </div>
                   <div className="flex flex-col items-center mb-6">
                     <h4 className="text-[1.25rem] leading-[1.75rem] font-[700] mb-2 text-center">

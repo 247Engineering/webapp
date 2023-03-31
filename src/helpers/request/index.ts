@@ -113,6 +113,7 @@ const request = async ({
 
     return data;
   } catch (err: any) {
+    console.log({err});
     const error = err.response?.data?.message || "something went wrong";
     if (err.statusCode !== 401 && err.message !== "Unauthorised")
       toast.error(error.toLowerCase());

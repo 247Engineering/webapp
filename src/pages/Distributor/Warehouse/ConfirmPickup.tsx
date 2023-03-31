@@ -19,20 +19,24 @@ const ConfirmPickup = () => {
   const { warehouse, order } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, warehouseStamp } = useSelector<RootState>(
+  const {
+    loading,
+    warehouseStamp,
+    order: { pickup_code },
+  } = useSelector<RootState>(
     ({ distributor }) => distributor
   ) as DistributorState;
 
-  const [otp, setOtp] = useState("");
+  // const [otp, setOtp] = useState(pickup_code);
 
-  const onChange = (value: string) => setOtp(value);
+  // const onChange = (value: string) => setOtp(value);
 
   const handleSubmit = () => {
     dispatch(
       confirmOrderPickup({
         order_doc_id: order as string,
         warehouse_id: warehouse as string,
-        pickup_code: otp as string,
+        pickup_code,
       })
     );
   };
@@ -63,7 +67,7 @@ const ConfirmPickup = () => {
         </header>
         <section className="mt-8 h-full flex flex-col text-black">
           <form onSubmit={handleSubmit}>
-            <OtpInput value={otp} onChange={onChange} />
+            <OtpInput disabled value={pickup_code || ""} onChange={() => {}} />
             <ButtonSubmit
               text="Submit"
               disabled={loading}

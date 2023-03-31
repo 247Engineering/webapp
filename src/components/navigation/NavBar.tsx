@@ -108,7 +108,7 @@ const NavBar = ({
           {logistics ? (
             <div
               className="flex items-center justify-center rounded-full w-[2rem] h-[2rem] ml-7 relative"
-              onClick={() => navigate(ROUTES.RETAILER.CART)}
+              onClick={() => {}}
             >
               <img
                 src={boxIcon}

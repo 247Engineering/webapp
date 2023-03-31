@@ -18,7 +18,7 @@ import { LogisticsState } from "../../types";
 import { clearOrder, updateOrder } from "../../store/features/logistics";
 import * as ROUTES from "../../routes";
 import { refreshToken } from "../../helpers/request";
-import { getETA } from "../../helpers/miscellaneous";
+// import { getETA } from "../../helpers/miscellaneous";
 
 const OrderPrompt = () => {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const OrderPrompt = () => {
     lat: number;
     lon: number;
   } | null>(null);
-  const [eta, setEta] = useState(10);
+  // const [eta, setEta] = useState(10);
 
   const tokens = useMemo(
     () => JSON.parse(localStorage.getItem("tokens") as string),
@@ -57,14 +57,16 @@ const OrderPrompt = () => {
         lon: position.coords.longitude,
       });
 
-      setEta(
-        getETA(
-          position.coords.latitude,
-          position.coords.longitude,
-          order?.location?.latitude,
-          order?.location?.longitude
-        )
-      );
+      // setEta(
+      //   Math.round(
+      //     getETA(
+      //       position.coords.latitude,
+      //       position.coords.longitude,
+      //       order?.location?.latitude,
+      //       order?.location?.longitude
+      //     )
+      //   )
+      // );
     });
     // eslint-disable-next-line
   }, []);
@@ -80,8 +82,8 @@ const OrderPrompt = () => {
       );
     };
 
-    const rejectOrder = async (response: any) => {
-      console.log({ rejectOrderResponse: response });
+    const cancelOrder = async (response: any) => {
+      console.log({ cancelOrderResponse: response });
       dispatch(clearOrder(() => navigate(ROUTES.LOGISTICS.DASHBOARD)));
     };
 
@@ -101,7 +103,7 @@ const OrderPrompt = () => {
       console.log("disconnected");
     });
     currentSocket.on("acceptOrderClient", acceptOrder);
-    currentSocket.on("rejectOrderClient", rejectOrder);
+    currentSocket.on("cancelOrderClient", cancelOrder);
     // eslint-disable-next-line
   }, []);
 
@@ -143,7 +145,7 @@ const OrderPrompt = () => {
                     ETA
                   </span>
                   <span className="text-[1rem] leading-[1.5rem]">
-                    {eta} mins
+                    {order?.eta} mins
                   </span>
                 </div>
               </div>
@@ -175,8 +177,7 @@ const OrderPrompt = () => {
                       DROP-OFF POINT
                     </h4>
                     <p className="text-[1rem] leading-[1.5rem]">
-                      {order?.retailer_address?.plus_code?.compound_code ||
-                        "567 Chevron Drive,Chevron, Lekki"}
+                      {order?.retailer_formatted_address || "N/A"}
                     </p>
                   </div>
                 </div>
@@ -185,7 +186,7 @@ const OrderPrompt = () => {
                 <button
                   className="rounded-[12px] border border-solid border-red p-[1.109rem] mr-4 flex justify-center items-center"
                   onClick={() =>
-                    socket?.emit("rejectOrderServer", {
+                    socket?.emit("cancelOrderServer", {
                       order_id: order?._id,
                     })
                   }
