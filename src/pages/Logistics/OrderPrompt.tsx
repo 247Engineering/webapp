@@ -18,6 +18,7 @@ import { LogisticsState } from "../../types";
 import { clearOrder, updateOrder } from "../../store/features/logistics";
 import * as ROUTES from "../../routes";
 import { refreshToken } from "../../helpers/request";
+import { getETA } from "../../helpers/miscellaneous";
 
 const OrderPrompt = () => {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ const OrderPrompt = () => {
     lat: number;
     lon: number;
   } | null>(null);
+  const [eta, setEta] = useState(10);
 
   const tokens = useMemo(
     () => JSON.parse(localStorage.getItem("tokens") as string),
@@ -54,6 +56,15 @@ const OrderPrompt = () => {
         lat: position.coords.latitude,
         lon: position.coords.longitude,
       });
+
+      setEta(
+        getETA(
+          position.coords.latitude,
+          position.coords.longitude,
+          order?.location?.latitude,
+          order?.location?.longitude
+        )
+      );
     });
     // eslint-disable-next-line
   }, []);
@@ -131,7 +142,9 @@ const OrderPrompt = () => {
                   <span className="text-[0.75rem] leading-[1rem] text-black-100">
                     ETA
                   </span>
-                  <span className="text-[1rem] leading-[1.5rem]">10 mins</span>
+                  <span className="text-[1rem] leading-[1.5rem]">
+                    {eta} mins
+                  </span>
                 </div>
               </div>
               <div className="px-[1.625rem] flex mb-6">

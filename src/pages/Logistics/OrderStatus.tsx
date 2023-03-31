@@ -1,5 +1,7 @@
 import React, { useState, useEffect, CSSProperties } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import MoonLoader from "react-spinners/MoonLoader";
 
 import marker from "../../assets/images/arrow-marker.svg";
@@ -19,6 +21,7 @@ import OtpInput from "../../components/forms/OtpInput";
 import { RootState, AppDispatch } from "../../store";
 import { LogisticsState } from "../../types";
 import { updateOrderStatus } from "../../store/features/logistics";
+import * as ROUTES from "../../routes";
 
 const override: CSSProperties = {
   borderColor: "#E34B31",
@@ -26,6 +29,7 @@ const override: CSSProperties = {
 };
 
 const OrderStatus = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { order, loading, orderStatus } = useSelector<RootState>(
     ({ logistics }) => logistics
@@ -56,9 +60,14 @@ const OrderStatus = () => {
       text: "Pick up",
       number: 1,
       button: "I have arrived",
+      hasOtp: false,
       onClick: () =>
         dispatch(
-          updateOrderStatus({ order_status: "ARRIVED", order: order._id })
+          updateOrderStatus({
+            order_status: "ARRIVED",
+            order: order._id,
+            onSuccess: () => toast.success("order status updated"),
+          })
         ),
       onSubmit: () => {},
     },
@@ -78,6 +87,7 @@ const OrderStatus = () => {
             onSuccess: () => {
               setOtp("");
               setShowOtp(false);
+              toast.success("order status updated");
             },
           })
         ),
@@ -87,25 +97,44 @@ const OrderStatus = () => {
       button: "I have arrived",
       text: "Delivery",
       number: 2,
+      hasOtp: false,
       onClick: () =>
         dispatch(
-          updateOrderStatus({ order_status: "DELIVERED", order: order._id })
+          updateOrderStatus({
+            order_status: "RT_DELIVERED",
+            order: order._id,
+            onSuccess: () => toast.success("order status updated"),
+          })
         ),
       onSubmit: () => {},
+    },
+    RT_DELIVERED: {
+      theme: "purple",
+      text: "Delivery",
+      number: 2,
+      hasOtp: true,
+      button: "Order delivered",
+      onClick: () => setShowOtp(true),
+      onSubmit: () =>
+        dispatch(
+          updateOrderStatus({
+            order_status: "DELIVERED",
+            order: order._id,
+            delivery_code: otp,
+            onSuccess: () => {
+              toast.success("delivery completed");
+              navigate(ROUTES.LOGISTICS.DASHBOARD);
+            },
+          })
+        ),
     },
     DELIVERED: {
       theme: "purple",
       text: "Delivery",
       number: 2,
+      hasOtp: false,
       button: "Order delivered",
-      onClick: () =>
-        dispatch(
-          updateOrderStatus({
-            order_status: "ARRIVED",
-            order: order._id,
-            pickup_code: otp,
-          })
-        ),
+      onClick: () => {},
       onSubmit: () => {},
     },
   };
@@ -139,7 +168,13 @@ const OrderStatus = () => {
               ]}
             />
           </div>
-          <MapModal onClose={true ? undefined : () => {}}>
+          <MapModal
+            onClose={
+              statusMap[orderStatus].hasOtp && showOtp
+                ? () => setShowOtp(false)
+                : undefined
+            }
+          >
             {!showOtp ? (
               <>
                 <div className="px-4 pb-4 font-[700]">
@@ -205,11 +240,13 @@ const OrderStatus = () => {
                   </div>
                   <div className="flex flex-col items-center mb-6">
                     <h4 className="text-[1.25rem] leading-[1.75rem] font-[700] mb-2 text-center">
-                      Confirm pick up
+                      Confirm{" "}
+                      {orderStatus !== "RT_DELIVERED" ? "pick up" : "delivery"}
                     </h4>
                     <p className="text-[0.875rem] leading-[1.25rem] text-center">
-                      Ask warehouse manager for code to confirm pick up and
-                      continue this order.
+                      {orderStatus !== "RT_DELIVERED"
+                        ? "Ask warehouse manager for code to confirm pick up and continue this order."
+                        : "Ask customer for code to confirm delivery and complete this order."}
                     </p>
                   </div>
                   <OtpInput
