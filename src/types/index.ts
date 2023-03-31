@@ -365,7 +365,7 @@ export interface LogisticsState {
   loading: boolean;
   stepsCompleted: number;
   order: any;
-  orderStatus: any
+  orderStatus: "ENROUTE" | "ARRIVED" | "PICKED" | "DELIVERED"
 }
 
 export interface DeliverySummaryProps {

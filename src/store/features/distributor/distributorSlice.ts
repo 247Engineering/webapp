@@ -93,6 +93,19 @@ export const editWarehouse = createAsyncThunk(
   }
 );
 
+export const manageWarehouse = createAsyncThunk(
+  "distributor/manageWarehouse",
+  async (payload: { wh_status?: "ENABLE" | "DISABLE" | "DELETE"; warehouse: string }) => {
+    const { warehouse, ...body } = payload;
+    return await request({
+      url: `/warehouse/modify/${warehouse}`,
+      method: "put",
+      body,
+      user: "distributor",
+    });
+  }
+);
+
 export const changeWarehouseManager = createAsyncThunk(
   "distributor/changeWarehouseManager",
   async (body: { email: string; warehouse_id: string }) => {
@@ -228,6 +241,7 @@ export const distributorSlice = createSlice({
             break;
           case "distributor/addWarehouse/fulfilled":
           case "distributor/editWarehouse/fulfilled":
+          case "distributor/manageWarehouse/fulfilled":
           case "distributor/changeWarehouseManager/fulfilled":
             state.warehouseStamp = new Date().getTime();
             break;

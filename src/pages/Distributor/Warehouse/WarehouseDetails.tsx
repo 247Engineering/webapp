@@ -11,7 +11,10 @@ import TableLayout from "../../../components/tables/TableLayout";
 import TableFooter from "../../../components/tables/TableFooter";
 import BackButton from "../../../components/forms/BackButton";
 
-import { fetchWarehouse } from "../../../store/features/distributor";
+import {
+  fetchWarehouse,
+  manageWarehouse,
+} from "../../../store/features/distributor";
 import { fetchWarehouseProducts } from "../../../store/features/product";
 import { AppDispatch, RootState } from "../../../store";
 import { DistributorState, ProductState } from "../../../types";
@@ -22,7 +25,7 @@ const WarehouseDetails = () => {
   const { warehouse: warehouseId } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { warehouse } = useSelector<RootState>(
+  const { warehouse, loading } = useSelector<RootState>(
     ({ distributor }) => distributor
   ) as DistributorState;
   const { products } = useSelector<RootState>(
@@ -52,18 +55,40 @@ const WarehouseDetails = () => {
             <div onClick={(e) => e.stopPropagation()}>
               <button
                 onClick={() => setOpen(true)}
+                disabled={loading}
                 className="bg-orange h-[2rem] w-[2rem] rounded-[10px] flex justify-center items-center relative"
               >
                 <img src={dots} alt="open options" />
                 {open ? (
                   <ul className="rounded-[8px] shadow-sm py-2 absolute top-[40px] right-0 z-10 bg-white w-max text-left">
-                    <li className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p">
+                    <li
+                      className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p"
+                      onClick={() =>
+                        dispatch(
+                          manageWarehouse({ warehouse, wh_status: "DELETE" })
+                        )
+                      }
+                    >
                       Delete
                     </li>
-                    <li className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p">
+                    <li
+                      className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p"
+                      onClick={() =>
+                        dispatch(
+                          manageWarehouse({ warehouse, wh_status: "DISABLE" })
+                        )
+                      }
+                    >
                       Disable
                     </li>
-                    <li className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p">
+                    <li
+                      className="px-[0.75rem] py-[0.625rem] hover:bg-orange-light p"
+                      onClick={() =>
+                        dispatch(
+                          manageWarehouse({ warehouse, wh_status: "ENABLE" })
+                        )
+                      }
+                    >
                       Enable
                     </li>
                   </ul>
