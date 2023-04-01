@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 
 import image from "../../../../assets/images/image.svg";
+import warehouseMarker from "../../../../assets/images/warehouse-marker.svg";
+import retailerMarker from "../../../../assets/images/retailer-marker.svg";
 
 import AppLayout from "../../../../components/layouts/AppLayout";
 import TableLayout from "../../../../components/tables/TableLayout";
@@ -37,8 +39,16 @@ const OrderDetails = () => {
         order: orderId as string,
       })
     );
-
+    const interval = setInterval(() => {
+      dispatch(
+        fetchWarehouseOrder({
+          warehouse: warehouse as string,
+          order: orderId as string,
+        })
+      );
+    }, 60000);
     return () => {
+      clearInterval(interval);
       dispatch(resetWarehouseStamp());
     };
   }, [dispatch, warehouse, orderId]);
@@ -89,7 +99,7 @@ const OrderDetails = () => {
         <header>
           <BackButton text="Orders" />
           <h1 className="font-[700] text-[1.25rem] leading-[1.75rem] my-2 text-black">
-            Order #{order?.order_id.replace("ORD_", "")}
+            Order #{order?.order_id.replace("ORD_", "") || ""}
           </h1>
           <p className="p mb-2 text-black-100">
             {format(
@@ -149,6 +159,18 @@ const OrderDetails = () => {
               center={{ lat: 9.0765, lng: 7.3986 }}
               lat={9.0765}
               lng={7.3986}
+              markers={[
+                {
+                  lat: order?.warehouse_details?.location?.latitude || 9.0765,
+                  lng: order?.warehouse_details?.location?.longitude || 7.3986,
+                  img: warehouseMarker,
+                },
+                {
+                  lat: order?.location?.latitude || 9.0765,
+                  lng: order?.location?.longitude || 7.3986,
+                  img: retailerMarker,
+                },
+              ]}
             />
           </div>
           <div className="rounded-br-[12px] rounded-bl-[12px] border border-solid border-grey-light p-4 mb-[2.375rem]">

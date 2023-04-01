@@ -25,30 +25,34 @@ const Dashboard = () => {
   const { order } = useSelector<RootState>(
     ({ product }) => product
   ) as LogisticsState;
-  console.log({ order });
 
   const [socket, setSocket] = useState<Socket | null>(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      refreshToken("logistics", tokens.refresh_token);
-    }, 60000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     refreshToken("logistics", tokens?.refresh_token);
+  //   }, 30000);
 
-    return () => {
-      clearInterval(interval);
-    };
-    // eslint-disable-next-line
-  }, []);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  //   // eslint-disable-next-line
+  // }, []);
 
   useEffect(() => {
     const findOrder = async (response: any) => {
-      console.log({ findOrderResponse: response });
-      dispatch(
-        setOrder({
-          data: JSON.parse(response.data),
-          onSuccess: () => navigate(ROUTES.LOGISTICS.ORDER_PROMPT),
-        })
-      );
+      // console.log({ findOrderResponse: response });
+      if (response.statusCode === 401) {
+        refreshToken("logistics", tokens?.refresh_token);
+        setTimeout(() => window.location.reload(), 7000);
+      } else {
+        dispatch(
+          setOrder({
+            data: JSON.parse(response.data),
+            onSuccess: () => navigate(ROUTES.LOGISTICS.ORDER_PROMPT),
+          })
+        );
+      }
     };
 
     if (!navigator.geolocation) {
@@ -72,7 +76,6 @@ const Dashboard = () => {
         console.log("disconnected");
       });
 
-      console.log({ position, currentSocket });
       currentSocket.emit("requestOrder", {
         lat: position.coords.latitude,
         lon: position.coords.longitude,
@@ -89,7 +92,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <AppLayout logistics>
+      <AppLayout logistics={order ? 1 : 0}>
         <div className="flex flex-col justify-center items-center mt-[9.875rem]">
           <img src={noOrders} alt="no orders" />
           <h1 className="mt-6 font-[700] text-[1.25rem] leading-[1.75rem]">

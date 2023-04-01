@@ -139,7 +139,7 @@ const RetailerPayment = () => {
             <ButtonSubmit
               disabled={loading}
               loading={loading}
-              text="Pay"
+              text="Proceed"
               onClick={handleSubmit}
               className="text-white bg-orange"
             />

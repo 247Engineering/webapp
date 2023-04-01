@@ -15,6 +15,7 @@ const initialState: RetailerState = {
   orders: [],
   order: null,
   warehouse: null,
+  location: null,
 };
 
 export const addBusinessInfo = createAsyncThunk(
@@ -193,9 +194,13 @@ export const retailerSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(signin.fulfilled, (state, { payload: { warehouse } }) => {
-        state.warehouse = warehouse;
-      })
+      .addCase(
+        signin.fulfilled,
+        (state, { payload: { warehouse, retailer_geo } }) => {
+          state.warehouse = warehouse;
+          state.location = retailer_geo;
+        }
+      )
       .addMatcher(
         isPendingAction("retailer"),
         (state, { type, meta: { arg } }) => {
@@ -221,6 +226,7 @@ export const retailerSlice = createSlice({
             case "retailer/addBusinessInfo/fulfilled":
               state.retailerStamp = new Date().getTime();
               state.warehouse = payload.warehouse;
+              state.location = payload.retailer_geo;
               break;
             case "retailer/addToCart/fulfilled":
               let itemInCart = state.cartItems.find(

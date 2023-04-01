@@ -35,6 +35,12 @@ const RetailerOrderStatus = () => {
 
   useEffect(() => {
     dispatch(fetchSingleOrder(orderId as string));
+    const interval = setInterval(() => {
+      dispatch(fetchSingleOrder(orderId as string));
+    }, 60000);
+    return () => {
+      clearInterval(interval);
+    };
   }, [dispatch, orderId]);
 
   const statusMap = {

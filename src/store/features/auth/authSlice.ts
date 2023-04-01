@@ -94,6 +94,17 @@ export const signin = createAsyncThunk(
   }
 );
 
+// export const signout = createAsyncThunk(
+//   "auth/signout",
+//   async (user: UserType) => {
+//     return await request({
+//       url: "/auth/logout",
+//       method: "post",
+//       user,
+//     });
+//   }
+// );
+
 export const validateOtp = createAsyncThunk(
   "auth/validateOtp",
   async ({ user, ...body }: { phone: string; otp: string; user: UserType }) => {

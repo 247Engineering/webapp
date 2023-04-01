@@ -8,6 +8,7 @@ import search from "../../../assets/images/search.svg";
 import AppLayout from "../../../components/layouts/AppLayout";
 import SortSelect from "../../../components/forms/SortSelect";
 import TableLayout from "../../../components/tables/TableLayout";
+import Loader from "../../../components/miscellaneous/Loader";
 
 import { RootState, AppDispatch } from "../../../store";
 import * as ROUTES from "../../../routes";
@@ -18,7 +19,7 @@ const RetailerOrders = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { orders } = useSelector<RootState>(
+  const { orders, loading } = useSelector<RootState>(
     ({ retailer }) => retailer
   ) as RetailerState;
 
@@ -39,6 +40,7 @@ const RetailerOrders = () => {
   return (
     <>
       <AppLayout cart>
+        {loading ? <Loader /> : null}
         <header>
           <h1 className="h1 text-black">Orders</h1>
         </header>

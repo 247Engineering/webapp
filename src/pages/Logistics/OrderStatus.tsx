@@ -125,7 +125,7 @@ const OrderStatus = () => {
             delivery_code: otp,
             onSuccess: () => {
               toast.success("delivery completed");
-              clearOrder(() => navigate(ROUTES.LOGISTICS.DASHBOARD));
+              dispatch(clearOrder(() => navigate(ROUTES.LOGISTICS.DASHBOARD)));
             },
           })
         ),
@@ -143,7 +143,7 @@ const OrderStatus = () => {
 
   return (
     <>
-      <AppLayout logistics noPadding>
+      <AppLayout logistics={order ? 1 : 0} noPadding>
         <div className="flex flex-col h-full relative">
           <div className="flex-grow">
             <Map
@@ -196,9 +196,9 @@ const OrderStatus = () => {
                   <div className="w-full mb-6 flex justify-center">
                     <p className="text-[1.25rem] leading-[1.75rem] text-center w-[90%]">
                       {["PICKED", "RT_DELIVERED"].includes(orderStatus)
-                        ? order?.warehouse_location
-                            ?.warehouse_formatted_address || "N/A"
-                        : order?.retailer_formatted_address || "N/A"}
+                        ? order?.retailer_formatted_address || "N/A"
+                        : order?.warehouse_details
+                            ?.warehouse_formatted_address || "N/A"}
                     </p>
                   </div>
                   <div className="py-[0.969rem] px-[1.313rem] bg-grey rounded-[12px] flex justify-between items-center mb-4">
@@ -214,8 +214,8 @@ const OrderStatus = () => {
                       />
                       <p className="text-[0.875rem] leading-[1.25rem] max-w-[10.875rem]">
                         {["PICKED", "RT_DELIVERED"].includes(orderStatus)
-                          ? order?.warehouse_location?.name || "N/A"
-                          : order?.retailer_name || "N/A"}
+                          ? order?.retailer_name || "N/A"
+                          : order?.warehouse_details?.name || "N/A"}
                       </p>
                     </div>
                     <div className="flex items-center">

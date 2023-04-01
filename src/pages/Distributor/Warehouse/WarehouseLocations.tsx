@@ -10,6 +10,7 @@ import distributor from "../../../assets/images/distributor-checked.svg";
 import AppLayout from "../../../components/layouts/AppLayout";
 import SortSelect from "../../../components/forms/SortSelect";
 import TableLayout from "../../../components/tables/TableLayout";
+import Loader from "../../../components/miscellaneous/Loader";
 
 import { fetchWarehouses } from "../../../store/features/distributor";
 import { AppDispatch, RootState } from "../../../store";
@@ -21,7 +22,7 @@ const WarehouseLocations = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { warehouses } = useSelector<RootState>(
+  const { warehouses, loading } = useSelector<RootState>(
     ({ distributor }) => distributor
   ) as DistributorState;
 
@@ -38,6 +39,7 @@ const WarehouseLocations = () => {
   return (
     <div className="h-full" onClick={() => setOpen(false)}>
       <AppLayout>
+        {loading ? <Loader /> : null}
         <header className="flex justify-between">
           <div>
             <h1 className="h1 mb-2 text-black">Warehouses</h1>

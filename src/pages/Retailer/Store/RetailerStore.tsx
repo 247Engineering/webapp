@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import searchIcon from "../../../assets/images/input-search.svg";
 
 import AppLayout from "../../../components/layouts/AppLayout";
 import ProductItem from "../../../components/miscellaneous/ProductItem";
+import Loader from "../../../components/miscellaneous/Loader";
 
 import { AppDispatch, RootState } from "../../../store";
 import { ProductState, RetailerState } from "../../../types";
@@ -15,7 +16,7 @@ import {
 
 const RetailerShop = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { products } = useSelector<RootState>(
+  const { products, loading } = useSelector<RootState>(
     ({ product }) => product
   ) as ProductState;
   const { warehouse } = useSelector<RootState>(
@@ -24,9 +25,14 @@ const RetailerShop = () => {
 
   const [search, setSearch] = useState("");
 
+  const debounceTimer = useRef<any>(null);
+
   useEffect(() => {
     if (search) {
-      dispatch(searchStoreProducts(search));
+      clearTimeout(debounceTimer.current);
+      debounceTimer.current = setTimeout(() => {
+        dispatch(searchStoreProducts(search));
+      }, 500);
     } else {
       dispatch(fetchAllProducts());
     }
@@ -34,7 +40,13 @@ const RetailerShop = () => {
 
   return (
     <>
-      <AppLayout location={warehouse?.name || "Victoria Island"} cart search hideLogo>
+      <AppLayout
+        location={warehouse?.name || "Victoria Island"}
+        cart
+        search
+        hideLogo
+      >
+        {loading ? <Loader /> : null}
         <div className="relative mt-[-1.5rem] mb-10">
           <input
             className="w-full p-[0.625rem] pl-[2.25rem] flex items-center justify-center p text-black-100 rounded-[8px] border border-solid border-grey-light"

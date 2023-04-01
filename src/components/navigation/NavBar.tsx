@@ -114,7 +114,7 @@ const NavBar = ({
                 className="w-[1.5rem] h-[1.5rem]"
               />
               <span className="absolute left-[16px] top-[-5px] text-white bg-orange font-[700] text-[0.625rem] leading-[0.875rem] rounded-[100px] px-1 py-[2px]">
-                {cartItems.reduce((acc, curr) => acc + curr.quantity, 0)}
+                {logistics}
               </span>
             </div>
           ) : null}

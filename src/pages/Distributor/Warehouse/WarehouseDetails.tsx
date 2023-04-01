@@ -204,7 +204,7 @@ const WarehouseDetails = () => {
                   ))}
                 </tbody>
               </TableLayout>
-              <TableFooter />
+              <TableFooter total={products?.length || 0} />
             </>
           )}
         </section>

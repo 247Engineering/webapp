@@ -10,6 +10,7 @@ import SortSelect from "../../../../components/forms/SortSelect";
 import TableLayout from "../../../../components/tables/TableLayout";
 import TableFooter from "../../../../components/tables/TableFooter";
 import Status from "../../../../components/miscellaneous/Status";
+import Loader from "../../../../components/miscellaneous/Loader";
 
 import {
   fetchWarehouseOrders,
@@ -47,7 +48,7 @@ const Orders = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { orders, warehouses } = useSelector<RootState>(
+  const { orders, warehouses, loading } = useSelector<RootState>(
     ({ distributor }) => distributor
   ) as DistributorState;
 
@@ -64,6 +65,7 @@ const Orders = () => {
   return (
     <>
       <AppLayout>
+        {loading ? <Loader /> : null}
         <MultiSelectCheckbox
           items={warehouses || []}
           type="warehouses"
@@ -148,7 +150,7 @@ const Orders = () => {
               ))}
             </tbody>
           </TableLayout>
-          <TableFooter />
+          <TableFooter total={orders?.length || 0} />
         </section>
       </AppLayout>
     </>

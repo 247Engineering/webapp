@@ -230,7 +230,7 @@ const WarehouseProducts = () => {
             </tbody>
           </TableLayout>
           <div className="pl-[2.25rem]">
-            <TableFooter />
+            <TableFooter total={products?.length || 0} />
           </div>
         </section>
       </AppLayout>

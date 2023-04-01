@@ -73,7 +73,7 @@ const OrderPrompt = () => {
 
   useEffect(() => {
     const acceptOrder = async (response: any) => {
-      console.log({ acceptOrderResponse: response });
+      // console.log({ acceptOrderResponse: response });
       dispatch(
         updateOrder({
           status: "accepted",
@@ -83,7 +83,7 @@ const OrderPrompt = () => {
     };
 
     const cancelOrder = async (response: any) => {
-      console.log({ cancelOrderResponse: response });
+      // console.log({ cancelOrderResponse: response });
       dispatch(clearOrder(() => navigate(ROUTES.LOGISTICS.DASHBOARD)));
     };
 
@@ -109,7 +109,7 @@ const OrderPrompt = () => {
 
   return (
     <>
-      <AppLayout logistics noPadding>
+      <AppLayout logistics={order ? 1 : 0} noPadding>
         <div className="flex flex-col h-full relative">
           <div className="flex-grow">
             <Map

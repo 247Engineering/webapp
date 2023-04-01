@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import standard from "../../../assets/images/standard.svg";
 import standardChecked from "../../../assets/images/standard-checked.svg";
 import schedule from "../../../assets/images/schedule.svg";
+import retailerMarker from "../../../assets/images/retailer-marker.svg";
+import warehouseMarker from "../../../assets/images/warehouse-marker.svg";
 // import scheduleChecked from '../../../assets/images/schedule-checked.svg'
 
 import AppLayout from "../../../components/layouts/AppLayout";
@@ -30,19 +32,24 @@ import {
 } from "../../../store/features/retailer";
 import * as ROUTES from "../../../routes";
 
-const deliveryOptionMap = {
-  priority: 1,
-  standard: 2,
-  schedule: 3,
-};
+// const deliveryOptionMap = {
+//   priority: 1,
+//   standard: 2,
+//   schedule: 3,
+// };
 
 const RetailerCheckout = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { cartItems, loading, orderId, retailerStamp } = useSelector<RootState>(
-    ({ retailer }) => retailer
-  ) as RetailerState;
+  const {
+    cartItems,
+    loading,
+    orderId,
+    retailerStamp,
+    warehouse,
+    location: retailerGeo,
+  } = useSelector<RootState>(({ retailer }) => retailer) as RetailerState;
   const { formattedAddress } = useSelector<RootState>(
     ({ auth }) => auth
   ) as AuthState;
@@ -197,6 +204,18 @@ const RetailerCheckout = () => {
                   center={{ lat: 9.0765, lng: 7.3986 }}
                   lat={9.0765}
                   lng={7.3986}
+                  markers={[
+                    {
+                      lat: warehouse?.location?.latitude || 9.0765,
+                      lng: warehouse?.location?.longitude || 7.3986,
+                      img: warehouseMarker,
+                    },
+                    {
+                      lat: retailerGeo?.latitude || 9.0765,
+                      lng: retailerGeo?.longitude || 7.3986,
+                      img: retailerMarker,
+                    },
+                  ]}
                 />
               </div>
               <h4 className="font-[700] text-[1rem] leading-[1.5rem] mb-6">

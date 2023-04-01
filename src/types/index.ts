@@ -205,7 +205,7 @@ export interface AppLayoutProps {
   location?: string;
   search?: boolean;
   cart?: boolean;
-  logistics?: boolean;
+  logistics?: boolean | number;
   hideName?: boolean;
   children?: any;
   onClose?: () => void;
@@ -311,6 +311,7 @@ export interface RetailerState {
   orders: any[];
   order: any;
   warehouse: any;
+  location: any
 }
 
 export type CartItem = {
