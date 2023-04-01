@@ -169,7 +169,8 @@ const OrderPrompt = () => {
                       PICK UP POINT #1
                     </h4>
                     <p className="text-[1rem] leading-[1.5rem]">
-                      567 Chevron Drive,Chevron, Lekki,
+                      {order?.warehouse_details?.warehouse_formatted_address ||
+                        "N/A"}
                     </p>
                   </div>
                   <div>
