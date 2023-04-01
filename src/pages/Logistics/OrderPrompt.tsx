@@ -42,7 +42,7 @@ const OrderPrompt = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       refreshToken("logistics", tokens.refresh_token);
-    }, 60000);
+    }, 20000);
 
     return () => {
       clearInterval(interval);

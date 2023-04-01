@@ -78,9 +78,7 @@ const NavBar = ({
             <img
               src={profile}
               alt="profile icon"
-              onClick={() => {
-                navigate("/dashboard");
-              }}
+              onClick={() => {}}
             />
           ) : null}
           {search ? (
