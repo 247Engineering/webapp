@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { AuthState, UserType } from "../../../types";
 import request from "../../../helpers/request";
 import { isRejectedAction, isPendingAction, isFulfilledAction } from "../utils";
+import { addBusinessInfo } from "../retailer";
 
 const initialState: AuthState = {
   firstName: null,
@@ -15,6 +16,7 @@ const initialState: AuthState = {
   businessName: null,
   vehicleNumber: null,
   stepsCompleted: 1,
+  formattedAddress: null,
 };
 
 export const signup = createAsyncThunk(
@@ -175,6 +177,12 @@ export const authSlice = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(
+        addBusinessInfo.fulfilled,
+        (state, { payload: { formatted_address } }) => {
+          state.formattedAddress = formatted_address;
+        }
+      )
       .addMatcher(isPendingAction("auth"), (state, action) => {
         state.loading = true;
       })
@@ -190,6 +198,7 @@ export const authSlice = createSlice({
             state.type = action.meta.arg.type;
             state.businessName = action.payload.business_name;
             state.stepsCompleted = action.payload.step;
+            state.formattedAddress = action.payload.formatted_address;
 
             localStorage.setItem(
               "tokens",
@@ -224,7 +233,8 @@ export const authSlice = createSlice({
           case "auth/requestPasswordReset/fulfilled":
           case "auth/createWarehouseUser/fulfilled":
           case "auth/validatePasswordResetOtp/fulfilled":
-            state.resetPasswordStamp = action.payload.reset_token || new Date().getTime();
+            state.resetPasswordStamp =
+              action.payload.reset_token || new Date().getTime();
             break;
         }
 

@@ -24,6 +24,7 @@ export interface AuthState {
   businessName: string | null;
   vehicleNumber: string | null;
   stepsCompleted: number;
+  formattedAddress: string | null;
 }
 
 export interface InputProps {
@@ -309,7 +310,7 @@ export interface RetailerState {
   orderId: string | null;
   orders: any[];
   order: any;
-  warehouse: any
+  warehouse: any;
 }
 
 export type CartItem = {
@@ -365,7 +366,7 @@ export interface LogisticsState {
   loading: boolean;
   stepsCompleted: number;
   order: any;
-  orderStatus: "ENROUTE" | "ARRIVED" | "PICKED" | "RT_DELIVERED" | "DELIVERED"
+  orderStatus: "ENROUTE" | "ARRIVED" | "PICKED" | "RT_DELIVERED" | "DELIVERED";
 }
 
 export interface DeliverySummaryProps {
@@ -373,5 +374,5 @@ export interface DeliverySummaryProps {
   id: string;
   date: Date;
   amount: number;
-  onClick?: () => void
+  onClick?: () => void;
 }

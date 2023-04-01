@@ -22,7 +22,7 @@ import OtpInput from "../../components/forms/OtpInput";
 
 import { RootState, AppDispatch } from "../../store";
 import { LogisticsState } from "../../types";
-import { updateOrderStatus } from "../../store/features/logistics";
+import { updateOrderStatus, clearOrder } from "../../store/features/logistics";
 import * as ROUTES from "../../routes";
 
 const override: CSSProperties = {
@@ -125,7 +125,7 @@ const OrderStatus = () => {
             delivery_code: otp,
             onSuccess: () => {
               toast.success("delivery completed");
-              navigate(ROUTES.LOGISTICS.DASHBOARD);
+              clearOrder(() => navigate(ROUTES.LOGISTICS.DASHBOARD))
             },
           })
         ),

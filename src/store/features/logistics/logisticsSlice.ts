@@ -76,6 +76,7 @@ export const logisticsSlice = createSlice({
     },
     clearOrder: (state, { payload }: { payload: () => void }) => {
       state.order = null;
+      state.orderStatus = "ENROUTE";
       payload();
     },
     updateOrder: (

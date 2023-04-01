@@ -17,7 +17,12 @@ import OnboardingRadio from "../../../components/forms/OnboardingRadio";
 import Map from "../../../components/miscellaneous/Map";
 import OrderSummary from "../../../components/miscellaneous/OrderSummary";
 
-import { Address, DeliveryOptions, RetailerState } from "../../../types";
+import {
+  Address,
+  DeliveryOptions,
+  RetailerState,
+  AuthState,
+} from "../../../types";
 import { AppDispatch, RootState } from "../../../store";
 import {
   clearRetailerStamp,
@@ -38,6 +43,9 @@ const RetailerCheckout = () => {
   const { cartItems, loading, orderId, retailerStamp } = useSelector<RootState>(
     ({ retailer }) => retailer
   ) as RetailerState;
+  const { formattedAddress } = useSelector<RootState>(
+    ({ auth }) => auth
+  ) as AuthState;
 
   const [defaultAddress, setDefaultAddress] = useState(true);
   const [location, setLocation] = useState<Address | null>(null);
@@ -56,7 +64,7 @@ const RetailerCheckout = () => {
       placeOrder({
         ...(location && { location }),
         delivery_instructions: instructions,
-        delivery_options: deliveryOptionMap[deliveryOption],
+        delivery_options: type === "delivery" ? 1 : 2,
       })
     );
   };
@@ -112,7 +120,7 @@ const RetailerCheckout = () => {
                     <div className="mb-1">
                       <Input
                         label="Location"
-                        value="365 Chevron Drive, Lekki, Lagos"
+                        value={formattedAddress}
                         onChange={() => {}}
                         disabled
                       />
@@ -244,7 +252,10 @@ const RetailerCheckout = () => {
               </span>
             </div>
             <ButtonSubmit
-              disabled={(type === "delivery" && !location) || loading}
+              disabled={
+                (type === "delivery" && !location && !formattedAddress) ||
+                loading
+              }
               loading={loading}
               text="Place order"
               onClick={handleSubmit}
