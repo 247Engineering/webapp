@@ -9,6 +9,7 @@ import AppLayout from "../../../../components/layouts/AppLayout";
 import SortSelect from "../../../../components/forms/SortSelect";
 import TableLayout from "../../../../components/tables/TableLayout";
 import TableFooter from "../../../../components/tables/TableFooter";
+import Status from "../../../../components/miscellaneous/Status";
 
 import {
   fetchWarehouseOrders,
@@ -18,6 +19,29 @@ import { AppDispatch, RootState } from "../../../../store";
 import { DistributorState } from "../../../../types";
 import * as ROUTES from "../../../../routes";
 import MultiSelectCheckbox from "../../../../components/forms/MultiSelectCheckbox";
+
+const statusMap = {
+  PENDING: {
+    statusText: "Pending order",
+    statusClassName: "bg-pumpkin-light text-pumpkin",
+  },
+  CONFIRMED: {
+    statusText: "Order confirmed",
+    statusClassName: "bg-[#E9D9F1] text-[#461A53]",
+  },
+  PICKUP: {
+    statusText: "Order confirmed",
+    statusClassName: "bg-[#E9D9F1] text-[#461A53]",
+  },
+  DELIVERY: {
+    statusText: "Out for delivery",
+    statusClassName: "bg-pumpkin-light text-pumpkin",
+  },
+  COMPLETED: {
+    statusText: "Order completed",
+    statusClassName: "bg-green-light text-green",
+  },
+};
 
 const Orders = () => {
   const navigate = useNavigate();
@@ -78,6 +102,7 @@ const Orders = () => {
                 <th className="w-[9.5rem]">Order ID</th>
                 <th className="w-[9.5rem]">Date</th>
                 <th className="w-[9.5rem]">Customer Address</th>
+                <th className="w-[9.5rem]">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -106,6 +131,18 @@ const Orders = () => {
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
                     {order.address || "N/A"}
+                  </td>
+                  <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
+                    <Status
+                      className={`${
+                        statusMap[order.status as keyof typeof statusMap]
+                          .statusClassName
+                      } rounded-[10px] py-1 px-2`}
+                      text={
+                        statusMap[order.status as keyof typeof statusMap]
+                          .statusText
+                      }
+                    />
                   </td>
                 </tr>
               ))}
