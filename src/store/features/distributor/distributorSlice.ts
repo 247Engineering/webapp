@@ -95,7 +95,10 @@ export const editWarehouse = createAsyncThunk(
 
 export const manageWarehouse = createAsyncThunk(
   "distributor/manageWarehouse",
-  async (payload: { wh_status?: "ENABLE" | "DISABLE" | "DELETE"; warehouse: string }) => {
+  async (payload: {
+    wh_status?: "ENABLE" | "DISABLE" | "DELETE";
+    warehouse: string;
+  }) => {
     const { warehouse, ...body } = payload;
     return await request({
       url: `/warehouse/modify/${warehouse}`,
@@ -253,7 +256,12 @@ export const distributorSlice = createSlice({
             break;
           case "distributor/fetchWarehouseOrder/fulfilled":
           case "distributor/updateWarehouseOrder/fulfilled":
-            state.order = action.payload.data;
+            state.order = {
+              ...action.payload.data,
+              ...(action.payload.pickup_code && {
+                pickup_code: action.payload.pickup_code,
+              }),
+            };
             break;
           case "distributor/confirmOrderPickup/fulfilled":
             state.order = action.payload.data;

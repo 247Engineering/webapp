@@ -63,7 +63,7 @@ const OrderDetails = () => {
       statusClassName: "bg-[#E9D9F1] text-[#461A53]",
       buttonText: "Confirm pickup",
       nextStatus: "DELIVERY",
-      goToConfirm: order?.delivery_type === "RT_PICKUP" ? true : false,
+      goToConfirm: order?.delivery_type === "WH_DELIVERY" ? true : false,
     },
     DELIVERY: {
       statusText: "Out for delivery",
