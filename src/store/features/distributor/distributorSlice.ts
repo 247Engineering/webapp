@@ -1,10 +1,10 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { DistributorState, Address, Owner } from '../../../types'
-import request from '../../../helpers/request'
-import { RootState } from '../..'
-import { signin } from '../auth'
-import { isRejectedAction, isPendingAction, isFulfilledAction } from '../utils'
+import { DistributorState, Address, Owner } from "../../../types";
+import request from "../../../helpers/request";
+import { RootState } from "../..";
+// import { signin } from '../auth'
+import { isRejectedAction, isPendingAction, isFulfilledAction } from "../utils";
 
 const initialState: DistributorState = {
   businessName: null,
@@ -18,19 +18,21 @@ const initialState: DistributorState = {
   loading: false,
   warehouseStamp: null,
   warehouses: [],
-}
+  warehouse: null,
+  order: null,
+};
 
 export const submitDistributor = createAsyncThunk(
-  'distributor/submitDistributor',
+  "distributor/submitDistributor",
   async (_, { getState }) => {
     const {
       auth: { id },
       distributor,
-    } = getState() as RootState
+    } = getState() as RootState;
 
     await request({
-      url: '/onboarding/setup',
-      method: 'post',
+      url: "/onboarding/setup",
+      method: "post",
       body: {
         user_id: id,
         business_name: distributor.businessName,
@@ -47,103 +49,233 @@ export const submitDistributor = createAsyncThunk(
           image: owner.idImage,
         })),
       },
-    })
-  },
-)
+      user: "distributor",
+    });
+  }
+);
 
 export const addWarehouse = createAsyncThunk(
-  'distributor/addWarehouse',
+  "distributor/addWarehouse",
   async (
     body: {
-      name: string
-      location: Address
-      email: string
+      name: string;
+      location: Address;
+      email: string;
     },
-    { getState },
+    { getState }
   ) => {
     const {
       auth: { id },
-    } = getState() as RootState
+    } = getState() as RootState;
 
     return await request({
-      url: '/warehouse/add',
-      method: 'post',
+      url: "/warehouse/add",
+      method: "post",
       body: {
         distributor_id: id,
         ...body,
       },
-    })
-  },
-)
+      user: "distributor",
+    });
+  }
+);
+
+export const editWarehouse = createAsyncThunk(
+  "distributor/editWarehouse",
+  async (payload: { name?: string; location?: Address; warehouse: string }) => {
+    const { warehouse, ...body } = payload;
+    return await request({
+      url: `/warehouse/edit/${warehouse}`,
+      method: "put",
+      body,
+      user: "distributor",
+    });
+  }
+);
+
+export const manageWarehouse = createAsyncThunk(
+  "distributor/manageWarehouse",
+  async (payload: {
+    wh_status?: "ENABLE" | "DISABLE" | "DELETE";
+    warehouse: string;
+  }) => {
+    const { warehouse, ...body } = payload;
+    return await request({
+      url: `/warehouse/modify/${warehouse}`,
+      method: "put",
+      body,
+      user: "distributor",
+    });
+  }
+);
+
+export const changeWarehouseManager = createAsyncThunk(
+  "distributor/changeWarehouseManager",
+  async (body: { email: string; warehouse_id: string }) => {
+    return await request({
+      url: `/warehouse/change-manager`,
+      method: "post",
+      body,
+      user: "distributor",
+    });
+  }
+);
 
 export const fetchWarehouses = createAsyncThunk(
-  'distributor/fetchWarehouses',
-  async (_, { getState }) => {
-    const {
-      auth: { id },
-    } = getState() as RootState
-
+  "distributor/fetchWarehouses",
+  async () => {
     return await request({
-      url: `/warehouse/get-warehouses/${id}`,
-      method: 'get',
-    })
-  },
-)
+      url: `/warehouse/get-warehouses`,
+      method: "get",
+      user: "distributor",
+    });
+  }
+);
+
+export const fetchWarehouse = createAsyncThunk(
+  "distributor/fetchWarehouse",
+  async (warehouse: string) => {
+    return await request({
+      url: `/warehouse/single/${warehouse}`,
+      method: "get",
+      user: "distributor",
+    });
+  }
+);
+
+export const fetchWarehouseOrders = createAsyncThunk(
+  "distributor/fetchWarehouseOrders",
+  async (warehouses: string) => {
+    return await request({
+      url: `/warehouse/orders?warehouse_ids=${warehouses}`,
+      method: "get",
+      user: "distributor",
+    });
+  }
+);
+
+export const fetchWarehouseOrder = createAsyncThunk(
+  "distributor/fetchWarehouseOrder",
+  async ({ order, warehouse }: { order: string; warehouse: string }) => {
+    return await request({
+      url: `/warehouse/order/${order}/${warehouse}`,
+      method: "get",
+      user: "distributor",
+    });
+  }
+);
+
+export const updateWarehouseOrder = createAsyncThunk(
+  "distributor/updateWarehouseOrder",
+  async ({
+    order,
+    warehouse,
+    status: order_status,
+  }: {
+    order: string;
+    warehouse: string;
+    status: string | null;
+  }) => {
+    return await request({
+      url: `/warehouse/update-order/${order}/${warehouse}`,
+      method: "put",
+      body: { order_status },
+      user: "distributor",
+    });
+  }
+);
+
+export const confirmOrderPickup = createAsyncThunk(
+  "distributor/confirmOrderPickup",
+  async (body: {
+    order_doc_id: string;
+    warehouse_id: string;
+    pickup_code: string;
+  }) => {
+    return await request({
+      url: "/warehouse/confirm-pickup",
+      method: "post",
+      body,
+      user: "distributor",
+    });
+  }
+);
 
 export const distributorSlice = createSlice({
-  name: 'distributor',
+  name: "distributor",
   initialState,
   reducers: {
     completeStep: (state, { payload }) => {
-      state.stepsCompleted = payload
+      state.stepsCompleted = payload;
     },
     updateDistributor: (state, { payload }: { payload: DistributorState }) => {
       for (const item in payload) {
         // @ts-ignore
-        state[item] = payload[item]
+        state[item] = payload[item];
       }
-      state.businessName = payload.businessName
+      state.businessName = payload.businessName;
     },
     addOwner: (state, { payload }: { payload: Owner }) => {
-      state.owners?.push(payload)
+      state.owners?.push(payload);
     },
     removeOwner: (state, { payload }: { payload: string }) => {
-      let owners = state.owners?.filter((owner) => owner.idImage !== payload)
-      state.owners = owners
+      let owners = state.owners?.filter((owner) => owner.idImage !== payload);
+      state.owners = owners;
     },
     resetWarehouseStamp: (state) => {
-      state.warehouseStamp = null
+      state.warehouseStamp = null;
     },
   },
   extraReducers(builder) {
     builder
-      // @ts-ignore
-      .addCase(signin.fulfilled, (state, { payload: { step } }) => {
-        if (step > 0) state.stepsCompleted = 3
+      // .addCase(signin.fulfilled, (state, { payload: { step } }) => {
+      //   if (step > 0) state.stepsCompleted = 3
+      // })
+      .addMatcher(isPendingAction("distributor"), (state, action) => {
+        state.loading = true;
       })
-      .addMatcher(isPendingAction('distributor'), (state, action) => {
-        state.loading = true
+      .addMatcher(isRejectedAction("distributor"), (state, action) => {
+        state.loading = false;
       })
-      .addMatcher(isRejectedAction('distributor'), (state, action) => {
-        state.loading = false
-      })
-      .addMatcher(isFulfilledAction('distributor'), (state, action) => {
+      .addMatcher(isFulfilledAction("distributor"), (state, action) => {
         switch (action.type) {
-          case 'distributor/submitDistributor/fulfilled':
-            state.stepsCompleted = 3
-            break
-          case 'distributor/addWarehouse/fulfilled':
-            state.warehouseStamp = action.payload.warehouse_id
-            break
-          case 'distributor/fetchWarehouses/fulfilled':
-            state.warehouses = action.payload.data
-            break
+          case "distributor/submitDistributor/fulfilled":
+            state.stepsCompleted = 3;
+            break;
+          case "distributor/addWarehouse/fulfilled":
+          case "distributor/editWarehouse/fulfilled":
+          case "distributor/manageWarehouse/fulfilled":
+          case "distributor/changeWarehouseManager/fulfilled":
+            state.warehouseStamp = new Date().getTime();
+            break;
+          case "distributor/fetchWarehouses/fulfilled":
+            state.warehouses = action.payload.data;
+            break;
+          case "distributor/fetchWarehouse/fulfilled":
+            state.warehouse = action.payload.data;
+            break;
+          case "distributor/fetchWarehouseOrder/fulfilled":
+          case "distributor/updateWarehouseOrder/fulfilled":
+            state.order = {
+              ...action.payload.data,
+              ...(action.payload.pickup_code && {
+                pickup_code: action.payload.pickup_code,
+              }),
+            };
+            break;
+          case "distributor/confirmOrderPickup/fulfilled":
+            state.order = action.payload.data;
+            state.warehouseStamp = new Date().getTime();
+            break;
+          case "distributor/fetchWarehouseOrders/fulfilled":
+            state.orders = action.payload.data;
+            break;
         }
 
-        state.loading = false
-      })
+        state.loading = false;
+      });
   },
-})
+});
 
 export const {
   completeStep,
@@ -151,6 +283,6 @@ export const {
   addOwner,
   removeOwner,
   resetWarehouseStamp,
-} = distributorSlice.actions
+} = distributorSlice.actions;
 
-export default distributorSlice.reducer
+export default distributorSlice.reducer;

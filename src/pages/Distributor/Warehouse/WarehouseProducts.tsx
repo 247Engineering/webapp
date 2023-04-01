@@ -1,43 +1,92 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import add from '../../../assets/images/add.svg'
-import search from '../../../assets/images/search.svg'
-import image from '../../../assets/images/image.svg'
+import add from "../../../assets/images/add.svg";
+import search from "../../../assets/images/search.svg";
+import image from "../../../assets/images/image.svg";
 
-import SortSelect from '../../../components/forms/SortSelect'
-import AppLayout from '../../../components/layouts/AppLayout'
-import TableLayout from '../../../components/tables/TableLayout'
-import TableFooter from '../../../components/tables/TableFooter'
+import SortSelect from "../../../components/forms/SortSelect";
+import AppLayout from "../../../components/layouts/AppLayout";
+import TableLayout from "../../../components/tables/TableLayout";
+import TableFooter from "../../../components/tables/TableFooter";
+import MultiSelectCheckbox from "../../../components/forms/MultiSelectCheckbox";
 
-import { fetchProducts } from '../../../store/features/product'
-import { AppDispatch, RootState } from '../../../store'
-import { ProductState } from '../../../types'
-import * as ROUTES from '../../../routes'
+import {
+  fetchProducts,
+  toggleDisableProducts,
+  deleteProducts,
+} from "../../../store/features/product";
+import { fetchWarehouses } from "../../../store/features/distributor";
+import { AppDispatch, RootState } from "../../../store";
+import { DistributorState, ProductState } from "../../../types";
+import * as ROUTES from "../../../routes";
 
 const WarehouseProducts = () => {
-  const navigate = useNavigate()
-  const { warehouse } = useParams()
+  const navigate = useNavigate();
+  const { warehouse } = useParams();
 
-  const dispatch = useDispatch<AppDispatch>()
-  const { products } = useSelector<RootState>(
-    ({ product }) => product,
-  ) as ProductState
+  const dispatch = useDispatch<AppDispatch>();
+  const { products, loading } = useSelector<RootState>(
+    ({ product }) => product
+  ) as ProductState;
+  const { warehouses } = useSelector<RootState>(
+    ({ distributor }) => distributor
+  ) as DistributorState;
 
-  const [sort, setSort] = useState('')
-  const [checked, setChecked] = useState(false)
-  const [open, setOpen] = useState(false)
+  const [sort, setSort] = useState("");
+  const [action, setAction] = useState("EDIT");
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+  const [open, setOpen] = useState(false);
+
+  const applyChange = () => {
+    switch (action) {
+      case "ENABLE":
+      case "DISABLE":
+        dispatch(
+          toggleDisableProducts({
+            onSuccess: () => dispatch(fetchProducts(warehouse as string)),
+            warehouse: warehouse as string,
+            change_status: action,
+            product_ids: checkedItems,
+          })
+        );
+        break;
+      case "DELETE":
+        dispatch(
+          deleteProducts({
+            onSuccess: () => dispatch(fetchProducts(warehouse as string)),
+            products: checkedItems,
+            warehouse: warehouse as string,
+          })
+        );
+        break;
+      default:
+        console.log("WIP");
+        break;
+    }
+  };
 
   useEffect(() => {
-    dispatch(fetchProducts())
-  }, [dispatch])
+    dispatch(fetchProducts(warehouse as string));
+    dispatch(fetchWarehouses());
+  }, [dispatch, warehouse]);
 
   return (
     <div className="h-full" onClick={() => setOpen(false)}>
       <AppLayout>
+        <MultiSelectCheckbox
+          items={warehouses || []}
+          type="warehouses"
+          isMultiSelect={false}
+          className="mb-4"
+          onChange={(warehouse) => {
+            navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS_FOR(warehouse));
+          }}
+          selected={warehouse}
+        />
         <header className="flex justify-between items-center">
-          <h1 className="h1 mb-2 text-black">Products</h1>
+          <h1 className="h1 text-black">Products</h1>
           <div className="relative" onClick={(e) => e.stopPropagation()}>
             <button
               className="button-add rounded-[10px] bg-orange text-white w-[2rem] h-[2rem]"
@@ -52,8 +101,8 @@ const WarehouseProducts = () => {
                   onClick={() =>
                     navigate(
                       ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCT_FORM_FOR(
-                        warehouse as string,
-                      ),
+                        warehouse as string
+                      )
                     )
                   }
                 >
@@ -70,8 +119,8 @@ const WarehouseProducts = () => {
           <div className="flex items-center mb-8">
             <SortSelect
               options={[
-                'Value - highest to lowest',
-                'Value - lowest to highest',
+                "Value - highest to lowest",
+                "Value - lowest to highest",
               ]}
               value={sort}
               onChange={(value) => setSort(value)}
@@ -88,12 +137,20 @@ const WarehouseProducts = () => {
             </button>
           </div>
           <div className="flex items-center mb-2">
-            <select className="select product-select mr-2">
-              <option value="1">Bulk edit</option>
-              <option value="2">Delete</option>
-              <option value="3">Disable</option>
+            <select
+              className="select product-select mr-2"
+              onChange={(e) => setAction(e.target.value)}
+            >
+              <option value="EDIT">Bulk edit</option>
+              <option value="DELETE">Delete</option>
+              <option value="DISABLE">Disable</option>
+              <option value="ENABLE">Enable</option>
             </select>
-            <button className="flex justify-center items-center bg-orange text-white rounded-[10px] px-4 py-2 font-[700] text-[0.75rem] leading-[1rem]">
+            <button
+              className="flex justify-center items-center bg-orange text-white rounded-[10px] px-4 py-2 font-[700] text-[0.75rem] leading-[1rem]"
+              onClick={applyChange}
+              disabled={loading}
+            >
               Apply
             </button>
           </div>
@@ -104,34 +161,55 @@ const WarehouseProducts = () => {
                   <div className="flex justify-center items-center">
                     <input
                       type="checkbox"
-                      checked={checked}
+                      checked={checkedItems.length === products.length}
                       onChange={() => {
-                        setChecked(!checked)
+                        setCheckedItems(
+                          checkedItems.length === products.length
+                            ? []
+                            : products.map((p) => p._id)
+                        );
                       }}
                       className="h-[0.938rem] w-[0.938rem]"
                     />
                   </div>
                 </th>
                 <th className="w-[11.938rem]">Products</th>
+                <th className="w-[11.188rem]">Price</th>
                 <th className="w-[11.188rem]">SKU</th>
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
+              {products?.map((product) => (
                 <tr key={product.sku} className="text-[0.75rem] leading-[1rem]">
                   <td className="w-[2.25rem]">
                     <div className="flex justify-center items-center">
                       <input
                         type="checkbox"
-                        checked={checked}
+                        checked={checkedItems.includes(product._id)}
                         onChange={() => {
-                          setChecked(!checked)
+                          setCheckedItems((prevItems) =>
+                            prevItems.includes(product._id)
+                              ? prevItems.filter(
+                                  (prevItem) => prevItem !== product._id
+                                )
+                              : [...prevItems, product._id]
+                          );
                         }}
                         className="h-[0.938rem] w-[0.938rem]"
                       />
                     </div>
                   </td>
-                  <td className="w-[11.938rem] px-4 py-2">
+                  <td
+                    className="w-[11.938rem] px-4 py-2"
+                    onClick={() => {
+                      navigate(
+                        ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCT_EDIT_FOR(
+                          warehouse as string,
+                          product._id
+                        )
+                      );
+                    }}
+                  >
                     <div className="flex items-center">
                       <img
                         src={product.images[0] || image}
@@ -143,18 +221,21 @@ const WarehouseProducts = () => {
                       </p>
                     </div>
                   </td>
+                  <td className="w-[11.188rem] p-4">
+                    N{product.price.toLocaleString()}
+                  </td>
                   <td className="w-[11.188rem] p-4">{product.sku}</td>
                 </tr>
               ))}
             </tbody>
           </TableLayout>
           <div className="pl-[2.25rem]">
-            <TableFooter />
+            <TableFooter total={products?.length || 0} />
           </div>
         </section>
       </AppLayout>
     </div>
-  )
-}
+  );
+};
 
-export default WarehouseProducts
+export default WarehouseProducts;

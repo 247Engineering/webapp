@@ -1,19 +1,19 @@
-import React, { useState, useReducer, useEffect, useMemo } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState, useReducer, useEffect, useMemo } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import AppLayout from '../../../components/layouts/AppLayout'
-import ButtonSubmit from '../../../components/forms/ButtonSubmit'
-import Input from '../../../components/forms/Input'
-import Checkbox from '../../../components/forms/Checkbox'
-import BackButton from '../../../components/forms/BackButton'
-import DragAndDrop from '../../../components/forms/DragAndDrop'
-import WeightInput from '../../../components/forms/WeightInput'
-import SearchSelect from '../../../components/forms/SearchSelect'
+import AppLayout from "../../../components/layouts/AppLayout";
+import ButtonSubmit from "../../../components/forms/ButtonSubmit";
+import Input from "../../../components/forms/Input";
+import Checkbox from "../../../components/forms/Checkbox";
+import BackButton from "../../../components/forms/BackButton";
+import DragAndDrop from "../../../components/forms/DragAndDrop";
+import WeightInput from "../../../components/forms/WeightInput";
+import SearchSelect from "../../../components/forms/SearchSelect";
 
-import { productImageReducer } from '../../../helpers/miscellaneous'
-import { ProductState, WarehouseProductProps } from '../../../types'
-import { AppDispatch, RootState } from '../../../store'
+import { productImageReducer } from "../../../helpers/miscellaneous";
+import { ProductState, WarehouseProductProps } from "../../../types";
+import { AppDispatch, RootState } from "../../../store";
 import {
   addProduct,
   clearSearchResult,
@@ -22,21 +22,23 @@ import {
   fetchSubCategories,
   reset,
   searchProducts,
-} from '../../../store/features/product'
-import * as ROUTES from '../../../routes'
+  fetchSingleProduct,
+  editProduct,
+} from "../../../store/features/product";
+import * as ROUTES from "../../../routes";
 
 const WarehouseProduct = ({
   isEdit,
   header,
   subHeader,
 }: WarehouseProductProps) => {
-  const navigate = useNavigate()
-  const { warehouse } = useParams()
+  const navigate = useNavigate();
+  const { warehouse, product: productId } = useParams();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const product = useSelector<RootState>(
-    ({ product }) => product,
-  ) as ProductState
+    ({ product }) => product
+  ) as ProductState;
 
   const {
     categories,
@@ -45,83 +47,122 @@ const WarehouseProduct = ({
     searchResult,
     loading,
     productStamp,
-  } = product
+    viewedProduct,
+  } = product;
 
-  const [dropdown, setDropdown] = useState(false)
-  const [name, setName] = useState(product.name || '')
-  const [description, setDescription] = useState(product.description || '')
-  const [price, setPrice] = useState(product.price || 0)
+  const [dropdown, setDropdown] = useState(false);
+  const [name, setName] = useState(viewedProduct?.name || "");
+  const [description, setDescription] = useState(
+    viewedProduct?.description || ""
+  );
+  const [price, setPrice] = useState(viewedProduct?.price || 0);
   const [discountedPrice, setDiscountedPrice] = useState(
-    product.discountedPrice || 0,
-  )
-  const [costPerItem, setCostPerItem] = useState(product.costPerItem || 0)
+    viewedProduct?.discount_price || 0
+  );
+  const [costPerItem, setCostPerItem] = useState(
+    viewedProduct?.cost_per_item || 0
+  );
   const [trackQuantity, setTrackQuantity] = useState(
-    product.trackQuantity || false,
-  )
-  const [quantity, setQuantity] = useState(product.quantity || 0)
-  const [weightValue, setWeightValue] = useState(product.weightValue || 0)
+    viewedProduct?.trackQuantity || false
+  );
+  const [quantity, setQuantity] = useState(viewedProduct?.quantity || 0);
+  const [minQuantity, setMinQuantity] = useState(
+    viewedProduct?.min_quantity || 10
+  );
+  const [weightValue, setWeightValue] = useState(
+    viewedProduct?.weight?.value || 0
+  );
   const [weightUnit, setWeightUnit] = useState(
-    String(product.weightUnit) || '0',
-  )
-  const [category, setCategory] = useState(product.category || '')
-  const [subCategory, setSubCategory] = useState(product.subCategory || '')
-  const [manufacturer, setManufacturer] = useState(product.manufacturer || '')
+    String(viewedProduct?.weight?.type) || "0"
+  );
+  const [category, setCategory] = useState(viewedProduct?.category || "");
+  const [subCategory, setSubCategory] = useState(
+    viewedProduct?.sub_category || ""
+  );
+  const [manufacturer, setManufacturer] = useState(
+    viewedProduct?.manufacturer || ""
+  );
 
   const [images, dispatchImage] = useReducer(
     productImageReducer,
-    product.images || [],
-  )
+    viewedProduct?.images || []
+  );
 
   const addProductImage = (image: any) => {
     dispatchImage({
-      type: 'add',
+      type: "add",
       payload: image,
-    })
-  }
+    });
+  };
 
   const handleNameSelect = (option: any) => {
-    setName(option.value)
+    setName(option.value);
     if (option.suggestedOption) {
-      setDescription(option.description)
-      setPrice(option.price)
-      setDiscountedPrice(option.discount_price)
-      setCostPerItem(option.cost_per_item)
-      setQuantity(option.quantity)
-      setWeightValue(option.weight.value)
-      setWeightUnit(String(option.weight.type))
-      setCategory(option.category)
-      setSubCategory(option.sub_category)
-      setManufacturer(option.manufacturer)
+      setDescription(option.description);
+      setPrice(option.price);
+      setDiscountedPrice(option.discount_price);
+      setCostPerItem(option.cost_per_item);
+      setQuantity(option.quantity);
+      setMinQuantity(option.min_quantity);
+      setWeightValue(option?.weight?.value || 0);
+      setWeightUnit(String(option?.weight?.type) || "0");
+      setCategory(option.category);
+      setSubCategory(option.sub_category);
+      setManufacturer(option.manufacturer);
       dispatchImage({
-        type: 'replace',
+        type: "replace",
         payload: option.images,
-      })
+      });
     }
-    dispatch(clearSearchResult())
-  }
+    dispatch(clearSearchResult());
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    dispatch(
-      addProduct({
-        name,
-        description,
-        price,
-        discount_price: discountedPrice,
-        cost_per_item: costPerItem,
-        sku: product.sku as string,
-        quantity,
-        weight: {
-          type: +weightUnit,
-          value: weightValue,
-        },
-        category,
-        sub_category: subCategory,
-        manufacturer: manufacturer,
-        images,
-      }),
-    )
-  }
+    e.preventDefault();
+    isEdit
+      ? dispatch(
+          editProduct({
+            name,
+            description,
+            price,
+            ...(discountedPrice && { discount_price: discountedPrice }),
+            cost_per_item: costPerItem,
+            ...(minQuantity && { min_quantity: +minQuantity }),
+            quantity,
+            weight: {
+              type: +weightUnit,
+              value: weightValue,
+            },
+            category,
+            sub_category: subCategory,
+            manufacturer: manufacturer,
+            images,
+            warehouse_id: warehouse as string,
+            product: productId as string,
+          })
+        )
+      : dispatch(
+          addProduct({
+            name,
+            description,
+            price,
+            ...(discountedPrice && { discount_price: discountedPrice }),
+            cost_per_item: costPerItem,
+            sku: product.sku as string,
+            min_quantity: +minQuantity,
+            quantity,
+            weight: {
+              type: +weightUnit,
+              value: weightValue,
+            },
+            category,
+            sub_category: subCategory,
+            manufacturer: manufacturer,
+            images,
+            warehouse_id: warehouse as string,
+          })
+        );
+  };
 
   const canSubmit = useMemo(
     () =>
@@ -129,7 +170,6 @@ const WarehouseProduct = ({
         name,
         description,
         price,
-        discountedPrice,
         costPerItem,
         quantity,
         weightValue,
@@ -141,33 +181,57 @@ const WarehouseProduct = ({
       name,
       description,
       price,
-      discountedPrice,
       costPerItem,
       quantity,
       weightValue,
       category,
       subCategory,
       manufacturer,
-    ],
-  )
+    ]
+  );
 
   useEffect(() => {
-    dispatch(fetchCategories())
-    dispatch(fetchSubCategories())
-    dispatch(fetchManufacturers())
-  }, [dispatch])
+    dispatch(fetchCategories());
+    dispatch(fetchSubCategories());
+    dispatch(fetchManufacturers());
+    if (productId) {
+      dispatch(fetchSingleProduct(productId));
+    }
+  }, [dispatch, productId]);
 
   useEffect(() => {
     if (productStamp)
-      navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS_FOR(warehouse as string))
+      navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCTS_FOR(warehouse as string));
 
     return () => {
-      dispatch(reset())
+      dispatch(reset());
+    };
+  }, [dispatch, navigate, productStamp, warehouse]);
+
+  useEffect(() => {
+    if (viewedProduct) {
+      setName(viewedProduct.name);
+      setDescription(viewedProduct.description);
+      setPrice(viewedProduct.price);
+      setDiscountedPrice(viewedProduct.discount_price || 0);
+      setCostPerItem(viewedProduct.cost_per_item);
+      setTrackQuantity(viewedProduct?.trackQuantity || true);
+      setQuantity(viewedProduct.quantity);
+      setMinQuantity(viewedProduct.min_quantity);
+      setWeightValue(viewedProduct.weight?.value || 0);
+      setWeightUnit(String(viewedProduct.weight?.type) || "0");
+      setCategory(viewedProduct.category);
+      setSubCategory(viewedProduct.sub_category);
+      setManufacturer(viewedProduct.manufacturer);
+      dispatchImage({
+        type: "replace",
+        payload: viewedProduct.images,
+      });
     }
-  }, [dispatch, navigate, productStamp, warehouse])
+  }, [viewedProduct]);
 
   return (
-    <div className="" onClick={() => setDropdown(false)}>
+    <div className="h-full" onClick={() => setDropdown(false)}>
       <AppLayout>
         <header>
           <BackButton text="Products" />
@@ -185,7 +249,7 @@ const WarehouseProduct = ({
                 setDropdown={setDropdown}
                 value={name}
                 onChange={handleNameSelect}
-                placeholder="Search product name"
+                placeholder={name || "Search product name"}
                 itemImage
                 addNew
                 options={searchResult.map((r) => ({
@@ -290,7 +354,7 @@ const WarehouseProduct = ({
             <div className="mb-4">
               <Input
                 label="SKU"
-                value={product.sku}
+                value={viewedProduct?.sku || product.sku}
                 onChange={() => {}}
                 type="text"
                 disabled
@@ -312,6 +376,15 @@ const WarehouseProduct = ({
                 onChange={setQuantity}
                 type="number"
                 placeholder="Enter quantity"
+              />
+            </div>
+            <div className="mb-4">
+              <Input
+                label="Minimum order quantity"
+                value={minQuantity}
+                onChange={setMinQuantity}
+                type="number"
+                placeholder="Enter minimum order quantity"
               />
             </div>
             <div className="mb-4">
@@ -380,7 +453,7 @@ const WarehouseProduct = ({
         </section>
       </AppLayout>
     </div>
-  )
-}
+  );
+};
 
-export default WarehouseProduct
+export default WarehouseProduct;

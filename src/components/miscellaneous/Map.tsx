@@ -3,19 +3,27 @@ import GoogleMapReact from 'google-map-react'
 import redDot from '../../assets/images/red-dot.svg'
 import { MapProps } from '../../types'
 
-const Marker = ({ lat, lng }: { lat: number; lng: number }) => (
-  <img src={redDot} alt="marker" />
-)
+const Marker = ({
+  lat,
+  lng,
+  img,
+}: {
+  lat: number
+  lng: number
+  img?: string
+}) => <img src={img || redDot} alt="marker" />
 
-const Map = ({ center, lat, lng }: MapProps) => {
+const Map = ({ center, lat, lng, markers }: MapProps) => {
   return (
     <>
       <GoogleMapReact
         bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_KEY as string }}
         defaultCenter={center}
-        defaultZoom={15}
+        defaultZoom={10}
       >
-        <Marker lat={lat} lng={lng} />
+        {markers?.map(({ lat, lng, img }) => (
+          <Marker key={img} lat={lat} lng={lng} img={img} />
+        ))}
       </GoogleMapReact>
     </>
   )

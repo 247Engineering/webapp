@@ -34,8 +34,9 @@ const LocationInput = ({
     geocodeByAddress(address)
       .then((results) => getLatLng(results[0]))
       .then((latLng) => {
-        setLocation({ latitude: latLng.lat, longitude: latLng.lng })
+        setDropdown(false)
         setAddress(address)
+        setLocation({ latitude: latLng.lat, longitude: latLng.lng })
       })
       .catch((error) => {
         setError(true)

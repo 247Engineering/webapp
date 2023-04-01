@@ -28,7 +28,7 @@ const ForgotPassword = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(requestPasswordReset({ email }))
+    dispatch(requestPasswordReset({ email, user: "distributor" }))
   }
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const ForgotPassword = () => {
               label="Email address"
               value={email}
               onChange={setEmail}
-              type="text"
+              type="email"
             />
           </div>
           <ButtonSubmit

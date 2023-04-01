@@ -25,8 +25,7 @@ const AccountSelect = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    //@ts-ignore
-    navigate(ROUTES[type.toUpperCase()].SIGNUP)
+    navigate(ROUTES[type.toUpperCase() as keyof typeof ROUTES].SIGNIN)
   }
 
   return (
@@ -48,8 +47,20 @@ const AccountSelect = () => {
             img={distributor}
             imgChecked={distributorChecked}
             textPrimary="Distributor"
-            textSecondary="Manage warehouse inventory and distribution"
+            textSecondary="Manage warehouses and operations"
             checked={type === 'distributor'}
+            onChange={handleChange}
+            className="mb-4"
+          />
+          <OnboardingRadio
+            id="warehouse"
+            name="account-select"
+            value="warehouse"
+            img={distributor}
+            imgChecked={distributorChecked}
+            textPrimary="Warehouse"
+            textSecondary="Manage inventory and orders"
+            checked={type === 'warehouse'}
             onChange={handleChange}
             className="mb-4"
           />
@@ -66,14 +77,14 @@ const AccountSelect = () => {
             className="mb-4"
           />
           <OnboardingRadio
-            id="delivery"
+            id="logistics"
             name="account-select"
-            value="delivery"
+            value="logistics"
             img={delivery}
             imgChecked={deliveryChecked}
             textPrimary="Delivery Rider"
             textSecondary="Deliver goods to appropriate destinations"
-            checked={type === 'delivery'}
+            checked={type === 'logistics'}
             onChange={handleChange}
             className="mb-6"
           />

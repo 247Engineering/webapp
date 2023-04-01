@@ -1,31 +1,32 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
-import AppLayout from '../../components/layouts/AppLayout'
-import Input from '../../components/forms/Input'
-import DragAndDrop from '../../components/forms/DragAndDrop'
-import PhoneNumberInput from '../../components/forms/PhoneNumberInput'
+import AppLayout from "../../components/layouts/AppLayout";
+import Input from "../../components/forms/Input";
+import DragAndDrop from "../../components/forms/DragAndDrop";
+import PhoneNumberInput from "../../components/forms/PhoneNumberInput";
 
-import { AppDispatch } from '../../store'
-import { addOwner, completeStep } from '../../store/features/distributor'
+import { AppDispatch } from "../../store";
+import { addOwner, completeStep } from "../../store/features/distributor";
 
 const BusinessInfo = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
 
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [callingCode, setCallingCode] = useState('+234')
-  const [mobile, setMobile] = useState('')
-  const [email, setEmail] = useState('')
-  const [file, setFile] = useState<string | ArrayBuffer | null>('')
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [callingCode, setCallingCode] = useState("+234");
+  const [mobile, setMobile] = useState("");
+  const [email, setEmail] = useState("");
+  const [file, setFile] = useState<string | ArrayBuffer | null>("");
+  const [isValidMobile, setIsValidMobile] = useState(true);
 
   const handleSubmit = (
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
   ) => {
-    e.preventDefault()
+    e.preventDefault();
     dispatch(
       addOwner({
         firstName,
@@ -33,35 +34,49 @@ const BusinessInfo = () => {
         phoneNumber: callingCode + mobile,
         email,
         idImage: file as string,
-      }),
-    )
-    dispatch(completeStep(2))
-    navigate(-1)
-  }
+      })
+    );
+    dispatch(completeStep(2));
+    navigate(-1);
+  };
 
   const canSubmit = useMemo(
     () =>
-      [firstName, lastName, callingCode, mobile, email, file].every(
-        (data) => !!data,
-      ),
-    [firstName, lastName, callingCode, mobile, email, file],
-  )
+      [
+        firstName,
+        lastName,
+        callingCode,
+        mobile,
+        email,
+        file,
+        isValidMobile,
+      ].every((data) => !!data),
+    [firstName, lastName, callingCode, mobile, email, file, isValidMobile]
+  );
 
   useEffect(() => {
     if (
       [firstName, lastName, callingCode, mobile, email, file].some(
-        (data) => !!data,
+        (data) => !!data
       )
     )
-      dispatch(completeStep(0.5))
-  }, [firstName, lastName, callingCode, mobile, email, file, dispatch])
+      dispatch(
+        completeStep(
+          [firstName, lastName, callingCode, mobile, email, file].every(
+            (data) => !!data
+          )
+            ? 2
+            : 1.5
+        )
+      );
+  }, [firstName, lastName, callingCode, mobile, email, file, dispatch]);
 
   return (
     <>
       <AppLayout
         alternate
         onClose={() => {
-          navigate(-1)
+          navigate(-1);
         }}
       >
         <header>
@@ -98,6 +113,7 @@ const BusinessInfo = () => {
                 setCode={setCallingCode}
                 setMobile={setMobile}
                 mobile={mobile}
+                setIsValid={setIsValidMobile}
               />
             </div>
             <div className="mb-4">
@@ -105,7 +121,7 @@ const BusinessInfo = () => {
                 label="Email address"
                 value={email}
                 onChange={setEmail}
-                type="text"
+                type="email"
               />
             </div>
             <DragAndDrop
@@ -123,7 +139,7 @@ const BusinessInfo = () => {
               <button
                 className="button button-small button-primary button-secondary text-orange"
                 onClick={() => {
-                  navigate(-1)
+                  navigate(-1);
                 }}
                 type="button"
               >
@@ -134,7 +150,7 @@ const BusinessInfo = () => {
         </section>
       </AppLayout>
     </>
-  )
-}
+  );
+};
 
-export default BusinessInfo
+export default BusinessInfo;

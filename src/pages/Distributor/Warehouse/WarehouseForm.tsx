@@ -1,51 +1,54 @@
-import React, { useState, useMemo, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useMemo, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import AppLayout from '../../../components/layouts/AppLayout'
-import Input from '../../../components/forms/Input'
-import ButtonSubmit from '../../../components/forms/ButtonSubmit'
-import LocationInput from '../../../components/forms/LocationInput'
+import AppLayout from "../../../components/layouts/AppLayout";
+import Input from "../../../components/forms/Input";
+import ButtonSubmit from "../../../components/forms/ButtonSubmit";
+import LocationInput from "../../../components/forms/LocationInput";
 
-import { DistributorState, Address } from '../../../types'
-import { AppDispatch, RootState } from '../../../store'
+import { DistributorState, Address } from "../../../types";
+import { AppDispatch, RootState } from "../../../store";
 import {
   addWarehouse,
   resetWarehouseStamp,
-} from '../../../store/features/distributor'
-import * as ROUTES from '../../../routes'
+} from "../../../store/features/distributor";
+import * as ROUTES from "../../../routes";
+
+const regex = new RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
 
 const WarehouseForm = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const { loading, warehouseStamp } = useSelector<RootState>(
-    ({ distributor }) => distributor,
-  ) as DistributorState
+    ({ distributor }) => distributor
+  ) as DistributorState;
 
-  const [warehouse, setWarehouse] = useState('')
-  const [location, setLocation] = useState<Address | null>(null)
-  const [locationDropdown, setLocationDropdown] = useState(false)
-  const [email, setEmail] = useState('')
+  const [warehouse, setWarehouse] = useState("");
+  const [location, setLocation] = useState<Address | null>(null);
+  const [locationDropdown, setLocationDropdown] = useState(false);
+  const [email, setEmail] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     dispatch(
-      addWarehouse({ name: warehouse, location: location as Address, email }),
-    )
-  }
+      addWarehouse({ name: warehouse, location: location as Address, email })
+    );
+  };
 
   const canSubmit = useMemo(
-    () => [warehouse, location, email].every((data) => !!data),
-    [warehouse, location, email],
-  )
+    () =>
+      [warehouse, location, email, regex.test(email)].every((data) => !!data),
+    [warehouse, location, email]
+  );
 
   useEffect(() => {
-    if (warehouseStamp) navigate(ROUTES.DISTRIBUTOR.WAREHOUSES)
+    if (warehouseStamp) navigate(ROUTES.DISTRIBUTOR.WAREHOUSES);
     return () => {
-      dispatch(resetWarehouseStamp())
-    }
-  })
+      dispatch(resetWarehouseStamp());
+    };
+  });
 
   return (
     <div onClick={() => setLocationDropdown(false)} className="h-full">
@@ -81,7 +84,7 @@ const WarehouseForm = () => {
                 label="Warehouse manager email"
                 value={email}
                 onChange={setEmail}
-                type="text"
+                type="email"
               />
             </div>
             <ButtonSubmit
@@ -95,7 +98,7 @@ const WarehouseForm = () => {
         </section>
       </AppLayout>
     </div>
-  )
-}
+  );
+};
 
-export default WarehouseForm
+export default WarehouseForm;

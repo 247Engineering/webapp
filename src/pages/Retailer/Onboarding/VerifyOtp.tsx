@@ -1,17 +1,73 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from "react";
+import {
+  useNavigate,
+  useSearchParams,
+  createSearchParams,
+} from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import ButtonSubmit from '../../../components/forms/ButtonSubmit'
-import Input from '../../../components/forms/Input'
-import LandingLayout from '../../../components/layouts/LandingLayout'
+import ButtonSubmit from "../../../components/forms/ButtonSubmit";
+import Input from "../../../components/forms/Input";
+import LandingLayout from "../../../components/layouts/LandingLayout";
+
+import { useAuth } from "../../../hooks/useAuth";
+import { RootState, AppDispatch } from "../../../store";
+import { AuthContextType, AuthState } from "../../../types";
+import {
+  validateOtp,
+  validatePasswordResetOtp,
+  passwordStampReset,
+} from "../../../store/features/auth";
+import * as ROUTES from "../../../routes";
 
 const VerifyOtp = () => {
-  const navigate = useNavigate()
-  const [otp, setOtp] = useState('')
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, id, phone, resetPasswordStamp } = useSelector<RootState>(
+    ({ auth }) => auth
+  ) as AuthState;
+
+  const { login } = useAuth() as AuthContextType;
+  const passwordResetToken = searchParams.get("token");
+
+  const [otp, setOtp] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+    if (!passwordResetToken) {
+      dispatch(validateOtp({ phone: phone as string, otp, user: "retailer" }));
+    } else {
+      dispatch(
+        validatePasswordResetOtp({
+          reset_token: passwordResetToken as string,
+          otp,
+          user: "retailer",
+        })
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (id) login({ id, type: "retailer" });
+  }, [id, login]);
+
+  useEffect(() => {
+    if (resetPasswordStamp) {
+      navigate({
+        pathname: ROUTES.AUTH.RESET_PASSWORD,
+        search: createSearchParams({
+          token: passwordResetToken as string,
+          user: "retailer",
+        }).toString(),
+      });
+    }
+
+    return () => {
+      dispatch(passwordStampReset());
+    };
+  }, [resetPasswordStamp, passwordResetToken, dispatch, navigate]);
 
   return (
     <LandingLayout>
@@ -25,7 +81,7 @@ const VerifyOtp = () => {
         <form onSubmit={handleSubmit}>
           <div className="mb-[12.75rem]">
             <Input
-              label="OTP (6 Digits)"
+              label="OTP (4 Digits)"
               value={otp}
               onChange={setOtp}
               type="text"
@@ -36,12 +92,13 @@ const VerifyOtp = () => {
             text="Confirm OTP"
             onClick={handleSubmit}
             className="mb-4"
-            disabled
+            disabled={loading || !otp}
+            loading={loading}
           />
           <ButtonSubmit
             text="Cancel"
             onClick={() => {
-              navigate(-1)
+              navigate(-1);
             }}
             className="bg-[#FFF5F6] text-[#E53451]"
             type="button"
@@ -49,7 +106,7 @@ const VerifyOtp = () => {
         </form>
       </section>
     </LandingLayout>
-  )
-}
+  );
+};
 
-export default VerifyOtp
+export default VerifyOtp;

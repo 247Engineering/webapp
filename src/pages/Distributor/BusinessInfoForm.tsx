@@ -1,47 +1,50 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import { Country, State } from 'country-state-city'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect, useMemo } from "react";
+import { Country, State } from "country-state-city";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import AppLayout from '../../components/layouts/AppLayout'
-import Input from '../../components/forms/Input'
-import DragAndDrop from '../../components/forms/DragAndDrop'
-import ButtonSubmit from '../../components/forms/ButtonSubmit'
+import AppLayout from "../../components/layouts/AppLayout";
+import Input from "../../components/forms/Input";
+import DragAndDrop from "../../components/forms/DragAndDrop";
+import ButtonSubmit from "../../components/forms/ButtonSubmit";
 
-import { AppDispatch, RootState } from '../../store'
-import { DistributorState } from '../../types'
-import { completeStep, updateDistributor } from '../../store/features/distributor'
-import * as ROUTES from "../../routes"
+import { AppDispatch, RootState } from "../../store";
+import { DistributorState } from "../../types";
+import {
+  completeStep,
+  updateDistributor,
+} from "../../store/features/distributor";
+import * as ROUTES from "../../routes";
 
 const BusinessInfo = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
 
   const distributor = useSelector<RootState>(
-    ({ distributor }) => distributor,
-  ) as DistributorState
+    ({ distributor }) => distributor
+  ) as DistributorState;
 
-  const [business, setBusiness] = useState(distributor.businessName || '')
-  const [address, setAddress] = useState(distributor.address || '')
-  const [city, setCity] = useState(distributor.city || '')
-  const [country, setCountry] = useState(distributor.country || '')
-  const [state, setState] = useState(distributor.state || '')
+  const [business, setBusiness] = useState(distributor.businessName || "");
+  const [address, setAddress] = useState(distributor.address || "");
+  const [city, setCity] = useState(distributor.city || "");
+  const [country, setCountry] = useState(distributor.country || "");
+  const [state, setState] = useState(distributor.state || "");
   const [cac, setCac] = useState<string | ArrayBuffer | null>(
-    distributor.cac || '',
-  )
+    distributor.cac || ""
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    dispatch(completeStep(1))
-    navigate(ROUTES.DISTRIBUTOR.ACCOUNT_SETUP)
-  }
+    e.preventDefault();
+    dispatch(completeStep(1));
+    navigate(ROUTES.DISTRIBUTOR.ACCOUNT_SETUP);
+  };
 
   const canSubmit = useMemo(
     () =>
       [business, address, city, country, state, cac].every((data) => !!data),
-    [business, address, city, country, state, cac],
-  )
+    [business, address, city, country, state, cac]
+  );
 
   useEffect(() => {
     if ([business, address, city, country, state, cac].some((data) => !!data)) {
@@ -53,18 +56,24 @@ const BusinessInfo = () => {
           country,
           state,
           cac: cac as string,
-        }),
-      )
-      dispatch(completeStep(0.5))
+        })
+      );
+      dispatch(
+        completeStep(
+          [business, address, city, country, state, cac].every((data) => !!data)
+            ? 1
+            : 0.5
+        )
+      );
     }
-  }, [business, address, city, country, state, cac, dispatch])
+  }, [business, address, city, country, state, cac, dispatch]);
 
   return (
     <>
       <AppLayout
         alternate
         onClose={() => {
-          navigate(-1)
+          navigate(-1);
         }}
       >
         <header>
@@ -135,7 +144,7 @@ const BusinessInfo = () => {
         </section>
       </AppLayout>
     </>
-  )
-}
+  );
+};
 
-export default BusinessInfo
+export default BusinessInfo;

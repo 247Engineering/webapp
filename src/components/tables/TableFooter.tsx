@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react";
 
-const TableFooter = () => {
+const TableFooter = ({ total }: { total: number }) => {
   return (
     <p className="mt-2 py-5 px-4 text-[0.75rem] leading-[1rem] text-black-100">
-      Showing 1-10 of 30 items
+      Showing {total ? 1 : 0}-{total} of {total} items
     </p>
-  )
-}
+  );
+};
 
-export default TableFooter
+export default TableFooter;

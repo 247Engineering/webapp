@@ -43,7 +43,7 @@ body,
 .textarea {
   display: block;
   width: 100%;
-  padding: 0.625rem;
+  padding: 0.875rem 0.5rem;
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 8px;
   font-size: 0.875rem;
@@ -84,7 +84,7 @@ textarea:focus-visible {
 }
 
 select {
-  background: url(../images/arrow-down.svg) 92% center no-repeat;
+  background: url(../images/arrow-down.svg) 95% center no-repeat;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -319,7 +319,7 @@ td:not(.rdp-cell) {
 
 /* react-toastify */
 .Toastify__toast--success {
-  background-color: #e34b31 !important;
+  background-color: #80CBA6 !important;
   font-weight: 700 !important;
   font-size: 0.75rem !important;
   line-height: 1rem !important;
@@ -335,3 +335,81 @@ td:not(.rdp-cell) {
   color: white !important;
   font-family: "Inter", sans-serif !important;
 }
+
+.icon-progress-wrapper {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.icon-progress-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+}
+
+.icon-progress-item:not(.icon-progress-item:first-child)::before {
+  position: absolute;
+  content: "";
+  border-bottom: 4px solid #edeff2;
+  width: 100%;
+  top: 50%;
+  left: -50%;
+  z-index: 2;
+}
+
+.icon-progress-item:not(.icon-progress-item:last-child)::after {
+  position: absolute;
+  content: "";
+  border-bottom: 4px solid #edeff2;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+}
+
+.icon-progress-item .step-counter {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ccc;
+  margin-bottom: 6px;
+}
+
+.icon-progress-item.active {
+  font-weight: bold;
+}
+
+.icon-progress-item.completed .step-counter {
+  background-color: #e34b31;
+}
+
+.icon-progress-item.completed::after {
+  position: absolute;
+  content: "";
+  border-bottom: 4px solid #e34b31;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+}
+
+/* .icon-progress-item:first-child::before {
+  content: none;
+}
+
+.icon-progress-item:last-child::after {
+  content: none;
+} */
