@@ -124,8 +124,8 @@ const OrderPrompt = () => {
                   img: deliveryMarker,
                 },
                 {
-                  lat: order?.location?.latitude || 9.0765,
-                  lng: order?.location?.longitude || 7.3986,
+                  lat: order?.warehouse_details?.location?.latitude || 9.0765,
+                  lng: order?.warehouse_details?.location?.longitude || 7.3986,
                   img: warehouseMarker,
                 },
                 {

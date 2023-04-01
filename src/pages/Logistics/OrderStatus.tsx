@@ -125,7 +125,7 @@ const OrderStatus = () => {
             delivery_code: otp,
             onSuccess: () => {
               toast.success("delivery completed");
-              clearOrder(() => navigate(ROUTES.LOGISTICS.DASHBOARD))
+              clearOrder(() => navigate(ROUTES.LOGISTICS.DASHBOARD));
             },
           })
         ),
@@ -195,7 +195,10 @@ const OrderStatus = () => {
                   </div>
                   <div className="w-full mb-6 flex justify-center">
                     <p className="text-[1.25rem] leading-[1.75rem] text-center w-[90%]">
-                      365 Adeyemo Alakija,Victoria Island
+                      {["PICKED", "RT_DELIVERED"].includes(orderStatus)
+                        ? order?.warehouse_location
+                            ?.warehouse_formatted_address || "N/A"
+                        : order?.retailer_formatted_address || "N/A"}
                     </p>
                   </div>
                   <div className="py-[0.969rem] px-[1.313rem] bg-grey rounded-[12px] flex justify-between items-center mb-4">
@@ -209,8 +212,10 @@ const OrderStatus = () => {
                         alt="warehouse"
                         className="mr-[0.604rem]"
                       />
-                      <p className="text-[0.875rem] leading-[1.25rem]">
-                        Femadons Victoria Island
+                      <p className="text-[0.875rem] leading-[1.25rem] max-w-[10.875rem]">
+                        {["PICKED", "RT_DELIVERED"].includes(orderStatus)
+                          ? order?.warehouse_location?.name || "N/A"
+                          : order?.retailer_name || "N/A"}
                       </p>
                     </div>
                     <div className="flex items-center">
