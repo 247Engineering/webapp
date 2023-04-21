@@ -5,7 +5,7 @@ import UnauthedLayout from "../components/layouts/UnauthedLayout";
 
 import AccountSelect from "../pages/AccountSelect";
 import ResetPassword from "../pages/ResetPassword";
-// import Current from "../pages/Logistics/Summary";
+// import Current from "../pages/Logistics/OrderStatus";
 
 import {
   unAuthedDistributorRoutes,

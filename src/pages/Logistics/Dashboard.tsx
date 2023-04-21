@@ -5,12 +5,13 @@ import { io, Socket } from "socket.io-client";
 import { toast } from "react-toastify";
 
 import noOrders from "../../assets/images/no-orders.svg";
+import chevron from "../../assets/images/chevron.svg";
 
 import AppLayout from "../../components/layouts/AppLayout";
 
 import { AppDispatch, RootState } from "../../store";
 import { LogisticsState } from "../../types";
-import { setOrder } from "../../store/features/logistics";
+import { setOrder, fetchBalance } from "../../store/features/logistics";
 import * as ROUTES from "../../routes";
 import { refreshToken } from "../../helpers/request";
 
@@ -22,29 +23,33 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { order } = useSelector<RootState>(
-    ({ product }) => product
+  const { order, balance } = useSelector<RootState>(
+    ({ logistics }) => logistics
   ) as LogisticsState;
 
   const [socket, setSocket] = useState<Socket | null>(null);
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     refreshToken("logistics", tokens?.refresh_token);
-  //   }, 30000);
+  useEffect(() => {
+    dispatch(fetchBalance());
+  }, [dispatch]);
 
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  //   // eslint-disable-next-line
-  // }, []);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshToken("logistics", tokens?.refresh_token);
+    }, 30000);
+
+    return () => {
+      clearInterval(interval);
+    };
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     const findOrder = async (response: any) => {
-      // console.log({ findOrderResponse: response });
+      console.log({ findOrderResponse: response });
       if (response.statusCode === 401) {
         refreshToken("logistics", tokens?.refresh_token);
-        setTimeout(() => window.location.reload(), 7000);
+        // setTimeout(() => window.location.reload(), 7000);
       } else {
         dispatch(
           setOrder({
@@ -92,8 +97,32 @@ const Dashboard = () => {
 
   return (
     <>
-      <AppLayout logistics={order ? 1 : 0}>
-        <div className="flex flex-col justify-center items-center mt-[9.875rem]">
+      <AppLayout bottomNav logistics={order ? 1 : 0} wallet>
+        <div className="flex justify-between items-center p-4 rounded-[8px] bg-grey-light-200">
+          <div>
+            <h5 className="mb-2 text-[0.875rem] leading-[1.25rem]">Balance</h5>
+            <h4 className="text-[1.5rem] leading-[2rem] font-[700]">
+              N
+              {balance
+                ?.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+                .split(".")[0] || "0"}
+              <span className="font-[400] text-[1.25rem] leading-[1.75rem]">
+                .
+                {balance
+                  ?.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                  .split(".")[1] || "00"}
+              </span>
+            </h4>
+          </div>
+          <img src={chevron} alt="chevron right" />
+        </div>
+        <div className="flex flex-col justify-center items-center mt-[6.125rem]">
           <img src={noOrders} alt="no orders" />
           <h1 className="mt-6 font-[700] text-[1.25rem] leading-[1.75rem]">
             Looking for orders

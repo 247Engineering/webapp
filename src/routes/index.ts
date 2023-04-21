@@ -76,6 +76,8 @@ export const LOGISTICS = {
   VERIFY_OTP: "/logistics/verify-otp",
   BUSINESS_INFO_FORM: "/logistics/vehicle-info/form",
   DASHBOARD: "/logistics/dashboard",
+  DELIVERIES: "/logistics/deliveries",
+  WALLET: "/logistics/wallet",
   ORDER_PROMPT: "/logistics/order/prompt",
   ORDER_STATUS: "/logistics/order/status",
 };

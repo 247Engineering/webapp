@@ -12,6 +12,8 @@ const initialState: LogisticsState = {
   loading: false,
   order: null,
   orderStatus: "ENROUTE",
+  balance: 0,
+  deliveries: [],
 };
 
 export const addVehicleInfo = createAsyncThunk(
@@ -63,6 +65,28 @@ export const updateOrderStatus = createAsyncThunk(
   }
 );
 
+export const fetchBalance = createAsyncThunk(
+  "logistics/fetchBalance",
+  async () => {
+    return await request({
+      url: `/rider/balance`,
+      method: "get",
+      user: "logistics",
+    });
+  }
+);
+
+export const fetchDeliveries = createAsyncThunk(
+  "logistics/fetchDeliveries",
+  async () => {
+    return await request({
+      url: `/rider/deliveries`,
+      method: "get",
+      user: "logistics",
+    });
+  }
+);
+
 export const logisticsSlice = createSlice({
   name: "logistics",
   initialState,
@@ -105,6 +129,12 @@ export const logisticsSlice = createSlice({
             break;
           case "logistics/updateOrderStatus/fulfilled":
             state.orderStatus = action.meta.arg.order_status;
+            break;
+          case "logistics/fetchBalance/fulfilled":
+            state.balance = action.payload.balance;
+            break;
+          case "logistics/fetchDeliveries/fulfilled":
+            state.deliveries = action.payload.deliveries;
             break;
         }
 

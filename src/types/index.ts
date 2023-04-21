@@ -201,6 +201,8 @@ export interface DistributorState {
 export interface AppLayoutProps {
   alternate?: boolean;
   hideLogo?: boolean;
+  hideHamburger?: boolean;
+  wallet?: boolean;
   full?: boolean;
   location?: string;
   search?: boolean;
@@ -215,6 +217,7 @@ export interface AppLayoutProps {
   secondaryNavBack?: string;
   back?: string;
   noPadding?: boolean;
+  bottomNav?: boolean;
 }
 
 export interface WeightInputProps {
@@ -311,7 +314,7 @@ export interface RetailerState {
   orders: any[];
   order: any;
   warehouse: any;
-  location: any
+  location: any;
 }
 
 export type CartItem = {
@@ -368,6 +371,8 @@ export interface LogisticsState {
   stepsCompleted: number;
   order: any;
   orderStatus: "ENROUTE" | "ARRIVED" | "PICKED" | "RT_DELIVERED" | "DELIVERED";
+  balance: number;
+  deliveries: any[];
 }
 
 export interface DeliverySummaryProps {

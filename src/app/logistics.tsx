@@ -5,6 +5,7 @@ import VerifyOtp from "../pages/Logistics/Onboarding/VerifyOtp";
 import VehicleInfo from "../pages/Logistics/VehicleInfoForm";
 import OrderStatus from "../pages/Logistics/OrderStatus";
 import OrderPrompt from "../pages/Logistics/OrderPrompt";
+import Deliveries from "../pages/Logistics/Deliveries";
 
 import * as ROUTES from "../routes";
 import Dashboard from "../pages/Logistics/Dashboard";
@@ -49,5 +50,9 @@ export const authedLogisticsRoutes = [
   {
     path: ROUTES.LOGISTICS.ORDER_STATUS,
     element: <OrderStatus />,
+  },
+  {
+    path: ROUTES.LOGISTICS.DELIVERIES,
+    element: <Deliveries />,
   },
 ];
