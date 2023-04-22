@@ -135,11 +135,11 @@ const Deliveries = () => {
                     </h5>
                     <Status
                       className={`${
-                        true
+                        delivery.paid
                           ? "bg-green-light text-green"
                           : "bg-[#FFEBEE] text-red"
                       } rounded-[10px] py-1 px-2 !text-[0.75rem] !leading-[1rem]`}
-                      text="Paid"
+                      text={delivery.paid ? "Paid" : "Unpaid"}
                     />
                     <p className="mt-2">
                       {format(
@@ -168,7 +168,9 @@ const Deliveries = () => {
                 </div>
                 <div className="flex justify-between items-center pb-4 mb-4 font-bold text-[0.75rem] leading-[1rem] border border-solid border-grey-light-100 border-0 border-b">
                   <h6>Customer</h6>
-                  <h6 className="font-normal">{delivery.first_name} {delivery.last_name}</h6>
+                  <h6 className="font-normal">
+                    {delivery.first_name} {delivery.last_name}
+                  </h6>
                 </div>
                 <div className="flex justify-between items-center pb-4 mb-4 font-bold text-[0.75rem] leading-[1rem] border border-solid border-grey-light-100 border-0 border-b">
                   <h6>Delivery Status</h6>
