@@ -8,6 +8,7 @@ import noOrders from "../../assets/images/no-orders.svg";
 import chevron from "../../assets/images/chevron.svg";
 
 import AppLayout from "../../components/layouts/AppLayout";
+import Loader from "../../components/miscellaneous/Loader";
 
 import { AppDispatch, RootState } from "../../store";
 import { LogisticsState } from "../../types";
@@ -23,7 +24,7 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { order, balance } = useSelector<RootState>(
+  const { order, balance, loading } = useSelector<RootState>(
     ({ logistics }) => logistics
   ) as LogisticsState;
 
@@ -98,7 +99,11 @@ const Dashboard = () => {
   return (
     <>
       <AppLayout bottomNav logistics={order ? 1 : 0} wallet>
-        <div className="flex justify-between items-center p-4 rounded-[8px] bg-grey-light-200">
+        {loading ? <Loader /> : null}
+        <div
+          className="flex justify-between items-center p-4 rounded-[8px] bg-grey-light-200"
+          onClick={() => navigate(ROUTES.LOGISTICS.DELIVERIES)}
+        >
           <div>
             <h5 className="mb-2 text-[0.875rem] leading-[1.25rem]">Balance</h5>
             <h4 className="text-[1.5rem] leading-[2rem] font-[700]">

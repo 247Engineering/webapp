@@ -12,6 +12,7 @@ import AppLayout from "../../components/layouts/AppLayout";
 import DeliverySummary from "../../components/miscellaneous/DeliverySummary";
 import Status from "../../components/miscellaneous/Status";
 import MapModal from "../../components/miscellaneous/MapModal";
+import Loader from "../../components/miscellaneous/Loader";
 
 import { AppDispatch, RootState } from "../../store";
 import { LogisticsState } from "../../types";
@@ -21,7 +22,7 @@ import { fetchDeliveries } from "../../store/features/logistics";
 const Deliveries = () => {
   // const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { deliveries } = useSelector<RootState>(
+  const { deliveries, loading } = useSelector<RootState>(
     ({ logistics }) => logistics
   ) as LogisticsState;
 
@@ -45,6 +46,7 @@ const Deliveries = () => {
   return (
     <>
       <AppLayout logistics bottomNav>
+        {loading ? <Loader /> : null}
         <div className="flex flex-col h-full relative mt-[-0.5rem] mb-[-4rem] mx-[-1rem]">
           <div className="px-4">
             <header className="mb-4">
@@ -95,8 +97,9 @@ const Deliveries = () => {
               if (type === "paid") {
                 return delivery.paid ? (
                   <DeliverySummary
+                    key={delivery.order_id}
                     id={delivery.order_id.replace("ORD_", "")}
-                    date={new Date()}
+                    date={new Date(delivery.order_date)}
                     status="Delivered"
                     amount={delivery.delivery_fee}
                     onClick={() => {
@@ -108,9 +111,10 @@ const Deliveries = () => {
               } else {
                 return !delivery.paid ? (
                   <DeliverySummary
+                    key={delivery.order_id}
                     id={delivery.order_id.replace("ORD_", "")}
-                    date={new Date()}
-                    status="Cancelled"
+                    date={new Date(delivery.order_date)}
+                    status="Delivered"
                     amount={delivery.delivery_fee}
                     onClick={() => {
                       setDelivery(delivery);
@@ -138,7 +142,10 @@ const Deliveries = () => {
                       text="Paid"
                     />
                     <p className="mt-2">
-                      {format(new Date(), "MMM d, yyyy - h:mma")}
+                      {format(
+                        new Date(delivery.order_date),
+                        "MMM d, yyyy - h:mma"
+                      )}
                     </p>
                   </div>
                   <img
@@ -156,12 +163,12 @@ const Deliveries = () => {
                 <div className="flex justify-between items-center pb-4 mb-4 font-bold text-[0.75rem] leading-[1rem] border border-solid border-grey-light-100 border-0 border-b">
                   <h6>Delivery Date</h6>
                   <h6 className="font-normal">
-                    {format(new Date(), "MMM d, yyyy")}
+                    {format(new Date(delivery.order_date), "MMM d, yyyy")}
                   </h6>
                 </div>
                 <div className="flex justify-between items-center pb-4 mb-4 font-bold text-[0.75rem] leading-[1rem] border border-solid border-grey-light-100 border-0 border-b">
                   <h6>Customer</h6>
-                  <h6 className="font-normal">Iya Duretti</h6>
+                  <h6 className="font-normal">{delivery.first_name} {delivery.last_name}</h6>
                 </div>
                 <div className="flex justify-between items-center pb-4 mb-4 font-bold text-[0.75rem] leading-[1rem] border border-solid border-grey-light-100 border-0 border-b">
                   <h6>Delivery Status</h6>
