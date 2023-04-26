@@ -50,7 +50,7 @@ const Dashboard = () => {
       console.log({ findOrderResponse: response });
       if (response.statusCode === 401) {
         refreshToken("logistics", tokens?.refresh_token);
-        // setTimeout(() => window.location.reload(), 7000);
+        setTimeout(() => window.location.reload(), 7000);
       } else {
         dispatch(
           setOrder({
