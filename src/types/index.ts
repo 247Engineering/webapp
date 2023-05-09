@@ -29,6 +29,7 @@ export interface AuthState {
 
 export interface InputProps {
   label: string;
+  labelRight?: string;
   options?: { value: string; label: string }[];
   type?: string;
   value: any;
@@ -269,6 +270,14 @@ export interface SearchSelectProps extends InputProps {
   loading: boolean;
 }
 
+export interface BankSelectProps extends InputProps {
+  dropdown: boolean;
+  setDropdown: (value: boolean) => void;
+  options: any[];
+  loading: boolean;
+  addBank: () => void;
+}
+
 export interface Address {
   latitude: number;
   longitude: number;
@@ -378,6 +387,13 @@ export interface LogisticsState {
 export interface DeliverySummaryProps {
   status: "Delivered" | "Cancelled";
   id: string;
+  date: Date;
+  amount: number;
+  onClick?: () => void;
+}
+
+export interface TransactionSummaryProps {
+  successful: boolean;
   date: Date;
   amount: number;
   onClick?: () => void;

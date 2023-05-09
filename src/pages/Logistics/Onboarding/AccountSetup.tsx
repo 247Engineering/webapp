@@ -13,7 +13,7 @@ const AccountSetup = () => {
   const navigate = useNavigate()
 
   const stepsCompleted = useSelector<RootState>(
-    ({ distributor }) => distributor.stepsCompleted,
+    ({ logistics }) => logistics.stepsCompleted,
   ) as number
 
   return (
@@ -26,7 +26,7 @@ const AccountSetup = () => {
           </p>
         </header>
         <section className="mt-8">
-          <ProgressBar step={Math.round(stepsCompleted)} totalSteps={3} />
+          <ProgressBar step={Math.round(stepsCompleted)} totalSteps={2} />
           <AccountProgressStep
             progress={
               stepsCompleted < 1
@@ -41,7 +41,7 @@ const AccountSetup = () => {
               navigate(ROUTES.DISTRIBUTOR.BUSINESS_INFO_FORM)
             }}
           />
-          {/* <AccountProgressStep
+          <AccountProgressStep
             progress={
               stepsCompleted < 2
                 ? stepsCompleted < 1.5
@@ -49,26 +49,13 @@ const AccountSetup = () => {
                   : 'started'
                 : 'done'
             }
-            title="Owner information"
-            text="Company Information"
+            title="Payment Information"
+            text="Add bank account details for withdrawals"
             onClick={() => {
-              navigate(ROUTES.DISTRIBUTOR.BUSINESS_OWNER)
+              navigate(ROUTES.LOGISTICS.ADD_PAYMENT)
             }}
           />
-          <AccountProgressStep
-            progress={
-              stepsCompleted < 3
-                ? stepsCompleted < 2.5
-                  ? 'none'
-                  : 'started'
-                : 'done'
-            }
-            title="Review and submit"
-            text="Company Information"
-            onClick={() => {
-              navigate(ROUTES.DISTRIBUTOR.BUSINESS_OWNER_REVIEW)
-            }}
-          /> */}
+
         </section>
       </AppLayout>
     </>

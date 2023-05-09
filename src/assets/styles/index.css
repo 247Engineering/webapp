@@ -50,6 +50,10 @@ body,
   line-height: 1.25rem;
 }
 
+.input.bank-select {
+  padding-right: 2rem;
+}
+
 .input.location {
   padding-right: 1.8rem;
 }

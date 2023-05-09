@@ -8,7 +8,7 @@ import { isRejectedAction, isPendingAction, isFulfilledAction } from "../utils";
 
 const initialState: LogisticsState = {
   vehicleNumber: null,
-  stepsCompleted: 1,
+  stepsCompleted: 0,
   loading: false,
   order: null,
   orderStatus: "ENROUTE",
@@ -28,6 +28,27 @@ export const addVehicleInfo = createAsyncThunk(
   }) => {
     await request({
       url: "/auth/setup-vehicle",
+      method: "post",
+      body,
+      user: "logistics",
+      onSuccess,
+    });
+  }
+);
+
+export const setupBankAccount = createAsyncThunk(
+  "logistics/setupBankAccount",
+  async ({
+    onSuccess,
+    ...body
+  }: {
+    onSuccess?: () => void;
+    settlementBank: string;
+    settlementAccountNumber: string;
+    settlementAccountName: string;
+  }) => {
+    await request({
+      url: "/auth/setup-bank-account",
       method: "post",
       body,
       user: "logistics",
@@ -110,6 +131,9 @@ export const logisticsSlice = createSlice({
       state.order = { ...state.order, status: payload.status };
       payload.onSuccess();
     },
+    completeStep: (state, { payload }) => {
+      state.stepsCompleted = payload;
+    },
   },
   extraReducers(builder) {
     builder
@@ -126,6 +150,7 @@ export const logisticsSlice = createSlice({
         switch (action.type) {
           case "logistics/addVehicleInfo/fulfilled":
             state.vehicleNumber = action.meta.arg.plate_number;
+            state.stepsCompleted = 1;
             break;
           case "logistics/updateOrderStatus/fulfilled":
             state.orderStatus = action.meta.arg.order_status;
@@ -135,6 +160,9 @@ export const logisticsSlice = createSlice({
             break;
           case "logistics/fetchDeliveries/fulfilled":
             state.deliveries = action.payload.deliveries;
+            break;
+          case "logistics/setupBankAccount/fulfilled":
+            state.stepsCompleted = 2;
             break;
         }
 

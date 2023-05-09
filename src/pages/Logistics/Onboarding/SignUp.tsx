@@ -39,6 +39,8 @@ const SignUp = () => {
       logisticsSignup({
         phone: (callingCode + mobile).replace("+", ""),
         password,
+        fname,
+        lname
       })
     );
   };

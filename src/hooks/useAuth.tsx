@@ -23,8 +23,9 @@ const retailerStep = {
 }
 
 const logisticsStep = {
-  1: ROUTES.LOGISTICS.BUSINESS_INFO_FORM,
-  2: ROUTES.LOGISTICS.DASHBOARD,
+  1: ROUTES.LOGISTICS.ACCOUNT_SETUP,
+  2: ROUTES.LOGISTICS.ACCOUNT_SETUP,
+  3: ROUTES.LOGISTICS.DASHBOARD,
 }
 
 export const AuthProvider = ({ children }: any) => {
@@ -52,7 +53,7 @@ export const AuthProvider = ({ children }: any) => {
           navigate(retailerStep[step as 1 | 2], { replace: true })
           break
         case 'logistics':
-          navigate(logisticsStep[step as 1 | 2], { replace: true })
+          navigate(logisticsStep[step as 1 | 2, 3], { replace: true })
           break
       }
     },
