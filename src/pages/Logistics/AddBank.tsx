@@ -37,12 +37,13 @@ const AddBank = ({ addPayment }: { addPayment?: boolean }) => {
         settlementAccountNumber: accountNumber,
         settlementBank: bankName,
         onSuccess: () => {
-          toast.success("account info received");
-          navigate(
-            addPayment
-              ? ROUTES.LOGISTICS.ACCOUNT_SETUP
-              : ROUTES.LOGISTICS.TRANSFER
-          );
+          if (addPayment) {
+            toast.success("account info received");
+            navigate(ROUTES.LOGISTICS.ACCOUNT_SETUP);
+          } else {
+            toast.success("bank account added");
+            navigate(ROUTES.LOGISTICS.TRANSFER);
+          }
         },
       })
     );

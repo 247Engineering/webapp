@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { LogisticsState } from "../../../types";
 import request from "../../../helpers/request";
 // import { RootState } from "../..";
-// import { signin } from '../auth'
+import { signin } from "../auth";
 import { isRejectedAction, isPendingAction, isFulfilledAction } from "../utils";
 
 const initialState: LogisticsState = {
@@ -137,9 +137,9 @@ export const logisticsSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      // .addCase(signin.fulfilled, (state, { payload: { step } }) => {
-      //   if (step > 0) state.stepsCompleted = 3
-      // })
+      .addCase(signin.fulfilled, (state, { payload: { plate_number } }) => {
+        state.vehicleNumber = plate_number;
+      })
       .addMatcher(isPendingAction("logistics"), (state, action) => {
         state.loading = true;
       })

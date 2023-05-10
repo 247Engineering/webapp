@@ -40,12 +40,12 @@ export const unAuthedLogisticsRoutes = [
 
 export const authedLogisticsRoutes = [
   {
-    path: ROUTES.LOGISTICS.DASHBOARD,
-    element: <Dashboard />,
+    path: ROUTES.LOGISTICS.ACCOUNT_SETUP,
+    element: <AccountSetup />,
   },
   {
-    path: ROUTES.DISTRIBUTOR.ACCOUNT_SETUP,
-    element: <AccountSetup />,
+    path: ROUTES.LOGISTICS.DASHBOARD,
+    element: <Dashboard />,
   },
   {
     path: ROUTES.LOGISTICS.BUSINESS_INFO_FORM,

@@ -2,7 +2,7 @@ export const DISTRIBUTOR = {
   SIGNUP: "/distributor/signup",
   SIGNIN: "/distributor/signin",
   FORGOT_PASSWORD: "/distributor/forgot-password",
-  VERIFY_MAIL: "/distributor/VERIFY-MAIL",
+  VERIFY_MAIL: "/distributor/verify-mail",
   ACCOUNT_SETUP: "/distributor/account-setup",
   DASHBOARD: "/distributor/dashboard",
   BUSINESS_OWNER: "/distributor/business-owner",

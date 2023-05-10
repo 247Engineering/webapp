@@ -145,10 +145,10 @@ const Wallet = () => {
                 <div className="flex justify-between items-center pb-4 mb-4 font-bold text-[0.75rem] leading-[1rem] border border-solid border-grey-light-100 border-0 border-b">
                   <h6>Recipient</h6>
                   <div>
-                  <h6 className="text-right">
-                    Iya Duretti
-                  </h6>
-                  <p className="font-normal text-black-100 text-right">8084451550</p>
+                    <h6 className="text-right">Iya Duretti</h6>
+                    <p className="font-normal text-black-100 text-right">
+                      8084451550
+                    </p>
                   </div>
                 </div>
                 <div className="flex justify-between items-center pb-4 mb-4 font-bold text-[0.75rem] leading-[1rem] border border-solid border-grey-light-100 border-0 border-b">
