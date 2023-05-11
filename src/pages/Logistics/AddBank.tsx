@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -17,7 +17,7 @@ const AddBank = ({ addPayment }: { addPayment?: boolean }) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { loading } = useSelector<RootState>(
+  const { loading, vehicleNumber, walletAccountName } = useSelector<RootState>(
     ({ logistics }) => logistics
   ) as LogisticsState;
 
@@ -39,7 +39,6 @@ const AddBank = ({ addPayment }: { addPayment?: boolean }) => {
         onSuccess: () => {
           if (addPayment) {
             toast.success("account info received");
-            navigate(ROUTES.LOGISTICS.ACCOUNT_SETUP);
           } else {
             toast.success("bank account added");
             navigate(ROUTES.LOGISTICS.TRANSFER);
@@ -48,6 +47,14 @@ const AddBank = ({ addPayment }: { addPayment?: boolean }) => {
       })
     );
   };
+
+  useEffect(() => {
+    navigate(
+      ROUTES.LOGISTICS[
+        vehicleNumber && walletAccountName ? "DASHBOARD" : "ACCOUNT_SETUP"
+      ]
+    );
+  }, [vehicleNumber, walletAccountName, navigate]);
 
   return (
     <AppLayout

@@ -13,7 +13,7 @@ import { LogisticsState } from "../../../types";
 const AccountSetup = () => {
   const navigate = useNavigate();
 
-  const { vehicleNumber } = useSelector<RootState>(
+  const { vehicleNumber, walletAccountName } = useSelector<RootState>(
     ({ logistics }) => logistics
   ) as LogisticsState;
 
@@ -27,7 +27,7 @@ const AccountSetup = () => {
           </p>
         </header>
         <section className="mt-8">
-          <ProgressBar step={vehicleNumber ? 1 : 0} totalSteps={2} />
+          <ProgressBar step={vehicleNumber || walletAccountName ? 1 : 0} totalSteps={2} />
           <AccountProgressStep
             progress={vehicleNumber ? "done" : "none"}
             title="Vehicle information"

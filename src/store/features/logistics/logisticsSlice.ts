@@ -8,6 +8,7 @@ import { isRejectedAction, isPendingAction, isFulfilledAction } from "../utils";
 
 const initialState: LogisticsState = {
   vehicleNumber: null,
+  walletAccountName: null,
   stepsCompleted: 0,
   loading: false,
   order: null,
@@ -163,6 +164,7 @@ export const logisticsSlice = createSlice({
             break;
           case "logistics/setupBankAccount/fulfilled":
             state.stepsCompleted = 2;
+            state.walletAccountName = action.meta.arg.settlementAccountName;
             break;
         }
 

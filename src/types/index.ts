@@ -376,6 +376,7 @@ export interface RouteObj {
 
 export interface LogisticsState {
   vehicleNumber: string | null;
+  walletAccountName: string | null;
   loading: boolean;
   stepsCompleted: number;
   order: any;
