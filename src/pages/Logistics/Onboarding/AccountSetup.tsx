@@ -33,7 +33,7 @@ const AccountSetup = () => {
             title="Vehicle information"
             text="Vehicle Information"
             onClick={() => {
-              navigate(ROUTES.DISTRIBUTOR.BUSINESS_INFO_FORM);
+              navigate(ROUTES.LOGISTICS.BUSINESS_INFO_FORM);
             }}
           />
           <AccountProgressStep

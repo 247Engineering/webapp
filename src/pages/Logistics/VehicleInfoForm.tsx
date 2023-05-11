@@ -35,7 +35,7 @@ const VehicleInfo = () => {
         license: file as string,
         onSuccess: () => {
           toast.success("vehicle info received");
-          navigate(ROUTES.LOGISTICS.DASHBOARD);
+          navigate(ROUTES.LOGISTICS.ACCOUNT_SETUP);
         },
       })
     );
