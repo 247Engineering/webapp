@@ -1,0 +1,6 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us.gcr.io/tfsapp/webapp', '.']
+images: 
+- 'us.gcr.io/tfsapp/webapp:latest'
+timeout: 3600s
