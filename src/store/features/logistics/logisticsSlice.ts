@@ -138,8 +138,9 @@ export const logisticsSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(signin.fulfilled, (state, { payload: { plate_number } }) => {
+      .addCase(signin.fulfilled, (state, { payload: { plate_number, payment_details } }) => {
         state.vehicleNumber = plate_number;
+        state.walletAccountName = payment_details?.walletAccountName
       })
       .addMatcher(isPendingAction("logistics"), (state, action) => {
         state.loading = true;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -18,7 +18,7 @@ const VehicleInfo = () => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { loading, vehicleNumber, walletAccountName } = useSelector<RootState>(
+  const { loading, walletAccountName } = useSelector<RootState>(
     ({ logistics }) => logistics
   ) as LogisticsState;
 
@@ -35,18 +35,13 @@ const VehicleInfo = () => {
         license: file as string,
         onSuccess: () => {
           toast.success("vehicle info received");
+          navigate(
+            ROUTES.LOGISTICS[walletAccountName ? "DASHBOARD" : "ACCOUNT_SETUP"]
+          );
         },
       })
     );
   };
-
-  useEffect(() => {
-    navigate(
-      ROUTES.LOGISTICS[
-        vehicleNumber && walletAccountName ? "DASHBOARD" : "ACCOUNT_SETUP"
-      ]
-    );
-  }, [vehicleNumber, walletAccountName, navigate]);
 
   return (
     <>

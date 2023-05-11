@@ -37,7 +37,7 @@ const AccountSetup = () => {
             }}
           />
           <AccountProgressStep
-            progress="none"
+            progress={walletAccountName ? "done" : "none"}
             title="Payment Information"
             text="Add bank account details for withdrawals"
             onClick={() => {
