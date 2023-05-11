@@ -35,7 +35,6 @@ export const AuthProvider = ({ children }: any) => {
   const step = useSelector<RootState>(
     ({ auth }) => auth.stepsCompleted
   ) as number;
-  console.log({step})
 
   const [user, setUser] = useLocalStorage("user", null);
 
