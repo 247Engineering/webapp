@@ -5,6 +5,7 @@ import axios, {
   AxiosResponse,
 } from "axios";
 import { toast } from "react-toastify";
+import env from "@beam-australia/react-env";
 
 import { RequestArgs } from "../../types";
 
@@ -104,6 +105,7 @@ const request = async ({
 }: RequestArgs) => {
   try {
     console.log(process.env)
+    console.log(env('REACT_APP_BASE_URL'));
     const { data } = await api({
       url: `${process.env.REACT_APP_BASE_URL}${user ? `/${user}` : ""}${url}`,
       method,
