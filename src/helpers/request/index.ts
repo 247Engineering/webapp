@@ -26,7 +26,8 @@ export const refreshToken = async (user: string, refresh_token: string) => {
 
 const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
   const tokens = JSON.parse(
-    localStorage.getItem("tokens")?.replace("undefined", "{}") as string
+    (localStorage.getItem("tokens")?.replace("undefined", "{}") as string) ||
+      "{}"
   );
   config.headers!["Authorization"] = `Bearer ${tokens?.access_token}`;
 
@@ -53,7 +54,9 @@ const onResponseError = async (
     ) {
       try {
         const storedTokens = JSON.parse(
-          localStorage.getItem("tokens")?.replace("undefined", "{}") as string
+          (localStorage
+            .getItem("tokens")
+            ?.replace("undefined", "{}") as string) || "{}"
         );
         let user = error.config?.url?.split("/")[3];
         const tokens = await refreshToken(
