@@ -50,7 +50,12 @@ export const retailerSignup = createAsyncThunk(
 
 export const logisticsSignup = createAsyncThunk(
   "auth/logisticsSignup",
-  async (body: { phone: string; password: string }) => {
+  async (body: {
+    phone: string;
+    password: string;
+    fname: string;
+    lname: string;
+  }) => {
     return await request({
       url: "/auth/register",
       method: "post",

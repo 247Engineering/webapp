@@ -8,12 +8,18 @@ import marker from "../../assets/images/arrow-marker.svg";
 import warehouse from "../../assets/images/warehouse-logistics.svg";
 import retailer from "../../assets/images/retailer-plain.svg";
 import arrow from "../../assets/images/arrow-sm.svg";
+import chevron from "../../assets/images/arrow-right.svg";
+import chevronDown from "../../assets/images/chevron-down.svg";
 import box from "../../assets/images/box.svg";
 import pickup from "../../assets/images/pick-up.svg";
 import delivery from "../../assets/images/delivery-purple.svg";
 import warehouseMarker from "../../assets/images/warehouse-marker.svg";
 import retailerMarker from "../../assets/images/retailer-marker.svg";
 import deliveryMarker from "../../assets/images/delivery-marker.svg";
+import phoneIcon from "../../assets/images/telephone.svg";
+import warehouseIcon from "../../assets/images/warehouse-orange.svg";
+import retailerIcon from "../../assets/images/retailer-purple.svg";
+import orderIcon from "../../assets/images/order-grey.svg";
 
 import AppLayout from "../../components/layouts/AppLayout";
 import Map from "../../components/miscellaneous/Map";
@@ -242,6 +248,112 @@ const OrderStatus = () => {
                     )}
                   </button>
                 </div>
+                {/* <div className="px-4 pb-4 mt-8">
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center">
+                      <img
+                        src={warehouseIcon}
+                        alt="warehouse"
+                        className="mr-2"
+                      />
+                      <p className="font-[700] text-[1rem] leading-[1.5rem]">
+                        Femadons VI
+                      </p>
+                    </div>
+                    <img src={phoneIcon} alt="phone" />
+                  </div>
+                  <div className="progress-step flex justify-between items-center mb-8">
+                    <p className="max-w-[15.313rem]">
+                      365 Adeyemo Alakija,Victoria Island
+                    </p>
+                    <img
+                      src={chevron}
+                      className="w-[0.714rem] h-[1.25rem]"
+                      alt="arrow"
+                    />
+                  </div>
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center">
+                      <img src={retailerIcon} alt="retailer" className="mr-2" />
+                      <p className="font-[700] text-[1rem] leading-[1.5rem]">
+                        Iya Duretti
+                      </p>
+                    </div>
+                    <img src={phoneIcon} alt="phone" />
+                  </div>
+                  <div className="progress-step flex justify-between items-center mb-8">
+                    <p className="max-w-[15.313rem]">
+                      365 Adeyemo Alakija,Victoria Island
+                    </p>
+                    <img
+                      src={chevron}
+                      className="w-[0.714rem] h-[1.25rem]"
+                      alt="arrow"
+                    />
+                  </div>
+                  <div className="mb-8 max-h-[8rem] overflow-y-auto">
+                    <div className="flex justify-between items-center mb-6">
+                      <div className="flex items-center">
+                        <img src={orderIcon} alt="order" className="mr-2" />
+                        <p className="font-[700] text-[1rem] leading-[1.5rem]">
+                          Order list
+                        </p>
+                      </div>
+                      <img src={chevronDown} alt="chevron" />
+                    </div>
+                    <div className="flex items-center justify-between pb-4 mb-4 border border-solid border-grey-light-100 border-0 border-b text-[0.75rem] leading-[1rem]">
+                      <p className="max-w-[11.813rem] font-[700] overflow-hidden text-ellipsis whitespace-nowrap">
+                        Indomie Chicken (40g) Carton Large
+                      </p>
+                      <p>x10</p>
+                    </div>
+                    <div className="flex items-center justify-between pb-4 mb-4 border border-solid border-grey-light-100 border-0 border-b text-[0.75rem] leading-[1rem] max-h-[8rem] overflow-y-auto">
+                      <p className="max-w-[11.813rem] font-[700] overflow-hidden text-ellipsis whitespace-nowrap">
+                        Indomie Chicken (40g) Carton Large
+                      </p>
+                      <p>x10</p>
+                    </div>
+                    <div className="flex items-center justify-between pb-4 mb-4 border border-solid border-grey-light-100 border-0 border-b text-[0.75rem] leading-[1rem] max-h-[8rem] overflow-y-auto">
+                      <p className="max-w-[11.813rem] font-[700] overflow-hidden text-ellipsis whitespace-nowrap">
+                        Indomie Chicken (40g) Carton Large
+                      </p>
+                      <p>x10</p>
+                    </div>
+                    <div className="flex items-center justify-between pb-4 mb-4 border border-solid border-grey-light-100 border-0 border-b text-[0.75rem] leading-[1rem] max-h-[8rem] overflow-y-auto">
+                      <p className="max-w-[11.813rem] font-[700] overflow-hidden text-ellipsis whitespace-nowrap">
+                        Indomie Chicken (40g) Carton Large
+                      </p>
+                      <p>x10</p>
+                    </div>
+                    <div className="flex items-center justify-between pb-4 mb-4 border border-solid border-grey-light-100 border-0 border-b text-[0.75rem] leading-[1rem] max-h-[8rem] overflow-y-auto">
+                      <p className="max-w-[11.813rem] font-[700] overflow-hidden text-ellipsis whitespace-nowrap">
+                        Indomie Chicken (40g) Carton Large
+                      </p>
+                      <p>x10</p>
+                    </div>
+                    <div className="flex items-center justify-between pb-4 mb-4 border border-solid border-grey-light-100 border-0 border-b text-[0.75rem] leading-[1rem] max-h-[8rem] overflow-y-auto">
+                      <p className="max-w-[11.813rem] font-[700] overflow-hidden text-ellipsis whitespace-nowrap">
+                        Indomie Chicken (40g) Carton Large
+                      </p>
+                      <p>x10</p>
+                    </div>
+                  </div>
+                  <button
+                    className={`w-full flex justify-center items-center p-[0.875rem] bg-orange text-white font-[700] text-[0.875rem] leading-[1.25rem] rounded-[12px]`}
+                    onClick={statusMap[orderStatus].onSubmit}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <MoonLoader
+                        cssOverride={override}
+                        size={15.6}
+                        color="#E34B31"
+                      />
+                    ) : (
+                      "Confirm"
+                    )}
+                  </button>
+                </div> */}
               </>
             ) : (
               <>

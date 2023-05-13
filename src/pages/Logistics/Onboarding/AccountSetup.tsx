@@ -1,20 +1,21 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import React from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import AppLayout from '../../../components/layouts/AppLayout'
-import AccountProgressStep from '../../../components/miscellaneous/AccountProgressStep'
-import ProgressBar from '../../../components/miscellaneous/ProgressBar'
+import AppLayout from "../../../components/layouts/AppLayout";
+import AccountProgressStep from "../../../components/miscellaneous/AccountProgressStep";
+import ProgressBar from "../../../components/miscellaneous/ProgressBar";
 
-import { RootState } from '../../../store'
-import * as ROUTES from '../../../routes'
+import { RootState } from "../../../store";
+import * as ROUTES from "../../../routes";
+import { LogisticsState } from "../../../types";
 
 const AccountSetup = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const stepsCompleted = useSelector<RootState>(
-    ({ distributor }) => distributor.stepsCompleted,
-  ) as number
+  const { vehicleNumber, walletAccountName } = useSelector<RootState>(
+    ({ logistics }) => logistics
+  ) as LogisticsState;
 
   return (
     <>
@@ -26,53 +27,27 @@ const AccountSetup = () => {
           </p>
         </header>
         <section className="mt-8">
-          <ProgressBar step={Math.round(stepsCompleted)} totalSteps={3} />
+          <ProgressBar step={vehicleNumber || walletAccountName ? 1 : 0} totalSteps={2} />
           <AccountProgressStep
-            progress={
-              stepsCompleted < 1
-                ? stepsCompleted < 0.5
-                  ? 'none'
-                  : 'started'
-                : 'done'
-            }
+            progress={vehicleNumber ? "done" : "none"}
             title="Vehicle information"
             text="Vehicle Information"
             onClick={() => {
-              navigate(ROUTES.DISTRIBUTOR.BUSINESS_INFO_FORM)
-            }}
-          />
-          {/* <AccountProgressStep
-            progress={
-              stepsCompleted < 2
-                ? stepsCompleted < 1.5
-                  ? 'none'
-                  : 'started'
-                : 'done'
-            }
-            title="Owner information"
-            text="Company Information"
-            onClick={() => {
-              navigate(ROUTES.DISTRIBUTOR.BUSINESS_OWNER)
+              navigate(ROUTES.LOGISTICS.BUSINESS_INFO_FORM);
             }}
           />
           <AccountProgressStep
-            progress={
-              stepsCompleted < 3
-                ? stepsCompleted < 2.5
-                  ? 'none'
-                  : 'started'
-                : 'done'
-            }
-            title="Review and submit"
-            text="Company Information"
+            progress={walletAccountName ? "done" : "none"}
+            title="Payment Information"
+            text="Add bank account details for withdrawals"
             onClick={() => {
-              navigate(ROUTES.DISTRIBUTOR.BUSINESS_OWNER_REVIEW)
+              navigate(ROUTES.LOGISTICS.ADD_PAYMENT);
             }}
-          /> */}
+          />
         </section>
       </AppLayout>
     </>
-  )
-}
+  );
+};
 
-export default AccountSetup
+export default AccountSetup;

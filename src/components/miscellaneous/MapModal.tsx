@@ -69,7 +69,7 @@ const MapModal = ({
 
   return (
     <div
-      className={`bg-white shadow-sm-alt rounded-tl-[10px] rounded-tr-[10px] z-10 absolute w-full bottom-0 flex flex-col overflow-y-auto ${
+      className={`bg-white shadow-sm-alt rounded-tl-[10px] rounded-tr-[10px] z-20 absolute w-full bottom-0 flex flex-col overflow-y-auto ${
         className ? className : ""
       }`}
       style={{ ...(top !== undefined && { top: `${top}px` }) }}

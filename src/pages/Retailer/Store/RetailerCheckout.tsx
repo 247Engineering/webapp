@@ -256,7 +256,7 @@ const RetailerCheckout = () => {
               />
             </>
           )}
-          <OrderSummary cartItems={cartItems} addItems className="mb-28" />
+          <OrderSummary cartItems={cartItems} addItems className="pb-[8.75rem]" />
           <div className="p-4 fixed bottom-0 left-0 right-0 bg-white shadow-sm-alt">
             <div className="mb-6 flex items-center justify-between">
               <span className="text-[1rem] leading-[1.5rem]">Total</span>

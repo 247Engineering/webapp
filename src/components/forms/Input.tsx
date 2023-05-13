@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
-import { InputProps } from '../../types'
-import eye from '../../assets/images/eye.svg'
-import caution from '../../assets/images/caution.svg'
+import React, { useState } from "react";
+import { InputProps } from "../../types";
+import eye from "../../assets/images/eye.svg";
+import caution from "../../assets/images/caution.svg";
 
 const Input = ({
   label,
+  labelRight,
   options,
   type: initialType,
   value,
@@ -19,48 +20,52 @@ const Input = ({
   suffix,
   disabled,
 }: InputProps) => {
-  const [type, setType] = useState(initialType)
+  const [type, setType] = useState(initialType);
 
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
+    >
   ) => {
-    let value = e.target.value
+    let value = e.target.value;
 
-    if (initialType === 'number') {
-      value = value.replaceAll(/[^0-9.]/g, '')
-      value =
-        value.startsWith('0') ? value.replace('0', '') : value
+    if (initialType === "number") {
+      value = value.replaceAll(/[^0-9.]/g, "");
+      value = value.startsWith("0") ? value.replace("0", "") : value;
     }
-    if (prefix) value = value.replace(prefix, '')
-    if (suffix) value = value.replace(suffix, '')
+    if (prefix) value = value.replace(prefix, "");
+    if (suffix) value = value.replace(suffix, "");
 
-    onChange(value)
-  }
+    onChange(value);
+  };
 
   return (
     <>
-      <label className="label text-black">{label}</label>
+      <div className="flex justify-between items-center">
+        <label className="label text-black">{label}</label>
+        {labelRight ? (
+          <span className="text-[0.75rem] leading-[1rem] text-black-100">{labelRight}</span>
+        ) : null}
+      </div>
       <div className="relative">
-        {initialType === 'textarea' ? (
+        {initialType === "textarea" ? (
           <textarea
             value={value}
             onChange={handleChange}
-            className={`textarea mt-2 ${error ? 'error' : ''}`}
+            className={`textarea mt-2 ${error ? "error" : ""}`}
             placeholder={placeholder}
             rows={3}
           ></textarea>
         ) : options ? (
           <select
-            className={`select mt-2 ${error ? 'error' : ''} ${
-              alternate ? 'alternate' : ''
+            className={`select mt-2 ${error ? "error" : ""} ${
+              alternate ? "alternate" : ""
             }`}
             value={value}
             onChange={handleChange}
           >
             <option value="" disabled>
-              {selectDefault || ''}
+              {selectDefault || ""}
             </option>
             {options.map((option) => (
               <option key={option.value} value={option.value}>
@@ -70,20 +75,20 @@ const Input = ({
           </select>
         ) : (
           <input
-            className={`input mt-2 ${error ? 'error' : ''}`}
-            type={initialType === 'password' ? type : 'text'}
+            className={`input mt-2 ${error ? "error" : ""}`}
+            type={initialType === "password" ? type : "text"}
             value={prefix ? prefix + value : suffix ? value + suffix : value}
             onChange={handleChange}
             placeholder={placeholder}
             disabled={disabled}
           />
         )}
-        {initialType === 'password' ? (
+        {initialType === "password" ? (
           <img
             src={eye}
             alt="toggle show password"
             className="w-[1.25rem] h-[1.25rem] absolute top-[0.95rem] right-[0.625rem]"
-            onClick={() => setType(type === 'password' ? 'text' : 'password')}
+            onClick={() => setType(type === "password" ? "text" : "password")}
           />
         ) : null}
         {image ? (
@@ -94,7 +99,7 @@ const Input = ({
           />
         ) : null}
         {error ? (
-          <span className="mt-2 text-[0.75rem] leading-[1rem] flex items-center text-black-100">
+          <span className="mt-2 text-[0.75rem] leading-[1rem] flex items-center text-red">
             <img
               className="w-[0.917rem] h-[0.792rem] mr-[0.542rem]"
               alt="error"
@@ -105,7 +110,7 @@ const Input = ({
         ) : null}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Input
+export default Input;

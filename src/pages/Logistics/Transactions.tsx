@@ -9,7 +9,7 @@ import searchIcon from "../../assets/images/search-alt.svg";
 import deliveryIcon from "../../assets/images/delivery-completed.svg";
 
 import AppLayout from "../../components/layouts/AppLayout";
-import DeliverySummary from "../../components/miscellaneous/DeliverySummary";
+import TransactionSummary from "../../components/miscellaneous/TransactionSummary";
 import Status from "../../components/miscellaneous/Status";
 import MapModal from "../../components/miscellaneous/MapModal";
 import Loader from "../../components/miscellaneous/Loader";
@@ -17,19 +17,21 @@ import Loader from "../../components/miscellaneous/Loader";
 import { AppDispatch, RootState } from "../../store";
 import { LogisticsState } from "../../types";
 import { fetchDeliveries } from "../../store/features/logistics";
+import BackButton from "../../components/forms/BackButton";
+import TableFooter from "../../components/tables/TableFooter";
 // import * as ROUTES from "../../routes";
 
-const Deliveries = () => {
+const Transactions = () => {
   // const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { deliveries, loading } = useSelector<RootState>(
+  const { loading } = useSelector<RootState>(
     ({ logistics }) => logistics
   ) as LogisticsState;
 
   const [search, setSearch] = useState("");
-  const [type, setType] = useState("unpaid");
+  // const [type, setType] = useState("unpaid");
   const [modal, setModal] = useState(false);
-  const [delivery, setDelivery] = useState<any>(null);
+  const [delivery] = useState<any>(null);
 
   useEffect(() => {
     if (modal) {
@@ -47,11 +49,12 @@ const Deliveries = () => {
     <>
       <AppLayout logistics bottomNav>
         {loading ? <Loader /> : null}
-        <div className="flex flex-col h-full relative mt-[-0.5rem] mb-[-4rem] mx-[-1rem]">
+        <div className="flex flex-col h-full relative mt-[-1.5rem] mb-[-4rem] mx-[-1rem]">
           <div className="px-4">
+            <BackButton text="" className="mb-[0.667rem]" />
             <header className="mb-4">
               <h1 className="font-bold text-[1.25rem] leading-[1.75rem]">
-                Deliveries
+                Transactions
               </h1>
             </header>
 
@@ -74,60 +77,57 @@ const Deliveries = () => {
               </button>
             </div>
 
-            <div className="p-1 bg-grey-light-200 rounded-[10px] flex items-center justify-between font-[700] text-[0.875rem] leading-[1.25rem] mb-6">
-              <button
-                className={`flex items-center justify-center text-black-100 rounded-[8px] py-[0.625rem] px-[0.875rem] w-[50%] ${
-                  type === "unpaid" ? "text-orange bg-orange-light-100" : ""
-                }`}
-                onClick={() => setType("unpaid")}
-              >
-                Unpaid
-              </button>
-              <button
-                className={`flex items-center justify-center text-black-100 rounded-[8px] py-[0.625rem] px-[0.875rem] w-[50%] ${
-                  type === "paid" ? "text-orange bg-orange-light-100" : ""
-                }`}
-                onClick={() => setType("paid")}
-              >
-                Paid
-              </button>
-            </div>
-
-            {deliveries.map((delivery) => {
-              if (type === "paid") {
-                return delivery.paid ? (
-                  <DeliverySummary
-                    key={delivery.order_id}
-                    id={delivery.order_id.replace("ORD_", "")}
-                    date={new Date(delivery.order_date)}
-                    status="Delivered"
-                    amount={delivery.delivery_fee}
-                    onClick={() => {
-                      setDelivery(delivery);
-                      setModal(true);
-                    }}
-                  />
-                ) : null;
-              } else {
-                return !delivery.paid ? (
-                  <DeliverySummary
-                    key={delivery.order_id}
-                    id={delivery.order_id.replace("ORD_", "")}
-                    date={new Date(delivery.order_date)}
-                    status="Delivered"
-                    amount={delivery.delivery_fee}
-                    onClick={() => {
-                      setDelivery(delivery);
-                      setModal(true);
-                    }}
-                  />
-                ) : null;
-              }
-            })}
+            <section className="pb-20">
+              <div className="mb-2">
+              <TransactionSummary
+                date={new Date()}
+                successful
+                amount={5000}
+                onClick={() => setModal(true)}
+              />
+              <TransactionSummary
+                date={new Date()}
+                successful={false}
+                amount={5000}
+                onClick={() => setModal(true)}
+              />
+              <TransactionSummary
+                date={new Date()}
+                successful
+                amount={5000}
+                onClick={() => setModal(true)}
+              />
+              <TransactionSummary
+                date={new Date()}
+                successful={false}
+                amount={5000}
+                onClick={() => setModal(true)}
+              />
+              <TransactionSummary
+                date={new Date()}
+                successful
+                amount={5000}
+                onClick={() => setModal(true)}
+              />
+              <TransactionSummary
+                date={new Date()}
+                successful={false}
+                amount={5000}
+                onClick={() => setModal(true)}
+              />
+              <TransactionSummary
+                date={new Date()}
+                successful
+                amount={5000}
+                onClick={() => setModal(true)}
+              />
+              </div>
+              <TableFooter total={10} />
+            </section>
           </div>
           {modal ? (
             <MapModal className="h-full" onClose={() => setModal(false)}>
-              <div className="px-4 pb-16 pt-8">
+              <div className="px-4 pb-16 pt-6">
                 <div className="flex justify-between mb-8">
                   <div>
                     <h5 className="font-bold text-[1.25rem] leading-[1.75rem] mb-2">
@@ -141,7 +141,7 @@ const Deliveries = () => {
                       } rounded-[10px] py-1 px-2 !text-[0.75rem] !leading-[1rem]`}
                       text={delivery.paid ? "Paid" : "Unpaid"}
                     />
-                    <p className="mt-2 text-black-100 text-[0.875rem] leading-[1.25rem]">
+                    <p className="mt-2">
                       {format(
                         new Date(delivery.order_date),
                         "MMM d, yyyy - h:mma"
@@ -192,4 +192,4 @@ const Deliveries = () => {
   );
 };
 
-export default Deliveries;
+export default Transactions;

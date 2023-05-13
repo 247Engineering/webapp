@@ -3,15 +3,18 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { LogisticsState } from "../../../types";
 import request from "../../../helpers/request";
 // import { RootState } from "../..";
-// import { signin } from '../auth'
+import { signin } from "../auth";
 import { isRejectedAction, isPendingAction, isFulfilledAction } from "../utils";
 
 const initialState: LogisticsState = {
   vehicleNumber: null,
-  stepsCompleted: 1,
+  walletAccountName: null,
+  stepsCompleted: 0,
   loading: false,
   order: null,
   orderStatus: "ENROUTE",
+  balance: 0,
+  deliveries: [],
 };
 
 export const addVehicleInfo = createAsyncThunk(
@@ -26,6 +29,27 @@ export const addVehicleInfo = createAsyncThunk(
   }) => {
     await request({
       url: "/auth/setup-vehicle",
+      method: "post",
+      body,
+      user: "logistics",
+      onSuccess,
+    });
+  }
+);
+
+export const setupBankAccount = createAsyncThunk(
+  "logistics/setupBankAccount",
+  async ({
+    onSuccess,
+    ...body
+  }: {
+    onSuccess?: () => void;
+    settlementBank: string;
+    settlementAccountNumber: string;
+    settlementAccountName: string;
+  }) => {
+    await request({
+      url: "/auth/setup-bank-account",
       method: "post",
       body,
       user: "logistics",
@@ -63,6 +87,28 @@ export const updateOrderStatus = createAsyncThunk(
   }
 );
 
+export const fetchBalance = createAsyncThunk(
+  "logistics/fetchBalance",
+  async () => {
+    return await request({
+      url: `/rider/balance`,
+      method: "get",
+      user: "logistics",
+    });
+  }
+);
+
+export const fetchDeliveries = createAsyncThunk(
+  "logistics/fetchDeliveries",
+  async () => {
+    return await request({
+      url: `/rider/deliveries`,
+      method: "get",
+      user: "logistics",
+    });
+  }
+);
+
 export const logisticsSlice = createSlice({
   name: "logistics",
   initialState,
@@ -86,12 +132,16 @@ export const logisticsSlice = createSlice({
       state.order = { ...state.order, status: payload.status };
       payload.onSuccess();
     },
+    completeStep: (state, { payload }) => {
+      state.stepsCompleted = payload;
+    },
   },
   extraReducers(builder) {
     builder
-      // .addCase(signin.fulfilled, (state, { payload: { step } }) => {
-      //   if (step > 0) state.stepsCompleted = 3
-      // })
+      .addCase(signin.fulfilled, (state, { payload: { plate_number, payment_details } }) => {
+        state.vehicleNumber = plate_number;
+        state.walletAccountName = payment_details?.walletAccountName
+      })
       .addMatcher(isPendingAction("logistics"), (state, action) => {
         state.loading = true;
       })
@@ -102,9 +152,20 @@ export const logisticsSlice = createSlice({
         switch (action.type) {
           case "logistics/addVehicleInfo/fulfilled":
             state.vehicleNumber = action.meta.arg.plate_number;
+            state.stepsCompleted = 1;
             break;
           case "logistics/updateOrderStatus/fulfilled":
             state.orderStatus = action.meta.arg.order_status;
+            break;
+          case "logistics/fetchBalance/fulfilled":
+            state.balance = action.payload.balance;
+            break;
+          case "logistics/fetchDeliveries/fulfilled":
+            state.deliveries = action.payload.deliveries;
+            break;
+          case "logistics/setupBankAccount/fulfilled":
+            state.stepsCompleted = 2;
+            state.walletAccountName = action.meta.arg.settlementAccountName;
             break;
         }
 

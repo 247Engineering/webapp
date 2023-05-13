@@ -18,7 +18,7 @@ const VehicleInfo = () => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { loading } = useSelector<RootState>(
+  const { loading, walletAccountName } = useSelector<RootState>(
     ({ logistics }) => logistics
   ) as LogisticsState;
 
@@ -35,7 +35,9 @@ const VehicleInfo = () => {
         license: file as string,
         onSuccess: () => {
           toast.success("vehicle info received");
-          navigate(ROUTES.LOGISTICS.DASHBOARD);
+          navigate(
+            ROUTES.LOGISTICS[walletAccountName ? "DASHBOARD" : "ACCOUNT_SETUP"]
+          );
         },
       })
     );
