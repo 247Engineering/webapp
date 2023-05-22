@@ -21,5 +21,6 @@ RUN npm run build
 # Specify the command to run when the container starts
 CMD ["npm", "start"]
 
+# SET environment variables
 
-# gcloud run deploy --image gcr.io/<PROJECT_ID>/<APP_NAME>:<APP_VERSION> --max-instances=3 --port <PORT_NO>
+ENV REACT_APP_BASE_URL=https://tfs-prod-gateway-52fyzijn.uc.gateway.dev, REACT_APP_GOOGLE_KEY=AIzaSyAmjKtdfyguikjmlMI7HzOmh8Us
