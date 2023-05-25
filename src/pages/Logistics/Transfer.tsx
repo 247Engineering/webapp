@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import {
+  // useDispatch,
+  useSelector,
+} from "react-redux";
+// import { toast } from "react-toastify";
 
 import AppLayout from "../../components/layouts/AppLayout";
 import Input from "../../components/forms/Input";
@@ -10,15 +13,18 @@ import BankSelect from "../../components/forms/BankSelect";
 
 import bank from "../../assets/images/bank.svg";
 
-import { AppDispatch, RootState } from "../../store";
-import { addVehicleInfo } from "../../store/features/logistics";
+import {
+  // AppDispatch,
+  RootState,
+} from "../../store";
+// import { addVehicleInfo } from "../../store/features/logistics";
 import * as ROUTES from "../../routes";
 import { LogisticsState } from "../../types";
 
 const Transfer = () => {
   const navigate = useNavigate();
 
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
 
   const { loading } = useSelector<RootState>(
     ({ logistics }) => logistics
