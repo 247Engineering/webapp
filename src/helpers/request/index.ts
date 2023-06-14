@@ -104,8 +104,6 @@ const request = async ({
   onSuccess,
 }: RequestArgs) => {
   try {
-    console.log(process.env)
-    console.log(env('REACT_APP_BASE_URL'));
     const { data } = await api({
       url: `${process.env.REACT_APP_BASE_URL}${user ? `/${user}` : ""}${url}`,
       method,
