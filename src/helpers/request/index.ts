@@ -5,7 +5,6 @@ import axios, {
   AxiosResponse,
 } from "axios";
 import { toast } from "react-toastify";
-import env from "@beam-australia/react-env";
 
 import { RequestArgs } from "../../types";
 
