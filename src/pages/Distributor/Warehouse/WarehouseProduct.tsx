@@ -19,7 +19,7 @@ import {
   clearSearchResult,
   fetchCategories,
   fetchManufacturers,
-  fetchSubCategories,
+  // fetchSubCategories,
   reset,
   searchProducts,
   fetchSingleProduct,
@@ -42,7 +42,7 @@ const WarehouseProduct = ({
 
   const {
     categories,
-    subCategories,
+    // subCategories,
     manufacturers,
     searchResult,
     loading,
@@ -73,12 +73,12 @@ const WarehouseProduct = ({
     viewedProduct?.weight?.value || 0
   );
   const [weightUnit, setWeightUnit] = useState(
-    String(viewedProduct?.weight?.type) || "0"
+    viewedProduct?.weight?.type ? String(viewedProduct?.weight?.type) : "0"
   );
   const [category, setCategory] = useState(viewedProduct?.category || "");
-  const [subCategory, setSubCategory] = useState(
-    viewedProduct?.sub_category || ""
-  );
+  // const [subCategory, setSubCategory] = useState(
+  //   viewedProduct?.sub_category || ""
+  // );
   const [manufacturer, setManufacturer] = useState(
     viewedProduct?.manufacturer || ""
   );
@@ -107,7 +107,7 @@ const WarehouseProduct = ({
       setWeightValue(option?.weight?.value || 0);
       setWeightUnit(String(option?.weight?.type) || "0");
       setCategory(option.category);
-      setSubCategory(option.sub_category);
+      // setSubCategory(option.sub_category);
       setManufacturer(option.manufacturer);
       dispatchImage({
         type: "replace",
@@ -131,10 +131,10 @@ const WarehouseProduct = ({
             quantity,
             weight: {
               type: +weightUnit,
-              value: weightValue,
+              value: +weightValue,
             },
             category,
-            sub_category: subCategory,
+            // sub_category: subCategory,
             manufacturer: manufacturer,
             images,
             warehouse_id: warehouse as string,
@@ -153,10 +153,10 @@ const WarehouseProduct = ({
             quantity,
             weight: {
               type: +weightUnit,
-              value: weightValue,
+              value: +weightValue,
             },
             category,
-            sub_category: subCategory,
+            // sub_category: subCategory,
             manufacturer: manufacturer,
             images,
             warehouse_id: warehouse as string,
@@ -168,31 +168,20 @@ const WarehouseProduct = ({
     () =>
       [
         name,
-        description,
         price,
         costPerItem,
         quantity,
         weightValue,
         category,
-        subCategory,
         manufacturer,
       ].every((data) => !!data),
-    [
-      name,
-      description,
-      price,
-      costPerItem,
-      quantity,
-      weightValue,
-      category,
-      subCategory,
-      manufacturer,
-    ]
+    [name, price, costPerItem, quantity, weightValue, category, manufacturer]
   );
+  console.log({name, price, costPerItem, quantity, weightValue, category, manufacturer, canSubmit})
 
   useEffect(() => {
     dispatch(fetchCategories());
-    dispatch(fetchSubCategories());
+    // dispatch(fetchSubCategories());
     dispatch(fetchManufacturers());
     if (productId) {
       dispatch(fetchSingleProduct(productId));
@@ -221,7 +210,7 @@ const WarehouseProduct = ({
       setWeightValue(viewedProduct.weight?.value || 0);
       setWeightUnit(String(viewedProduct.weight?.type) || "0");
       setCategory(viewedProduct.category);
-      setSubCategory(viewedProduct.sub_category);
+      // setSubCategory(viewedProduct.sub_category);
       setManufacturer(viewedProduct.manufacturer);
       dispatchImage({
         type: "replace",
@@ -333,7 +322,11 @@ const WarehouseProduct = ({
               <div>
                 <Input
                   label="Margin"
-                  value={Math.round(((price - costPerItem) / price) * 100)}
+                  value={
+                    price
+                      ? Math.round(((price - costPerItem) / price) * 100)
+                      : 0
+                  }
                   onChange={() => {}}
                   type="number"
                   suffix="%"
@@ -408,7 +401,7 @@ const WarehouseProduct = ({
                 default="Select product category"
               />
             </div>
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <Input
                 label="Product sub-category"
                 value={subCategory}
@@ -420,7 +413,7 @@ const WarehouseProduct = ({
                 alternate
                 default="Select product sub-category"
               />
-            </div>
+            </div> */}
             <div>
               <Input
                 label="Manufacturer"
@@ -434,21 +427,23 @@ const WarehouseProduct = ({
                 default="Select manufacturer"
               />
             </div>
-            <ButtonSubmit
-              className="mt-[5.813rem]"
-              text="Submit"
-              onClick={handleSubmit}
-              disabled={!canSubmit || loading}
-              loading={loading}
-            />
-            {isEdit ? (
+            <div className="pb-12">
               <ButtonSubmit
-                className="mt-4 bg-transparent text-[#E53451]"
-                text="Cancel"
-                onClick={() => navigate(-1)}
-                type="button"
+                className="mt-[5.813rem]"
+                text="Submit"
+                onClick={handleSubmit}
+                disabled={!canSubmit || loading}
+                loading={loading}
               />
-            ) : null}
+              {isEdit ? (
+                <ButtonSubmit
+                  className="mt-4 bg-transparent text-[#E53451]"
+                  text="Cancel"
+                  onClick={() => navigate(-1)}
+                  type="button"
+                />
+              ) : null}
+            </div>
           </form>
         </section>
       </AppLayout>
