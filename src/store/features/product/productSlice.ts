@@ -73,6 +73,17 @@ export const fetchSingleProduct = createAsyncThunk(
   }
 );
 
+export const fetchSingleWarehouseProduct = createAsyncThunk(
+  "product/fetchSingleWarehouseProduct",
+  async (id: string) => {
+    return await request({
+      url: `/product/get-product/${id}`,
+      method: "get",
+      user: "distributor",
+    });
+  }
+);
+
 export const generateSku = createAsyncThunk("product/generateSku", async () => {
   return await request({
     url: "/product/generate-sku",
@@ -273,6 +284,9 @@ export const productSlice = createSlice({
             break;
           case "product/fetchSingleProduct/fulfilled":
             state.viewedProduct = action.payload.data;
+            break;
+          case "product/fetchSingleWarehouseProduct/fulfilled":
+            state.viewedProduct = action.payload.product;
             break;
           case "product/generateSku/fulfilled":
             state.sku = action.payload.sku;
