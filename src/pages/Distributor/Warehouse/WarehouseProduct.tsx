@@ -22,7 +22,7 @@ import {
   // fetchSubCategories,
   reset,
   searchProducts,
-  fetchSingleProduct,
+  fetchSingleWarehouseProduct,
   editProduct,
 } from "../../../store/features/product";
 import * as ROUTES from "../../../routes";
@@ -184,7 +184,7 @@ const WarehouseProduct = ({
     // dispatch(fetchSubCategories());
     dispatch(fetchManufacturers());
     if (productId) {
-      dispatch(fetchSingleProduct(productId));
+      dispatch(fetchSingleWarehouseProduct(productId));
     }
   }, [dispatch, productId]);
 
