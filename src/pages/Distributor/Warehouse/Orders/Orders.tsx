@@ -137,12 +137,10 @@ const Orders = () => {
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
                     <Status
                       className={`${
-                        statusMap[order.status as keyof typeof statusMap]
-                          .statusClassName
+                        statusMap[order.status as keyof typeof statusMap]?.statusClassName
                       } rounded-[10px] py-1 px-2`}
                       text={
-                        statusMap[order.status as keyof typeof statusMap]
-                          .statusText
+                        statusMap[order.status as keyof typeof statusMap]?.statusText
                       }
                     />
                   </td>
