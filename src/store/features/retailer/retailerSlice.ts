@@ -305,6 +305,10 @@ export const retailerSlice = createSlice({
               state.cartItems = [];
               state.cartId = null;
               break;
+            case "retailer/verifyPayment/fulfilled":
+              state.cartItems = [];
+              state.cartId = null;
+              break;
             case "retailer/fetchOrders/fulfilled":
               state.orders = payload.orders;
               break;
