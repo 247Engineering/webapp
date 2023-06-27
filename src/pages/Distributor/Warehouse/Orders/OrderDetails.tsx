@@ -143,7 +143,7 @@ const OrderDetails = () => {
                       />
                       <div className="flex flex-col justify-between">
                         <p className="font-[700] capitalize">{item.name}</p>
-                        <p>75ml</p>
+                        <p>{item.weight_value}{item.weight_unit}</p>
                       </div>
                     </div>
                   </td>
