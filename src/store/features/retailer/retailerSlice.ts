@@ -16,6 +16,7 @@ const initialState: RetailerState = {
   order: null,
   warehouse: null,
   location: null,
+  accountDetails: null,
 };
 
 export const addBusinessInfo = createAsyncThunk(
@@ -180,6 +181,37 @@ export const fetchSingleOrder = createAsyncThunk(
   }
 );
 
+export const fetchAccountDetails = createAsyncThunk(
+  "retailer/fetchAccountDetails",
+  async (body: { order_doc_id: string }) => {
+    return await request({
+      url: "/payment/pay-warehouse",
+      method: "post",
+      body,
+      user: "retailer",
+    });
+  }
+);
+
+export const verifyPayment = createAsyncThunk(
+  "retailer/verifyPayment",
+  async ({
+    order_doc_id,
+    onSuccess,
+  }: {
+    order_doc_id: string;
+    onSuccess: () => void;
+  }) => {
+    return await request({
+      url: "/payment/verify-txn",
+      method: "post",
+      body: { order_doc_id },
+      user: "retailer",
+      onSuccess,
+    });
+  }
+);
+
 export const retailerSlice = createSlice({
   name: "retailer",
   initialState,
@@ -269,6 +301,10 @@ export const retailerSlice = createSlice({
               break;
             case "retailer/fetchSingleOrder/fulfilled":
               state.order = payload.order;
+              break;
+            case "retailer/fetchAccountDetails/fulfilled":
+              state.accountDetails =
+                payload.accountDetails || payload.accoutDetails;
               break;
           }
 

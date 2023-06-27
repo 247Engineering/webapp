@@ -324,6 +324,7 @@ export interface RetailerState {
   order: any;
   warehouse: any;
   location: any;
+  accountDetails: any;
 }
 
 export type CartItem = {

@@ -62,6 +62,8 @@ export const RETAILER = {
   ORDERS: "/retailer/orders",
   PAYMENT: "/retailer/orders/:order/payment",
   PAYMENT_FOR: (order: string) => `/retailer/orders/${order}/payment`,
+  TRANSFER_PAYMENT: "/retailer/orders/:order/payment/transfer",
+  TRANSFER_PAYMENT_FOR: (order: string) => `/retailer/orders/${order}/payment/transfer`,
   ORDER_NOTIFICATION: "/retailer/orders/:order/notification",
   ORDER_NOTIFICATION_FOR: (order: string) =>
     `/retailer/orders/${order}/notification`,

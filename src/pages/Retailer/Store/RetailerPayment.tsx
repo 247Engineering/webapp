@@ -35,13 +35,17 @@ const RetailerPayment = () => {
   // const [selectedCard, setSelectedCard] = useState('mastercard')
 
   const handleSubmit = () => {
-    dispatch(
-      completeOrder({
-        order_doc_id: order as string,
-        payment_option:
-          paymentOptionMap[paymentOption as "cash" | "card" | "transfer"],
-      })
-    );
+    if (paymentOption === "transfer") {
+      navigate(ROUTES.RETAILER.TRANSFER_PAYMENT_FOR(order as string));
+    } else {
+      dispatch(
+        completeOrder({
+          order_doc_id: order as string,
+          payment_option:
+            paymentOptionMap[paymentOption as "cash" | "card" | "transfer"],
+        })
+      );
+    }
   };
 
   useEffect(() => {
@@ -103,16 +107,16 @@ const RetailerPayment = () => {
             option="card"
             className="mb-2"
           /> */}
-          {/* <PaymentOptionItem
+          <PaymentOptionItem
             id="transfer"
             name="payment"
             value="transfer"
             text="Bank Transfer"
-            checked={paymentOption === 'transfer'}
+            checked={paymentOption === "transfer"}
             onChange={(value) => setPaymentOption(value)}
             option="transfer"
             className="mb-2"
-          /> */}
+          />
           <PaymentOptionItem
             id="cash"
             name="payment"
@@ -139,7 +143,7 @@ const RetailerPayment = () => {
             <ButtonSubmit
               disabled={loading}
               loading={loading}
-              text="Proceed"
+              text={paymentOption === "transfer" ? "Pay" : "Proceed"}
               onClick={handleSubmit}
               className="text-white bg-orange"
             />
