@@ -17,6 +17,7 @@ const initialState: RetailerState = {
   warehouse: null,
   location: null,
   accountDetails: null,
+  deliveryFee: 0
 };
 
 export const addBusinessInfo = createAsyncThunk(
@@ -46,6 +47,14 @@ export const addBusinessInfo = createAsyncThunk(
     });
   }
 );
+
+export const getDeliveryFee = createAsyncThunk("retailer/getDeliveryFee", async () => {
+  return await request({
+    url: "/commerce/delivery-fee",
+    method: "get",
+    user: "retailer",
+  });
+});
 
 export const fetchCart = createAsyncThunk("retailer/fetchCart", async () => {
   return await request({
@@ -298,6 +307,9 @@ export const retailerSlice = createSlice({
               break;
             case "retailer/fetchOrders/fulfilled":
               state.orders = payload.orders;
+              break;
+            case "retailer/getDeliveryFee/fulfilled":
+              state.deliveryFee = payload.delivery_fee;
               break;
             case "retailer/fetchSingleOrder/fulfilled":
               state.order = payload.order;

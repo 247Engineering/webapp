@@ -27,9 +27,8 @@ const RetailerPayment = () => {
   const { order } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { cartItems, loading, retailerStamp } = useSelector<RootState>(
-    ({ retailer }) => retailer
-  ) as RetailerState;
+  const { cartItems, loading, retailerStamp, deliveryFee } =
+    useSelector<RootState>(({ retailer }) => retailer) as RetailerState;
 
   const [paymentOption, setPaymentOption] = useState("cash");
   // const [selectedCard, setSelectedCard] = useState('mastercard')
@@ -131,13 +130,16 @@ const RetailerPayment = () => {
             <div className="mb-6 flex items-center justify-between">
               <span className="text-[1rem] leading-[1.5rem]">Total</span>
               <span className="font-[700] text-[1.25rem] leading-[1.75rem]">
-                N{" "}
-                {cartItems
-                  .reduce((acc, curr) => acc + curr.quantity * curr.price, 0)
-                  .toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
+                N
+                {(
+                  cartItems.reduce(
+                    (acc, curr) => acc + curr.quantity * curr.price,
+                    0
+                  ) + deliveryFee
+                ).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
               </span>
             </div>
             <ButtonSubmit

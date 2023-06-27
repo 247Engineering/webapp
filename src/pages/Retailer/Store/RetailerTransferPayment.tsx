@@ -13,8 +13,6 @@ import { AppDispatch, RootState } from "../../../store";
 import {
   fetchAccountDetails,
   verifyPayment,
-  completeOrder,
-  clearRetailerStamp,
 } from "../../../store/features/retailer";
 import * as ROUTES from "../../../routes";
 
@@ -23,18 +21,19 @@ const RetailerTransferPayment = () => {
   const { order } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { cartItems, loading, retailerStamp, accountDetails } =
+  const { cartItems, loading, accountDetails, deliveryFee } =
     useSelector<RootState>(({ retailer }) => retailer) as RetailerState;
 
   const amount = useMemo(
     () =>
-      cartItems
-        .reduce((acc, curr) => acc + curr.quantity * curr.price, 0)
-        .toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }),
-    [cartItems]
+      (
+        cartItems.reduce((acc, curr) => acc + curr.quantity * curr.price, 0) +
+        deliveryFee
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+    [cartItems, deliveryFee]
   );
 
   const handleSubmit = () => {
@@ -42,12 +41,7 @@ const RetailerTransferPayment = () => {
       verifyPayment({
         order_doc_id: order as string,
         onSuccess: () => {
-          dispatch(
-            completeOrder({
-              order_doc_id: order as string,
-              payment_option: 2,
-            })
-          );
+          navigate(ROUTES.RETAILER.ORDER_NOTIFICATION_FOR(order as string));
         },
       })
     );
@@ -56,14 +50,6 @@ const RetailerTransferPayment = () => {
   useEffect(() => {
     dispatch(fetchAccountDetails({ order_doc_id: order as string }));
   }, [order, dispatch]);
-
-  useEffect(() => {
-    if (retailerStamp)
-      navigate(ROUTES.RETAILER.ORDER_NOTIFICATION_FOR(order as string));
-    return () => {
-      dispatch(clearRetailerStamp());
-    };
-  }, [order, retailerStamp, dispatch, navigate]);
 
   return (
     <div>
