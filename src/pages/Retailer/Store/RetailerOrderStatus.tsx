@@ -190,6 +190,7 @@ const RetailerOrderStatus = () => {
                 image: item.images[0],
               })) || []
             }
+            deliveryFee={order?.delivery_fee || 0}
           />
           <h4 className="font-[700] text-[1rem] leading-[1.5rem]">Address</h4>
           <p className="w-[11.75rem] text-[0.875rem] leading-[1.25rem] mb-20 capitalize">
