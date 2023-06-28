@@ -16,6 +16,8 @@ const initialState: RetailerState = {
   order: null,
   warehouse: null,
   location: null,
+  accountDetails: null,
+  deliveryFee: 0
 };
 
 export const addBusinessInfo = createAsyncThunk(
@@ -45,6 +47,14 @@ export const addBusinessInfo = createAsyncThunk(
     });
   }
 );
+
+export const getDeliveryFee = createAsyncThunk("retailer/getDeliveryFee", async () => {
+  return await request({
+    url: "/commerce/delivery-fee",
+    method: "get",
+    user: "retailer",
+  });
+});
 
 export const fetchCart = createAsyncThunk("retailer/fetchCart", async () => {
   return await request({
@@ -180,6 +190,37 @@ export const fetchSingleOrder = createAsyncThunk(
   }
 );
 
+export const fetchAccountDetails = createAsyncThunk(
+  "retailer/fetchAccountDetails",
+  async (body: { order_doc_id: string }) => {
+    return await request({
+      url: "/payment/pay-warehouse",
+      method: "post",
+      body,
+      user: "retailer",
+    });
+  }
+);
+
+export const verifyPayment = createAsyncThunk(
+  "retailer/verifyPayment",
+  async ({
+    order_doc_id,
+    onSuccess,
+  }: {
+    order_doc_id: string;
+    onSuccess: () => void;
+  }) => {
+    return await request({
+      url: "/payment/verify-txn",
+      method: "post",
+      body: { order_doc_id },
+      user: "retailer",
+      onSuccess,
+    });
+  }
+);
+
 export const retailerSlice = createSlice({
   name: "retailer",
   initialState,
@@ -264,11 +305,22 @@ export const retailerSlice = createSlice({
               state.cartItems = [];
               state.cartId = null;
               break;
+            case "retailer/verifyPayment/fulfilled":
+              state.cartItems = [];
+              state.cartId = null;
+              break;
             case "retailer/fetchOrders/fulfilled":
               state.orders = payload.orders;
               break;
+            case "retailer/getDeliveryFee/fulfilled":
+              state.deliveryFee = payload.delivery_fee;
+              break;
             case "retailer/fetchSingleOrder/fulfilled":
               state.order = payload.order;
+              break;
+            case "retailer/fetchAccountDetails/fulfilled":
+              state.accountDetails =
+                payload.accountDetails || payload.accoutDetails;
               break;
           }
 

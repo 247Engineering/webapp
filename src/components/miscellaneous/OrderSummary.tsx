@@ -1,28 +1,30 @@
-import React, { useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
-import add from '../../assets/images/add-order.svg'
+import add from "../../assets/images/add-order.svg";
 
-import { CartItem } from '../../types'
-import * as ROUTES from '../../routes'
+import { CartItem } from "../../types";
+import * as ROUTES from "../../routes";
 
-const num = 0
+const num = 0;
 
 const OrderSummary = ({
   addItems,
   className,
   cartItems,
+  deliveryFee = 0,
 }: {
-  addItems?: boolean
-  className?: string
-  cartItems: CartItem[]
+  addItems?: boolean;
+  className?: string;
+  cartItems: CartItem[];
+  deliveryFee?: number;
 }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const total = useMemo(
     () => cartItems.reduce((acc, curr) => acc + curr.quantity * curr.price, 0),
-    [cartItems],
-  )
+    [cartItems]
+  );
 
   return (
     <div className={className}>
@@ -64,7 +66,7 @@ const OrderSummary = ({
         </div>
         <div className="mb-2 flex justify-between items-center">
           <span>Delivery Fee</span>
-          <span>N {num.toLocaleString()}</span>
+          <span>N {deliveryFee.toLocaleString()}</span>
         </div>
         <div className="mb-2 flex justify-between items-center">
           <span>Service Fee</span>
@@ -72,11 +74,11 @@ const OrderSummary = ({
         </div>
         <div className="flex justify-between items-center font-[700] text-[0.875rem] leading-[1.25rem]">
           <span>Total</span>
-          <span>N {total.toLocaleString()}</span>
+          <span>N {(total + deliveryFee).toLocaleString()}</span>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default OrderSummary
+export default OrderSummary;

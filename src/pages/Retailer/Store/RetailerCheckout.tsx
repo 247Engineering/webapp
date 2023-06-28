@@ -28,6 +28,7 @@ import {
 import { AppDispatch, RootState } from "../../../store";
 import {
   clearRetailerStamp,
+  getDeliveryFee,
   placeOrder,
 } from "../../../store/features/retailer";
 import * as ROUTES from "../../../routes";
@@ -49,6 +50,7 @@ const RetailerCheckout = () => {
     retailerStamp,
     warehouse,
     location: retailerGeo,
+    deliveryFee,
   } = useSelector<RootState>(({ retailer }) => retailer) as RetailerState;
   const { formattedAddress } = useSelector<RootState>(
     ({ auth }) => auth
@@ -82,6 +84,10 @@ const RetailerCheckout = () => {
       dispatch(clearRetailerStamp());
     };
   }, [retailerStamp, orderId, navigate, dispatch]);
+
+  useEffect(() => {
+    dispatch(getDeliveryFee());
+  }, [dispatch]);
 
   return (
     <div onClick={() => setLocationDropdown(false)} className="h-full">
@@ -256,18 +262,26 @@ const RetailerCheckout = () => {
               />
             </>
           )}
-          <OrderSummary cartItems={cartItems} addItems className="pb-[8.75rem]" />
+          <OrderSummary
+            cartItems={cartItems}
+            addItems
+            className="pb-[8.75rem]"
+            deliveryFee={deliveryFee}
+          />
           <div className="p-4 fixed bottom-0 left-0 right-0 bg-white shadow-sm-alt">
             <div className="mb-6 flex items-center justify-between">
               <span className="text-[1rem] leading-[1.5rem]">Total</span>
               <span className="font-[700] text-[1.25rem] leading-[1.75rem]">
-                N{" "}
-                {cartItems
-                  .reduce((acc, curr) => acc + curr.quantity * curr.price, 0)
-                  .toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
+                N
+                {(
+                  cartItems.reduce(
+                    (acc, curr) => acc + curr.quantity * curr.price,
+                    0
+                  ) + deliveryFee
+                ).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
               </span>
             </div>
             <ButtonSubmit

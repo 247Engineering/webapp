@@ -8,6 +8,7 @@ import RetailerStoreItem from '../pages/Retailer/Store/RetailerStoreItem'
 import RetailerCart from '../pages/Retailer/Store/RetailerCart'
 import RetailerCheckout from '../pages/Retailer/Store/RetailerCheckout'
 import RetailerPayment from '../pages/Retailer/Store/RetailerPayment'
+import RetailerTransferPayment from '../pages/Retailer/Store/RetailerTransferPayment'
 import RetailerOrders from '../pages/Retailer/Store/RetailerOrders';
 import RetailerOrderStatusNotification from '../pages/Retailer/Store/RetailerOrderStatusNotification';
 import RetailerOrderStatus from '../pages/Retailer/Store/RetailerOrderStatus';
@@ -62,6 +63,10 @@ export const authedRetailerRoutes = [
   {
     path: ROUTES.RETAILER.PAYMENT,
     element: <RetailerPayment />,
+  },
+  {
+    path: ROUTES.RETAILER.TRANSFER_PAYMENT,
+    element: <RetailerTransferPayment />,
   },
   {
     path: ROUTES.RETAILER.ORDERS,

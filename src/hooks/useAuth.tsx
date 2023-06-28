@@ -25,7 +25,7 @@ const retailerStep = {
 const logisticsStep = {
   1: ROUTES.LOGISTICS.ACCOUNT_SETUP,
   2: ROUTES.LOGISTICS.ACCOUNT_SETUP,
-  3: ROUTES.LOGISTICS.ACCOUNT_SETUP,
+  3: ROUTES.LOGISTICS.DASHBOARD,
 };
 
 export const AuthProvider = ({ children }: any) => {

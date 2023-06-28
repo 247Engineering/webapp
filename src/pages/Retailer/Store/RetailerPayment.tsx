@@ -27,21 +27,24 @@ const RetailerPayment = () => {
   const { order } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { cartItems, loading, retailerStamp } = useSelector<RootState>(
-    ({ retailer }) => retailer
-  ) as RetailerState;
+  const { cartItems, loading, retailerStamp, deliveryFee } =
+    useSelector<RootState>(({ retailer }) => retailer) as RetailerState;
 
   const [paymentOption, setPaymentOption] = useState("cash");
   // const [selectedCard, setSelectedCard] = useState('mastercard')
 
   const handleSubmit = () => {
-    dispatch(
-      completeOrder({
-        order_doc_id: order as string,
-        payment_option:
-          paymentOptionMap[paymentOption as "cash" | "card" | "transfer"],
-      })
-    );
+    if (paymentOption === "transfer") {
+      navigate(ROUTES.RETAILER.TRANSFER_PAYMENT_FOR(order as string));
+    } else {
+      dispatch(
+        completeOrder({
+          order_doc_id: order as string,
+          payment_option:
+            paymentOptionMap[paymentOption as "cash" | "card" | "transfer"],
+        })
+      );
+    }
   };
 
   useEffect(() => {
@@ -103,16 +106,16 @@ const RetailerPayment = () => {
             option="card"
             className="mb-2"
           /> */}
-          {/* <PaymentOptionItem
+          <PaymentOptionItem
             id="transfer"
             name="payment"
             value="transfer"
             text="Bank Transfer"
-            checked={paymentOption === 'transfer'}
+            checked={paymentOption === "transfer"}
             onChange={(value) => setPaymentOption(value)}
             option="transfer"
             className="mb-2"
-          /> */}
+          />
           <PaymentOptionItem
             id="cash"
             name="payment"
@@ -127,19 +130,22 @@ const RetailerPayment = () => {
             <div className="mb-6 flex items-center justify-between">
               <span className="text-[1rem] leading-[1.5rem]">Total</span>
               <span className="font-[700] text-[1.25rem] leading-[1.75rem]">
-                N{" "}
-                {cartItems
-                  .reduce((acc, curr) => acc + curr.quantity * curr.price, 0)
-                  .toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
+                N
+                {(
+                  cartItems.reduce(
+                    (acc, curr) => acc + curr.quantity * curr.price,
+                    0
+                  ) + deliveryFee
+                ).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
               </span>
             </div>
             <ButtonSubmit
               disabled={loading}
               loading={loading}
-              text="Proceed"
+              text={paymentOption === "transfer" ? "Pay" : "Proceed"}
               onClick={handleSubmit}
               className="text-white bg-orange"
             />
