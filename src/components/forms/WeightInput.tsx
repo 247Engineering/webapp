@@ -26,8 +26,8 @@ const WeightInput = ({ value, setValue, unit, setUnit }: WeightInputProps) => {
           value={unit}
           onChange={handleUnitChange}
         >
-          <option value="0">Grams(g)</option>
-          <option value="1">Litres(L)</option>
+          <option value="0">KG</option>
+          <option value="1">L</option>
         </select>
       </div>
     </>
