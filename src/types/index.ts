@@ -322,10 +322,11 @@ export interface RetailerState {
   orderId: string | null;
   orders: any[];
   order: any;
+  orderType: "delivery" | "pickup";
   warehouse: any;
   location: any;
   accountDetails: any;
-  deliveryFee: number
+  deliveryFee: number;
 }
 
 export type CartItem = {
