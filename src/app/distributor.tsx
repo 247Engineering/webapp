@@ -46,13 +46,17 @@ export const unAuthedDistributorRoutes = [
     element: (
       <SignIn
         type="warehouse"
-        forgotPassword={ROUTES.DISTRIBUTOR.FORGOT_PASSWORD}
+        forgotPassword={ROUTES.WAREHOUSE.FORGOT_PASSWORD}
       />
     ),
   },
   {
     path: ROUTES.DISTRIBUTOR.FORGOT_PASSWORD,
-    element: <ForgotPassword />,
+    element: <ForgotPassword user="distributor" />,
+  },
+  {
+    path: ROUTES.WAREHOUSE.FORGOT_PASSWORD,
+    element: <ForgotPassword user="warehouse" />,
   },
   {
     path: ROUTES.DISTRIBUTOR.VERIFY_MAIL,

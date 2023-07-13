@@ -150,6 +150,7 @@ export const requestPasswordReset = createAsyncThunk(
     email?: string;
     phone?: string;
     user: UserType;
+    type?: string
   }) => {
     return await request({
       url: `/auth/reset${
