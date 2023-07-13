@@ -228,10 +228,10 @@ const RetailerCheckout = () => {
                 Pick-up locations
               </h4>
               <h5 className="font-[700] text-[0.875rem] leading[1.25rem] mb-1">
-                Femadons Depot - Victoria Island
+                {warehouse?.name}
               </h5>
               <p className="text-[0.875rem] leading[1.25rem] text-black-100 mb-8">
-                365, Adetokunbo Ademola Street, Victoria Island, Lagos{" "}
+                {warehouse?.formatted_address}
               </p>
               {/* <h4 className="font-[700] text-[1rem] leading-[1.5rem] mb-6">
                 Pick-up time
