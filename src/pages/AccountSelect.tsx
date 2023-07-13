@@ -76,7 +76,7 @@ const AccountSelect = () => {
             onChange={handleChange}
             className="mb-4"
           />
-          <OnboardingRadio
+          {/* <OnboardingRadio
             id="logistics"
             name="account-select"
             value="logistics"
@@ -87,7 +87,7 @@ const AccountSelect = () => {
             checked={type === 'logistics'}
             onChange={handleChange}
             className="mb-6"
-          />
+          /> */}
           <ButtonSubmit text="Next" onClick={handleSubmit} className="mb-4" />
         </form>
       </section>

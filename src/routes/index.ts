@@ -46,6 +46,7 @@ export const WAREHOUSE = {
   DASHBOARD: "/distributor/dashboard",
   SIGNIN: "/distributor/warehouse-manager-login",
   SIGNUP: "/auth/account-select",
+  FORGOT_PASSWORD: "/warehouse/forgot-password"
 };
 
 export const RETAILER = {
