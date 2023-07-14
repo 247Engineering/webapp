@@ -12,7 +12,7 @@ import boxIcon from "../../assets/images/box.svg";
 import boxIconSelected from "../../assets/images/deliveries-selected.svg";
 import walletIcon from "../../assets/images/wallet.svg";
 import walletIconSelected from "../../assets/images/wallet-selected.svg";
-import profile from "../../assets/images/profile.svg";
+// import profile from "../../assets/images/profile.svg";
 
 import BackButton from "../forms/BackButton";
 
@@ -135,14 +135,14 @@ const NavBar = ({
               className="ml-7"
             />
           ) : null}
-          {!alternate ? (
+          {/* {!alternate ? (
             <img
               src={profile}
               alt="profile icon"
               onClick={() => {}}
               className="ml-7"
             />
-          ) : null}
+          ) : null} */}
           {!alternate && !hideHamburger ? (
             <img
               src={hamburger}

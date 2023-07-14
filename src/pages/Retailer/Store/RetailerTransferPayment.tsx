@@ -24,6 +24,8 @@ const RetailerTransferPayment = () => {
   const { cartItems, loading, accountDetails, deliveryFee, orderType } =
     useSelector<RootState>(({ retailer }) => retailer) as RetailerState;
 
+  console.log({deliveryFee, orderType})
+
   const amount = useMemo(
     () =>
       (
