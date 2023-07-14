@@ -304,7 +304,7 @@ export const retailerSlice = createSlice({
               state.orderId = payload.id;
               state.retailerStamp = payload.id;
               state.orderType =
-                arg.delivery_options === 1 ? "delivery" : "pickup";
+                arg.order.delivery_options === 1 ? "delivery" : "pickup";
               break;
             case "retailer/completeOrder/fulfilled":
               state.retailerStamp = new Date().getTime();
