@@ -9,8 +9,8 @@ import distributorChecked from '../assets/images/distributor-checked.svg'
 import distributor from '../assets/images/distributor.svg'
 import retailerChecked from '../assets/images/retailer-checked.svg'
 import retailer from '../assets/images/retailer.svg'
-import deliveryChecked from '../assets/images/delivery-checked.svg'
-import delivery from '../assets/images/delivery.svg'
+// import deliveryChecked from '../assets/images/delivery-checked.svg'
+// import delivery from '../assets/images/delivery.svg'
 
 import * as ROUTES from '../routes'
 

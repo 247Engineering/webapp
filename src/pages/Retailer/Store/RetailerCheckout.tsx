@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 // import priority from '../../../assets/images/priority.svg'
 // import priorityChecked from '../../../assets/images/priority-checked.svg'
@@ -62,7 +63,7 @@ const RetailerCheckout = () => {
   const [instructions, setInstructions] = useState("");
   const [deliveryOption, setDeliveryOption] =
     useState<DeliveryOptions>("standard");
-  const [type, setType] = useState("delivery");
+  const [type, setType] = useState("pickup");
 
   const handleChange = (value: DeliveryOptions) => {
     setDeliveryOption(value);
@@ -105,7 +106,10 @@ const RetailerCheckout = () => {
               className={`flex items-center justify-center text-black-100 rounded-[8px] p-[0.625rem] w-[50%] ${
                 type === "delivery" ? "text-orange bg-orange-light-100" : ""
               }`}
-              onClick={() => setType("delivery")}
+              onClick={() => {
+                toast.success("Delivery checkout option is coming soon!");
+                // setType("delivery")
+              }}
             >
               Delivery
             </button>
