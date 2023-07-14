@@ -27,7 +27,7 @@ const RetailerPayment = () => {
   const { order } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { cartItems, loading, retailerStamp, deliveryFee } =
+  const { cartItems, loading, retailerStamp, deliveryFee, orderType } =
     useSelector<RootState>(({ retailer }) => retailer) as RetailerState;
 
   const [paymentOption, setPaymentOption] = useState("cash");
@@ -135,7 +135,7 @@ const RetailerPayment = () => {
                   cartItems.reduce(
                     (acc, curr) => acc + curr.quantity * curr.price,
                     0
-                  ) + deliveryFee
+                  ) + ((orderType === "delivery" ? deliveryFee : 0))
                 ).toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
