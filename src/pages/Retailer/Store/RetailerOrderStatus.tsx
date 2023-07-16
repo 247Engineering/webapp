@@ -190,7 +190,11 @@ const RetailerOrderStatus = () => {
                 image: item.images[0],
               })) || []
             }
-            deliveryFee={order?.delivery_fee || 0}
+            deliveryFee={
+              order?.delivery_type === "RT_PICKUP"
+                ? 0
+                : order?.delivery_fee || 0
+            }
             serviceFee={order?.service_fee || 0}
           />
           <h4 className="font-[700] text-[1rem] leading-[1.5rem]">Address</h4>
