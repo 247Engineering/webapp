@@ -6,18 +6,18 @@ import add from "../../assets/images/add-order.svg";
 import { CartItem } from "../../types";
 import * as ROUTES from "../../routes";
 
-const num = 0;
-
 const OrderSummary = ({
   addItems,
   className,
   cartItems,
   deliveryFee = 0,
+  serviceFee = 0,
 }: {
   addItems?: boolean;
   className?: string;
   cartItems: CartItem[];
   deliveryFee?: number;
+  serviceFee?: number;
 }) => {
   const navigate = useNavigate();
 
@@ -70,11 +70,11 @@ const OrderSummary = ({
         </div>
         <div className="mb-2 flex justify-between items-center">
           <span>Service Fee</span>
-          <span>N {num.toLocaleString()}</span>
+          <span>N {serviceFee.toLocaleString()}</span>
         </div>
         <div className="flex justify-between items-center font-[700] text-[0.875rem] leading-[1.25rem]">
           <span>Total</span>
-          <span>N {(total + deliveryFee).toLocaleString()}</span>
+          <span>N {(total + deliveryFee + serviceFee).toLocaleString()}</span>
         </div>
       </div>
     </div>
