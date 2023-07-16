@@ -52,6 +52,7 @@ const RetailerCheckout = () => {
     warehouse,
     location: retailerGeo,
     deliveryFee,
+    serviceFee,
   } = useSelector<RootState>(({ retailer }) => retailer) as RetailerState;
   const { formattedAddress } = useSelector<RootState>(
     ({ auth }) => auth
@@ -271,6 +272,7 @@ const RetailerCheckout = () => {
             addItems
             className="pb-[8.75rem]"
             deliveryFee={type === "delivery" ? deliveryFee : 0}
+            serviceFee={serviceFee}
           />
           <div className="p-4 fixed bottom-0 left-0 right-0 bg-white shadow-sm-alt">
             <div className="mb-6 flex items-center justify-between">
@@ -281,7 +283,9 @@ const RetailerCheckout = () => {
                   cartItems.reduce(
                     (acc, curr) => acc + curr.quantity * curr.price,
                     0
-                  ) + (type === "delivery" ? deliveryFee : 0)
+                  ) +
+                  (type === "delivery" ? deliveryFee : 0) +
+                  serviceFee
                 ).toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,

@@ -1,32 +1,39 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-import OnboardingRadio from '../components/forms/OnboardingRadio'
-import OnboardingLayout from '../components/layouts/OnboardingLayout'
-import ButtonSubmit from '../components/forms/ButtonSubmit'
+import OnboardingRadio from "../components/forms/OnboardingRadio";
+import OnboardingLayout from "../components/layouts/OnboardingLayout";
+import ButtonSubmit from "../components/forms/ButtonSubmit";
 
-import distributorChecked from '../assets/images/distributor-checked.svg'
-import distributor from '../assets/images/distributor.svg'
-import retailerChecked from '../assets/images/retailer-checked.svg'
-import retailer from '../assets/images/retailer.svg'
-// import deliveryChecked from '../assets/images/delivery-checked.svg'
-// import delivery from '../assets/images/delivery.svg'
+import distributorChecked from "../assets/images/distributor-checked.svg";
+import distributor from "../assets/images/distributor.svg";
+import retailerChecked from "../assets/images/retailer-checked.svg";
+import retailer from "../assets/images/retailer.svg";
+import deliveryChecked from "../assets/images/delivery-checked.svg";
+import delivery from "../assets/images/delivery.svg";
 
-import * as ROUTES from '../routes'
+import * as ROUTES from "../routes";
 
 const AccountSelect = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [type, setType] = useState('distributor')
+  const [type, setType] = useState("distributor");
 
   const handleChange = (value: string) => {
-    setType(value)
-  }
+    setType(value);
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    navigate(ROUTES[type.toUpperCase() as keyof typeof ROUTES].SIGNIN)
-  }
+    e.preventDefault();
+    if (type === "logistics") {
+      toast.success(
+        "We're currently working to bring the logistics feature to you. Stay tuned!"
+      );
+      return;
+    }
+    navigate(ROUTES[type.toUpperCase() as keyof typeof ROUTES].SIGNIN);
+  };
 
   return (
     <OnboardingLayout>
@@ -48,7 +55,7 @@ const AccountSelect = () => {
             imgChecked={distributorChecked}
             textPrimary="Distributor"
             textSecondary="Manage warehouses and operations"
-            checked={type === 'distributor'}
+            checked={type === "distributor"}
             onChange={handleChange}
             className="mb-4"
           />
@@ -60,7 +67,7 @@ const AccountSelect = () => {
             imgChecked={distributorChecked}
             textPrimary="Warehouse"
             textSecondary="Manage inventory and orders"
-            checked={type === 'warehouse'}
+            checked={type === "warehouse"}
             onChange={handleChange}
             className="mb-4"
           />
@@ -72,11 +79,11 @@ const AccountSelect = () => {
             imgChecked={retailerChecked}
             textPrimary="Retailer"
             textSecondary="Shop for items directly from wholesalers"
-            checked={type === 'retailer'}
+            checked={type === "retailer"}
             onChange={handleChange}
             className="mb-4"
           />
-          {/* <OnboardingRadio
+          <OnboardingRadio
             id="logistics"
             name="account-select"
             value="logistics"
@@ -84,10 +91,10 @@ const AccountSelect = () => {
             imgChecked={deliveryChecked}
             textPrimary="Delivery Rider"
             textSecondary="Deliver goods to appropriate destinations"
-            checked={type === 'logistics'}
+            checked={type === "logistics"}
             onChange={handleChange}
             className="mb-6"
-          /> */}
+          />
           <ButtonSubmit text="Next" onClick={handleSubmit} className="mb-4" />
         </form>
       </section>
@@ -95,7 +102,7 @@ const AccountSelect = () => {
         Terms of use. Privacy policy
       </a>
     </OnboardingLayout>
-  )
-}
+  );
+};
 
-export default AccountSelect
+export default AccountSelect;

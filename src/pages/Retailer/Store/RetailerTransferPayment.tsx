@@ -21,21 +21,26 @@ const RetailerTransferPayment = () => {
   const { order } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { cartItems, loading, accountDetails, deliveryFee, orderType } =
-    useSelector<RootState>(({ retailer }) => retailer) as RetailerState;
-
-  console.log({deliveryFee, orderType})
+  const {
+    cartItems,
+    loading,
+    accountDetails,
+    deliveryFee,
+    serviceFee,
+    orderType,
+  } = useSelector<RootState>(({ retailer }) => retailer) as RetailerState;
 
   const amount = useMemo(
     () =>
       (
         cartItems.reduce((acc, curr) => acc + curr.quantity * curr.price, 0) +
-        (orderType === "delivery" ? deliveryFee : 0)
+        (orderType === "delivery" ? deliveryFee : 0) +
+        serviceFee
       ).toLocaleString(undefined, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }),
-    [cartItems, deliveryFee, orderType]
+    [cartItems, deliveryFee, serviceFee, orderType]
   );
 
   const handleSubmit = () => {

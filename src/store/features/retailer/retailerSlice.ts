@@ -18,6 +18,7 @@ const initialState: RetailerState = {
   location: null,
   accountDetails: null,
   deliveryFee: 0,
+  serviceFee: 0,
   orderType: "delivery",
 };
 
@@ -53,7 +54,7 @@ export const getDeliveryFee = createAsyncThunk(
   "retailer/getDeliveryFee",
   async () => {
     return await request({
-      url: "/commerce/delivery-fee",
+      url: "/commerce/fees",
       method: "get",
       user: "retailer",
     });
@@ -320,6 +321,7 @@ export const retailerSlice = createSlice({
               break;
             case "retailer/getDeliveryFee/fulfilled":
               state.deliveryFee = payload.delivery_fee;
+              state.serviceFee = payload.service_fee;
               break;
             case "retailer/fetchSingleOrder/fulfilled":
               state.order = payload.order;
