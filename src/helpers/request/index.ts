@@ -9,19 +9,25 @@ import { toast } from "react-toastify";
 import { RequestArgs } from "../../types";
 
 export const refreshToken = async (user: string, refresh_token: string) => {
-  const {
-    data: { tokens },
-  } = await axios({
-    url: `${process.env.REACT_APP_BASE_URL}/${user}/auth/refresh-tokens`,
-    method: "put",
-    headers: {
-      Authorization: `Bearer ${refresh_token}`,
-    },
-  });
+  try {
+    const {
+      data: { tokens },
+    } = await axios({
+      url: `${process.env.REACT_APP_BASE_URL}/${user}/auth/refresh-tokens`,
+      method: "put",
+      headers: {
+        Authorization: `Bearer ${refresh_token}`,
+      },
+    });
 
-  localStorage.setItem("tokens", JSON.stringify(tokens));
+    localStorage.setItem("tokens", JSON.stringify(tokens));
 
-  return tokens;
+    return tokens;
+  } catch {
+    localStorage.clear();
+    window.location.reload();
+    return {};
+  }
 };
 
 const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
