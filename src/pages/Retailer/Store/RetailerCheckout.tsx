@@ -212,9 +212,12 @@ const RetailerCheckout = () => {
             <>
               <div className="rounded-[10px] w-full h-[7.5rem] mb-8 overflow-hidden">
                 <Map
-                  center={{ lat: 9.0765, lng: 7.3986 }}
-                  lat={9.0765}
-                  lng={7.3986}
+                  center={{
+                    lat: warehouse?.location?.latitude || 9.0765,
+                    lng: warehouse?.location?.longitude || 7.3986,
+                  }}
+                  lat={warehouse?.location?.latitude || 9.0765}
+                  lng={warehouse?.location?.longitude || 7.3986}
                   markers={[
                     {
                       lat: warehouse?.location?.latitude || 9.0765,

@@ -69,11 +69,12 @@ const OrderDetails = () => {
       goToConfirm: false,
     },
     PICKUP: {
-      statusText: "Order confirmed",
+      statusText: "Ready for pickup",
       statusClassName: "bg-[#E9D9F1] text-[#461A53]",
       buttonText: "Confirm pickup",
       nextStatus: "DELIVERY",
-      goToConfirm: order?.delivery_type === "WH_DELIVERY" ? true : false,
+      // goToConfirm: order?.delivery_type === "WH_DELIVERY" ? true : false,
+      goToConfirm: true,
     },
     DELIVERY: {
       statusText: "Out for delivery",
@@ -143,7 +144,10 @@ const OrderDetails = () => {
                       />
                       <div className="flex flex-col justify-between">
                         <p className="font-[700] capitalize">{item.name}</p>
-                        <p>{item.weight_value}{item.weight_unit}</p>
+                        <p>
+                          {item.weight_value}
+                          {item.weight_unit}
+                        </p>
                       </div>
                     </div>
                   </td>
@@ -156,9 +160,12 @@ const OrderDetails = () => {
           </TableLayout>
           <div className="mt-[1.875rem] rounded-tr-[12px] rounded-tl-[12px] border border-solid border-grey-light w-full h-[8.375rem] overflow-hidden">
             <Map
-              center={{ lat: 9.0765, lng: 7.3986 }}
-              lat={9.0765}
-              lng={7.3986}
+              center={{
+                lat: order?.warehouse_details?.location?.latitude || 9.0765,
+                lng: order?.warehouse_details?.location?.longitude || 7.3986,
+              }}
+              lat={order?.warehouse_details?.location?.latitude || 9.0765}
+              lng={order?.warehouse_details?.location?.longitude || 7.3986}
               markers={[
                 {
                   lat: order?.warehouse_details?.location?.latitude || 9.0765,

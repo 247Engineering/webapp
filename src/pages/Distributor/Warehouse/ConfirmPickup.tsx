@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -22,21 +22,20 @@ const ConfirmPickup = () => {
   const {
     loading,
     warehouseStamp,
-    order: { pickup_code },
   } = useSelector<RootState>(
     ({ distributor }) => distributor
   ) as DistributorState;
 
-  // const [otp, setOtp] = useState(pickup_code);
+  const [otp, setOtp] = useState("");
 
-  // const onChange = (value: string) => setOtp(value);
+  const onChange = (value: string) => setOtp(value);
 
   const handleSubmit = () => {
     dispatch(
       confirmOrderPickup({
         order_doc_id: order as string,
         warehouse_id: warehouse as string,
-        pickup_code,
+        pickup_code: otp,
       })
     );
   };
@@ -76,7 +75,7 @@ const ConfirmPickup = () => {
               )
             }
           >
-            <OtpInput disabled value={pickup_code || ""} onChange={() => {}} />
+            <OtpInput value={otp} onChange={onChange} />
             <ButtonSubmit
               text="Submit"
               disabled={loading}
