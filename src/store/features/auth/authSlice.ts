@@ -143,19 +143,24 @@ export const validatePasswordResetOtp = createAsyncThunk(
 
 export const requestPasswordReset = createAsyncThunk(
   "auth/requestPasswordReset",
-  async (body: {
+  async ({
+    user,
+    ...body
+  }: {
     email?: string;
     phone?: string;
     user: UserType;
     type?: string;
   }) => {
+    const reqBody = { ...body, user: body.type };
     return await request({
       url: `/auth/reset${
-        body.user === "retailer" || body.user === "logistics" ? "-password" : ""
+        user === "retailer" || user === "logistics" ? "-password" : ""
       }`,
       method: "put",
-      body,
-      user: body.user,
+      //@ts-ignore
+      reqBody,
+      user,
     });
   }
 );
