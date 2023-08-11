@@ -1,27 +1,35 @@
-import Dashboard from '../pages/Distributor/Dashboard/Dashboard'
-import VerifyMail from '../pages/Distributor/Onboarding/VerifyMail'
-import SignIn from '../pages/SignIn'
-import SignUp from '../pages/Distributor/Onboarding/SignUp'
-import ForgotPassword from '../pages/Distributor/Onboarding/ForgotPassword'
-import AccountSetup from '../pages/Distributor/Onboarding/AccountSetup'
-import BusinessInfoForm from '../pages/Distributor/BusinessInfoForm'
-import BusinessOwner from '../pages/Distributor/BusinessOwner'
-import BusinessOwnerForm from '../pages/Distributor/BusinessOwnerForm'
-import BusinessOwnerReview from '../pages/Distributor/BusinessOwnerReview'
-import WarehouseForm from '../pages/Distributor/Warehouse/WarehouseForm'
-import WarehouseFormEdit from '../pages/Distributor/Warehouse/WarehouseFormEdit'
-import ChangeWarehouseManager from '../pages/Distributor/Warehouse/ChangeWarehouseManager'
-import WarehouseLocations from '../pages/Distributor/Warehouse/WarehouseLocations'
-import WarehouseSignUp from '../pages/Distributor/Onboarding/Warehouse/SignUp'
-import WarehouseProducts from '../pages/Distributor/Warehouse/WarehouseProducts'
-import AddWarehouseProduct from '../pages/Distributor/Warehouse/AddWarehouseProduct'
-import WarehouseDetails from '../pages/Distributor/Warehouse/WarehouseDetails'
-import WarehouseOrders from '../pages/Distributor/Warehouse/Orders/Orders'
-import WarehouseOrderDetails from '../pages/Distributor/Warehouse/Orders/OrderDetails'
-import ConfirmPickup from '../pages/Distributor/Warehouse/ConfirmPickup'
+import Dashboard from "../pages/Distributor/Dashboard/Dashboard";
+import VerifyMail from "../pages/Distributor/Onboarding/VerifyMail";
+import SignIn from "../pages/SignIn";
+import SignUp from "../pages/Distributor/Onboarding/SignUp";
+import ForgotPassword from "../pages/Distributor/Onboarding/ForgotPassword";
+import AccountSetup from "../pages/Distributor/Onboarding/AccountSetup";
+import BusinessInfoForm from "../pages/Distributor/BusinessInfoForm";
+import BusinessOwner from "../pages/Distributor/BusinessOwner";
+import BusinessOwnerForm from "../pages/Distributor/BusinessOwnerForm";
+import BusinessOwnerReview from "../pages/Distributor/BusinessOwnerReview";
+import WarehouseForm from "../pages/Distributor/Warehouse/WarehouseForm";
+import WarehouseFormEdit from "../pages/Distributor/Warehouse/WarehouseFormEdit";
+import ChangeWarehouseManager from "../pages/Distributor/Warehouse/ChangeWarehouseManager";
+import WarehouseLocations from "../pages/Distributor/Warehouse/WarehouseLocations";
+import WarehouseSignUp from "../pages/Distributor/Onboarding/Warehouse/SignUp";
+import WarehouseProducts from "../pages/Distributor/Warehouse/WarehouseProducts";
+import AddWarehouseProduct from "../pages/Distributor/Warehouse/AddWarehouseProduct";
+import WarehouseDetails from "../pages/Distributor/Warehouse/WarehouseDetails";
+import WarehouseOrders from "../pages/Distributor/Warehouse/Orders/Orders";
+import WarehouseOrderDetails from "../pages/Distributor/Warehouse/Orders/OrderDetails";
+import ConfirmPickup from "../pages/Distributor/Warehouse/ConfirmPickup";
+import CreateSale from "../pages/Distributor/Warehouse/CreateSale";
+import RetailerInformation from "../pages/Distributor/Warehouse/RetailerInformation";
+import WarehouseCheckout from "../pages/Distributor/Warehouse/WarehouseCheckout";
+import WarehouseCart from "../pages/Distributor/Warehouse/WarehouseCart";
+import WarehousePayment from "../pages/Distributor/Warehouse/WarehousePayment";
+import WarehouseTransferPayment from "../pages/Distributor/Warehouse/WarehouseTransferPayment";
+import WarehouseStore from "../pages/Distributor/Warehouse/WarehouseStore";
+import WarehouseStoreItem from "../pages/Distributor/Warehouse/WarehouseStoreItem";
 
-import * as ROUTES from '../routes'
-import EditWarehouseProduct from '../pages/Distributor/Warehouse/EditWarehouseProduct'
+import * as ROUTES from "../routes";
+import EditWarehouseProduct from "../pages/Distributor/Warehouse/EditWarehouseProduct";
 
 export const unAuthedDistributorRoutes = [
   {
@@ -62,7 +70,7 @@ export const unAuthedDistributorRoutes = [
     path: ROUTES.DISTRIBUTOR.VERIFY_MAIL,
     element: <VerifyMail />,
   },
-]
+];
 
 export const authedDistributorRoutes = [
   {
@@ -133,4 +141,36 @@ export const authedDistributorRoutes = [
     path: ROUTES.DISTRIBUTOR.WAREHOUSE_PRODUCT_EDIT,
     element: <EditWarehouseProduct />,
   },
-]
+  {
+    path: ROUTES.DISTRIBUTOR.WAREHOUSE_SALE,
+    element: <CreateSale />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.WAREHOUSE_RETAILER_INFO,
+    element: <RetailerInformation />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.WAREHOUSE_CART,
+    element: <WarehouseCart />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.WAREHOUSE_CHECKOUT,
+    element: <WarehouseCheckout />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.WAREHOUSE_PAYMENT,
+    element: <WarehousePayment />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.WAREHOUSE_TRANSFER_PAYMENT,
+    element: <WarehouseTransferPayment />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.WAREHOUSE_STORE,
+    element: <WarehouseStore />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.WAREHOUSE_STORE_PRODUCT,
+    element: <WarehouseStoreItem />,
+  },
+];

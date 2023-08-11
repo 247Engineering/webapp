@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { ProductItemProps } from '../../types'
+import { AuthState, DistributorState, ProductItemProps } from '../../types'
 import OrderCounter from './OrderCounter'
 import { RootState } from '../../store'
 import { RetailerState } from '../../types'
@@ -14,11 +14,20 @@ const CartItem = ({
   unit = 'carton',
   id,
 }: ProductItemProps) => {
-  const { cartItems } = useSelector<RootState>(
+  const { type } = useSelector<RootState>(
+    ({ distributor }) => distributor,
+  ) as AuthState
+  
+  const { cartItems: retailerItems } = useSelector<RootState>(
     ({ retailer }) => retailer,
   ) as RetailerState
 
-  const itemInCart = cartItems.find((item) => item.id === id)
+  const { cartItems: distributorItems } = useSelector<RootState>(
+    ({ distributor }) => distributor,
+  ) as DistributorState
+
+  const cartItems = type === "retailer" ? retailerItems : distributorItems 
+  const itemInCart = cartItems?.find((item) => item.id === id)
 
   const [quantity, setQuantity] = useState(itemInCart?.quantity || 0)
 

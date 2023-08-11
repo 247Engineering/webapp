@@ -16,6 +16,35 @@ export const DISTRIBUTOR = {
   WAREHOUSE_PRODUCTS: "/distributor/warehouses/:warehouse/products",
   WAREHOUSE_PRODUCTS_FOR: (warehouse: string) =>
     `/distributor/warehouses/${warehouse}/products`,
+  WAREHOUSE_SALE: "/distributor/warehouses/:warehouse/create-order",
+  WAREHOUSE_SALE_FOR: (warehouse: string) =>
+    `/distributor/warehouses/${warehouse}/create-order`,
+  WAREHOUSE_RETAILER_INFO: "/distributor/warehouses/:warehouse/retailer-info",
+  WAREHOUSE_RETAILER_INFO_FOR: (warehouse: string) =>
+    `/distributor/warehouses/${warehouse}/retailer-info`,
+  WAREHOUSE_STORE: "/distributor/warehouses/:warehouse/store",
+  WAREHOUSE_STORE_FOR: (warehouse: string) =>
+    `/distributor/warehouses/${warehouse}/store`,
+  WAREHOUSE_STORE_PRODUCT: "/distributor/warehouses/:warehouse/store/:product",
+  WAREHOUSE_STORE_PRODUCT_FOR: (warehouse: string, product: string) =>
+    `/distributor/warehouses/${warehouse}/store/${product}`,
+  WAREHOUSE_CART: "/distributor/warehouses/:warehouse/cart",
+  WAREHOUSE_CART_FOR: (warehouse: string) =>
+    `/distributor/warehouses/${warehouse}/cart`,
+  WAREHOUSE_CHECKOUT: "/distributor/warehouses/:warehouse/checkout",
+  WAREHOUSE_CHECKOUT_FOR: (warehouse: string) =>
+    `/distributor/warehouses/${warehouse}/checkout`,
+  WAREHOUSE_PAYMENT: "/distributor/warehouses/:warehouse/orders/:order/payment",
+  WAREHOUSE_PAYMENT_FOR: (warehouse: string, order: string) =>
+    `/distributor/warehouses/${warehouse}/orders/${order}/payment`,
+  WAREHOUSE_TRANSFER_PAYMENT:
+    "/distributor/warehouses/:warehouse/orders/:order/payment/transfer",
+  WAREHOUSE_TRANSFER_PAYMENT_FOR: (warehouse: string, order: string) =>
+    `/distributor/warehouses/${warehouse}/orders/${order}/payment/transfer`,
+  ORDER_NOTIFICATION:
+    "/distributor/warehouses/:warehouse/orders/:order/notification",
+  ORDER_NOTIFICATION_FOR: (warehouse: string, order: string) =>
+    `/distributor/warehouses/${warehouse}/orders/${order}/notification`,
   WAREHOUSE_PRODUCT_FORM: "/distributor/warehouses/:warehouse/products/form",
   WAREHOUSE_PRODUCT_FORM_FOR: (warehouse: string) =>
     `/distributor/warehouses/${warehouse}/products/form`,
@@ -46,7 +75,7 @@ export const WAREHOUSE = {
   DASHBOARD: "/distributor/dashboard",
   SIGNIN: "/distributor/warehouse-manager-login",
   SIGNUP: "/auth/account-select",
-  FORGOT_PASSWORD: "/warehouse/forgot-password"
+  FORGOT_PASSWORD: "/warehouse/forgot-password",
 };
 
 export const RETAILER = {
@@ -64,7 +93,8 @@ export const RETAILER = {
   PAYMENT: "/retailer/orders/:order/payment",
   PAYMENT_FOR: (order: string) => `/retailer/orders/${order}/payment`,
   TRANSFER_PAYMENT: "/retailer/orders/:order/payment/transfer",
-  TRANSFER_PAYMENT_FOR: (order: string) => `/retailer/orders/${order}/payment/transfer`,
+  TRANSFER_PAYMENT_FOR: (order: string) =>
+    `/retailer/orders/${order}/payment/transfer`,
   ORDER_NOTIFICATION: "/retailer/orders/:order/notification",
   ORDER_NOTIFICATION_FOR: (order: string) =>
     `/retailer/orders/${order}/notification`,

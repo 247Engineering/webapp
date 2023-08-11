@@ -28,7 +28,7 @@ export interface AuthState {
 }
 
 export interface InputProps {
-  label: string;
+  label?: string;
   labelRight?: string;
   options?: { value: string; label: string }[];
   type?: string;
@@ -191,12 +191,18 @@ export interface DistributorState {
   cac: string | null;
   owners?: Owner[];
   stepsCompleted?: number;
+  saleStepsCompleted?: number;
   loading?: boolean;
   warehouseStamp?: number | null;
   warehouses?: any[];
   warehouse?: any;
   order?: any;
   orders?: any[];
+  cartItems?: CartItem[];
+  cartId?: string | null;
+  retailer?: any;
+  orderType?: "delivery" | "pickup";
+  orderId?: string | null;
 }
 
 export interface AppLayoutProps {
