@@ -26,6 +26,7 @@ const initialState: DistributorState = {
   retailer: null,
   orderType: "delivery",
   orderId: null,
+  accountDetails: null,
 };
 
 export const submitDistributor = createAsyncThunk(
@@ -362,6 +363,44 @@ export const completeOrder = createAsyncThunk(
   }
 );
 
+export const fetchAccountDetails = createAsyncThunk(
+  "distributor/fetchAccountDetails",
+  async (body: { order_doc_id: string }) => {
+    return await request({
+      url: "/commerce/pay-warehouse",
+      method: "post",
+      body,
+      user: "distributor",
+    });
+  }
+);
+
+export const verifyPayment = createAsyncThunk(
+  "distributor/verifyPayment",
+  async (
+    {
+      order_doc_id,
+      onSuccess,
+    }: {
+      order_doc_id: string;
+      onSuccess: () => void;
+    },
+    { getState }
+  ) => {
+    const {
+      distributor: { retailer },
+    } = getState() as RootState;
+
+    return await request({
+      url: "/commerce/verify-txn",
+      method: "post",
+      body: { order_doc_id, retailer_id: retailer?.retailer_id },
+      user: "distributor",
+      onSuccess,
+    });
+  }
+);
+
 export const distributorSlice = createSlice({
   name: "distributor",
   initialState,
@@ -496,6 +535,14 @@ export const distributorSlice = createSlice({
             break;
           case "distributor/fetchWarehouseOrders/fulfilled":
             state.orders = action.payload.data;
+            break;
+          case "distributor/verifyPayment/fulfilled":
+            state.cartItems = [];
+            state.cartId = null;
+            break;
+          case "distributor/fetchAccountDetails/fulfilled":
+            state.accountDetails =
+              action.payload.accountDetails || action.payload.accoutDetails;
             break;
         }
 

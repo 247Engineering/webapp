@@ -203,6 +203,7 @@ export interface DistributorState {
   retailer?: any;
   orderType?: "delivery" | "pickup";
   orderId?: string | null;
+  accountDetails?: any;
 }
 
 export interface AppLayoutProps {

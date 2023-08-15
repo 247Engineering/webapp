@@ -1,8 +1,5 @@
-import React, { useMemo } from "react";
-import {
-  useDispatch,
-  useSelector,
-} from "react-redux";
+import React, { useMemo, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
 import logo from "../../../assets/images/24.svg";
@@ -12,16 +9,12 @@ import ButtonSubmit from "../../../components/forms/ButtonSubmit";
 import Loader from "../../../components/miscellaneous/Loader";
 
 import { DistributorState } from "../../../types";
+import { AppDispatch, RootState } from "../../../store";
 import {
-  AppDispatch,
-  RootState,
-} from "../../../store";
-// import {
-//   fetchAccountDetails,
-//   verifyPayment,
-// } from "../../../store/features/distributor";
+  fetchAccountDetails,
+  verifyPayment,
+} from "../../../store/features/distributor";
 import * as ROUTES from "../../../routes";
-import { clearCart } from "../../../store/features/retailer";
 
 const WarehouseTransferPayment = () => {
   const navigate = useNavigate();
@@ -29,22 +22,11 @@ const WarehouseTransferPayment = () => {
   const { order, warehouse } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
-  const {
-    cartItems,
-    loading,
-    // accountDetails,
-    // deliveryFee,
-    // serviceFee,
-    orderType,
-  } = useSelector<RootState>(
-    ({ distributor }) => distributor
-  ) as DistributorState;
+  const { cartItems, loading, accountDetails, orderType } =
+    useSelector<RootState>(
+      ({ distributor }) => distributor
+    ) as DistributorState;
 
-  const accountDetails = {
-    account_name: "FEMADONS LIMITED",
-    destination_bank: "Providus Bank",
-    account_number: "2189217875",
-  };
   const deliveryFee = 0;
   const serviceFee = 0;
 
@@ -65,21 +47,19 @@ const WarehouseTransferPayment = () => {
   );
 
   const handleSubmit = () => {
-    dispatch(clearCart())
-    navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_ORDERS);
-    // dispatch(
-    //   verifyPayment({
-    //     order_doc_id: order as string,
-    //     onSuccess: () => {
-    //       navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_ORDERS);
-    //     },
-    //   })
-    // );
+    dispatch(
+      verifyPayment({
+        order_doc_id: order as string,
+        onSuccess: () => {
+          navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_ORDERS);
+        },
+      })
+    );
   };
 
-  // useEffect(() => {
-  //   dispatch(fetchAccountDetails({ order_doc_id: order as string }));
-  // }, [order, dispatch]);
+  useEffect(() => {
+    dispatch(fetchAccountDetails({ order_doc_id: order as string }));
+  }, [order, dispatch]);
 
   return (
     <div>

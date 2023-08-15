@@ -27,9 +27,11 @@ import WarehousePayment from "../pages/Distributor/Warehouse/WarehousePayment";
 import WarehouseTransferPayment from "../pages/Distributor/Warehouse/WarehouseTransferPayment";
 import WarehouseStore from "../pages/Distributor/Warehouse/WarehouseStore";
 import WarehouseStoreItem from "../pages/Distributor/Warehouse/WarehouseStoreItem";
+import EditWarehouseProduct from "../pages/Distributor/Warehouse/EditWarehouseProduct";
+import Coupons from "../pages/Distributor/Coupons/Coupons";
+import CouponForm from "../pages/Distributor/Coupons/CouponForm";
 
 import * as ROUTES from "../routes";
-import EditWarehouseProduct from "../pages/Distributor/Warehouse/EditWarehouseProduct";
 
 export const unAuthedDistributorRoutes = [
   {
@@ -96,6 +98,14 @@ export const authedDistributorRoutes = [
   {
     path: ROUTES.DISTRIBUTOR.BUSINESS_INFO_FORM,
     element: <BusinessInfoForm />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.COUPONS,
+    element: <Coupons />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.COUPON_FORM,
+    element: <CouponForm />,
   },
   {
     path: ROUTES.DISTRIBUTOR.WAREHOUSES,

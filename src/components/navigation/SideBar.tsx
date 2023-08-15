@@ -40,11 +40,15 @@ const SideBar = ({ show }: { show: boolean }) => {
             },
           ]
         : []),
-      {
-        link: ROUTES.DISTRIBUTOR.DASHBOARD,
-        text: "Operations",
-        image: operations,
-      },
+      ...(user?.type === "distributor"
+        ? [
+            {
+              link: ROUTES.DISTRIBUTOR.COUPONS,
+              text: "Coupons",
+              image: operations,
+            },
+          ]
+        : []),
       { link: ROUTES.DISTRIBUTOR.DASHBOARD, text: "Settings", image: settings },
     ],
     RETAILER: [

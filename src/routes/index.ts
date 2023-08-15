@@ -9,6 +9,8 @@ export const DISTRIBUTOR = {
   BUSINESS_OWNER_REVIEW: "/distributor/business-owner/review",
   BUSINESS_OWNER_FORM: "/distributor/business-owner/form",
   BUSINESS_INFO_FORM: "/distributor/business-info/form",
+  COUPONS: "/distributor/coupons",
+  COUPON_FORM: "/distributor/coupons/form",
   WAREHOUSE_SIGNUP: "/distributor/create-warehouse-manager",
   WAREHOUSE_LOGIN: "/distributor/warehouse-manager-login",
   WAREHOUSES: "/distributor/warehouses",
