@@ -542,7 +542,7 @@ export const distributorSlice = createSlice({
             break;
           case "distributor/fetchAccountDetails/fulfilled":
             state.accountDetails =
-              action.payload.accountDetails || action.payload.accoutDetails;
+              action.payload.data
             break;
         }
 
