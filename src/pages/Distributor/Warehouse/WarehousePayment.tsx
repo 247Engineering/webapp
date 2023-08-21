@@ -33,10 +33,13 @@ const WarehousePayment = () => {
     loading,
     warehouseStamp,
     retailer,
+    couponAmount,
     // deliveryFee,
     // serviceFee,
     orderType,
-  } = useSelector<RootState>(({ distributor }) => distributor) as DistributorState;
+  } = useSelector<RootState>(
+    ({ distributor }) => distributor
+  ) as DistributorState;
 
   const deliveryFee = 0;
   const serviceFee = 0;
@@ -153,7 +156,8 @@ const WarehousePayment = () => {
                     0
                   ) +
                   (orderType === "delivery" ? deliveryFee : 0) +
-                  serviceFee
+                  serviceFee -
+                  (couponAmount || 0)
                 ).toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,

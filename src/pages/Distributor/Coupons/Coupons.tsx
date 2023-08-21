@@ -12,10 +12,7 @@ import TableLayout from "../../../components/tables/TableLayout";
 import TableFooter from "../../../components/tables/TableFooter";
 import Loader from "../../../components/miscellaneous/Loader";
 
-import {
-  fetchWarehouseOrders,
-  fetchWarehouses,
-} from "../../../store/features/distributor";
+import { fetchCoupons } from "../../../store/features/distributor";
 import { AppDispatch, RootState } from "../../../store";
 import { DistributorState } from "../../../types";
 import * as ROUTES from "../../../routes";
@@ -24,19 +21,15 @@ const Coupons = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { orders, warehouses, loading } = useSelector<RootState>(
+  const { coupons, loading } = useSelector<RootState>(
     ({ distributor }) => distributor
   ) as DistributorState;
 
   const [sort, setSort] = useState("");
-  const [warehouseIds, setWarehouseIds] = useState(() =>
-    warehouses?.map((warehouse) => warehouse._id).join(",")
-  );
 
   useEffect(() => {
-    if (warehouseIds) dispatch(fetchWarehouseOrders(warehouseIds));
-    dispatch(fetchWarehouses());
-  }, [dispatch, warehouseIds]);
+    dispatch(fetchCoupons());
+  }, [dispatch]);
 
   return (
     <>
@@ -81,51 +74,40 @@ const Coupons = () => {
                 <th className="w-[9.5rem]">Date Created</th>
                 <th className="w-[9.5rem]">Created By</th>
                 <th className="w-[9.5rem]">Value (N)</th>
-                <th className="w-[9.5rem]">Used By</th>
+                <th className="w-[9.5rem]">Warehouse</th>
                 <th className="w-[9.5rem]">Status</th>
               </tr>
             </thead>
             <tbody>
-              {orders?.map((order) => (
-                <tr
-                  key={order.id}
-                  onClick={() =>
-                    navigate(
-                      ROUTES.DISTRIBUTOR.WAREHOUSE_ORDER_FOR(
-                        order.warehouse_id,
-                        order.id
-                      )
-                    )
-                  }
-                >
+              {coupons?.map((coupon) => (
+                <tr key={coupon.coupon}>
                   <td className="w-[9.5rem] overflow-hidden text-ellipsis p-4 font-[700] text-[0.75rem] leading-[1rem] text-purple">
-                    {order.order_id}
+                    {coupon.coupon}
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                    {format(
-                      order.order_date
-                        ? new Date(order.order_date)
-                        : new Date(),
-                      "dd/M/yyy hh:ma"
-                    )}
+                    {format(new Date(coupon.date_created), "dd/M/yyy hh:ma")}
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                    Chuks Billions
+                    {coupon.coupon_creator}
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                    {(2500).toLocaleString()}
+                    {coupon.coupon_amount.toLocaleString()}
                   </td>
                   <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem]">
-                    Sabinus Orji
+                    {coupon.warehouse}
                   </td>
-                  <td className="w-[9.5rem] p-4 text-[0.75rem] leading-[1rem] font-[700] text-red">
-                    Expired
+                  <td
+                    className={`w-[9.5rem] p-4 text-[0.75rem] leading-[1rem] font-[700] ${
+                      coupon.status === "VALID" ? "text-green" : "text-red"
+                    }`}
+                  >
+                    {coupon.status}
                   </td>
                 </tr>
               ))}
             </tbody>
           </TableLayout>
-          <TableFooter total={orders?.length || 0} />
+          <TableFooter total={coupons?.length || 0} />
         </section>
       </AppLayout>
     </>

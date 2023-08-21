@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, CSSProperties } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import MoonLoader from "react-spinners/MoonLoader";
 
 // import priority from '../../../assets/images/priority.svg'
 // import priorityChecked from '../../../assets/images/priority-checked.svg'
@@ -30,6 +31,7 @@ import { AppDispatch, RootState } from "../../../store";
 import {
   resetWarehouseStamp,
   placeOrder,
+  applyCoupon,
 } from "../../../store/features/distributor";
 import * as ROUTES from "../../../routes";
 
@@ -40,6 +42,11 @@ import * as ROUTES from "../../../routes";
 // };
 
 const WarehouseCheckout = () => {
+  const override: CSSProperties = {
+    borderColor: "#E34B31",
+    background: "transparent",
+  };
+
   const navigate = useNavigate();
 
   const { warehouse: warehouseId } = useParams();
@@ -52,10 +59,13 @@ const WarehouseCheckout = () => {
     orderId,
     warehouseStamp,
     warehouses,
+    couponAmount,
     // location: retailerGeo,
     // deliveryFee,
     // serviceFee,
-  } = useSelector<RootState>(({ distributor }) => distributor) as DistributorState;
+  } = useSelector<RootState>(
+    ({ distributor }) => distributor
+  ) as DistributorState;
 
   // let retailerGeo = {};
   let deliveryFee = 0;
@@ -295,17 +305,45 @@ const WarehouseCheckout = () => {
             className="pb-1"
             deliveryFee={type === "delivery" ? deliveryFee : 0}
             serviceFee={serviceFee}
+            couponAmount={couponAmount}
           />
           <div className="grid grid-cols-2 gap-2 items-center pb-[10.75rem]">
-            <label className="text-[1rem] leading-[1rem] font-[700]">
-              Apply Coupon
-            </label>
             <input
               className="input"
               type="text"
+              placeholder="Enter coupon"
               value={coupon}
               onChange={(e) => setCoupon(e.target.value.toUpperCase())}
             />
+            <button
+              disabled={!coupon || loading || !!couponAmount}
+              className="bg-orange text-white button button-small p-2 ml-auto !w-[7.469rem]"
+              onClick={() =>
+                dispatch(
+                  applyCoupon({
+                    warehouse_id: warehouseId as string,
+                    coupon,
+                    amount:
+                      (cartItems || [])?.reduce(
+                        (acc, curr) => acc + curr.quantity * curr.price,
+                        0
+                      ) +
+                      (type === "delivery" ? deliveryFee : 0) +
+                      serviceFee,
+                  })
+                )
+              }
+            >
+              {loading ? (
+                <MoonLoader
+                  cssOverride={override}
+                  size={15.6}
+                  color="#E34B31"
+                />
+              ) : (
+                "Apply Coupon"
+              )}
+            </button>
           </div>
           <div className="p-4 fixed bottom-0 left-0 right-0 bg-white shadow-sm-alt">
             <div className="mb-6 flex items-center justify-between">
@@ -318,7 +356,8 @@ const WarehouseCheckout = () => {
                     0
                   ) +
                   (type === "delivery" ? deliveryFee : 0) +
-                  serviceFee
+                  serviceFee -
+                  (couponAmount || 0)
                 ).toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,

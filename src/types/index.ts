@@ -204,6 +204,8 @@ export interface DistributorState {
   orderType?: "delivery" | "pickup";
   orderId?: string | null;
   accountDetails?: any;
+  coupons?: any[];
+  couponAmount?: number
 }
 
 export interface AppLayoutProps {

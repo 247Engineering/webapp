@@ -12,12 +12,14 @@ const OrderSummary = ({
   cartItems,
   deliveryFee = 0,
   serviceFee = 0,
+  couponAmount = 0,
 }: {
   addItems?: boolean;
   className?: string;
   cartItems: CartItem[];
   deliveryFee?: number;
   serviceFee?: number;
+  couponAmount?: number;
 }) => {
   const navigate = useNavigate();
 
@@ -72,9 +74,18 @@ const OrderSummary = ({
           <span>Service Fee</span>
           <span>N {serviceFee.toLocaleString()}</span>
         </div>
+        {couponAmount ? (
+          <div className="mb-2 flex justify-between items-center">
+            <span>Coupon Amount</span>
+            <span>-N {couponAmount.toLocaleString()}</span>
+          </div>
+        ) : null}
         <div className="flex justify-between items-center font-[700] text-[0.875rem] leading-[1.25rem]">
           <span>Total</span>
-          <span>N {(total + deliveryFee + serviceFee).toLocaleString()}</span>
+          <span>
+            N{" "}
+            {(total + deliveryFee + serviceFee - couponAmount).toLocaleString()}
+          </span>
         </div>
       </div>
     </div>

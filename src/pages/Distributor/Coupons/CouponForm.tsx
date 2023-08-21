@@ -1,45 +1,50 @@
-import React, { useState, useMemo } from "react";
-import {
-  // useDispatch,
-  useSelector,
-} from "react-redux";
+import React, { useState, useMemo, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import AppLayout from "../../../components/layouts/AppLayout";
 import Input from "../../../components/forms/Input";
 import ButtonSubmit from "../../../components/forms/ButtonSubmit";
 
-import {
-  // AppDispatch,
-  RootState,
-} from "../../../store";
+import { AppDispatch, RootState } from "../../../store";
 import { DistributorState } from "../../../types";
-import // completeStep,
-// updateDistributor,
-"../../../store/features/distributor";
+import {
+  fetchWarehouses,
+  createCoupon,
+} from "../../../store/features/distributor";
 import * as ROUTES from "../../../routes";
 
 const CouponForm = () => {
   const navigate = useNavigate();
 
-  // const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const distributor = useSelector<RootState>(
+  const { warehouses, loading } = useSelector<RootState>(
     ({ distributor }) => distributor
   ) as DistributorState;
 
-  const [coupon, setCoupon] = useState("");
+  const [warehouse, setWarehouse] = useState("");
   const [amount, setAmount] = useState(0);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    navigate(ROUTES.DISTRIBUTOR.COUPONS);
+    dispatch(
+      createCoupon({
+        warehouse_id: warehouse,
+        amount,
+        onSuccess: () => navigate(ROUTES.DISTRIBUTOR.COUPONS),
+      })
+    );
   };
 
   const canSubmit = useMemo(
-    () => [coupon, amount].every((data) => !!data),
-    [coupon, amount]
+    () => [warehouse, amount].every((data) => !!data),
+    [warehouse, amount]
   );
+
+  useEffect(() => {
+    dispatch(fetchWarehouses());
+  }, [dispatch]);
 
   return (
     <>
@@ -61,12 +66,15 @@ const CouponForm = () => {
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <Input
-                label="Coupon"
-                value={coupon}
+                label="Warehouse"
+                value={warehouse}
                 onChange={(value: string) =>
-                  setCoupon(value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase())
+                  setWarehouse(value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase())
                 }
-                type="text"
+                options={warehouses?.map((warehouse) => ({
+                  value: warehouse._id,
+                  label: warehouse.name,
+                }))}
               />
             </div>
             <div className="mb-4">
@@ -82,7 +90,8 @@ const CouponForm = () => {
               text="Create"
               onClick={handleSubmit}
               className="mt-12"
-              disabled={!canSubmit}
+              disabled={!canSubmit || loading}
+              loading={loading}
             />
           </form>
         </section>

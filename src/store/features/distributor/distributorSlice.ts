@@ -27,6 +27,8 @@ const initialState: DistributorState = {
   orderType: "delivery",
   orderId: null,
   accountDetails: null,
+  coupons: [],
+  couponAmount: 0
 };
 
 export const submitDistributor = createAsyncThunk(
@@ -401,6 +403,69 @@ export const verifyPayment = createAsyncThunk(
   }
 );
 
+export const createCoupon = createAsyncThunk(
+  "distributor/createCoupon",
+  async ({
+    onSuccess,
+    ...body
+  }: {
+    warehouse_id: string;
+    amount: number;
+    onSuccess?: () => void;
+  }) => {
+    return await request({
+      url: "/coupon/create",
+      method: "post",
+      body,
+      user: "distributor",
+      onSuccess,
+    });
+  }
+);
+
+export const applyCoupon = createAsyncThunk(
+  "distributor/applyCoupon",
+  async (
+    {
+      onSuccess,
+      ...body
+    }: {
+      warehouse_id: string;
+      coupon: string;
+      amount: number;
+      onSuccess?: () => void;
+    },
+    { getState }
+  ) => {
+    const {
+      distributor: { retailer, cartId },
+    } = getState() as RootState;
+
+    return await request({
+      url: "/coupon/apply",
+      method: "post",
+      body: {
+        ...body,
+        cart_id: cartId,
+        retailer_id: retailer?.retailer_id,
+      },
+      user: "distributor",
+      onSuccess,
+    });
+  }
+);
+
+export const fetchCoupons = createAsyncThunk(
+  "distributor/fetchCoupons",
+  async () => {
+    return await request({
+      url: `/coupon/retrieve`,
+      method: "get",
+      user: "distributor",
+    });
+  }
+);
+
 export const distributorSlice = createSlice({
   name: "distributor",
   initialState,
@@ -532,6 +597,7 @@ export const distributorSlice = createSlice({
             state.cartId = null;
             state.retailer = null;
             state.saleStepsCompleted = 0;
+            state.couponAmount = 0;
             break;
           case "distributor/fetchWarehouseOrders/fulfilled":
             state.orders = action.payload.data;
@@ -539,10 +605,16 @@ export const distributorSlice = createSlice({
           case "distributor/verifyPayment/fulfilled":
             state.cartItems = [];
             state.cartId = null;
+            state.couponAmount = 0
             break;
           case "distributor/fetchAccountDetails/fulfilled":
-            state.accountDetails =
-              action.payload.data
+            state.accountDetails = action.payload.data;
+            break;
+          case "distributor/fetchCoupons/fulfilled":
+            state.coupons = action.payload.data.coupon_data;
+            break;
+          case "distributor/applyCoupon/fulfilled":
+            state.couponAmount = action.payload.data.coupon_amount;
             break;
         }
 
