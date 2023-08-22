@@ -71,7 +71,7 @@ const RetailerInformation = () => {
   );
 
   useEffect(() => {
-    if (isValidMobile) {
+    if (isValidMobile && mobile.length === 10) {
       dispatch(findRetailer((callingCode + mobile).replace("+", "")));
     } else {
       setFoundRetailer(false);
