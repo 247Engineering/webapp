@@ -304,7 +304,7 @@ const WarehouseProduct = ({
                   label="Discounted price"
                   value={discountedPrice}
                   onChange={setDiscountedPrice}
-                  type="text"
+                  type="number"
                   placeholder="Enter discounted price"
                 />
               </div>

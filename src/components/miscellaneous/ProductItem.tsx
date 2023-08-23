@@ -1,15 +1,20 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-import defaultImage from '../../assets/images/image.svg'
+import defaultImage from "../../assets/images/image.svg";
 
-import Status from './Status'
-import OrderCounter from './OrderCounter'
+import Status from "./Status";
+import OrderCounter from "./OrderCounter";
 
-import { ProductItemProps, RetailerState } from '../../types'
-import * as ROUTES from '../../routes'
-import { RootState } from '../../store'
+import {
+  AuthState,
+  DistributorState,
+  ProductItemProps,
+  RetailerState,
+} from "../../types";
+import * as ROUTES from "../../routes";
+import { RootState } from "../../store";
 
 const ProductItem = ({
   discount,
@@ -17,23 +22,42 @@ const ProductItem = ({
   name,
   price,
   minOrder,
-  unit = 'carton',
+  unit = "carton",
   id,
 }: ProductItemProps) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const { cartItems } = useSelector<RootState>(
-    ({ retailer }) => retailer,
-  ) as RetailerState
+  const { warehouse } = useParams();
 
-  const itemInCart = cartItems.find((item) => item.id === id)
+  const { type } = useSelector<RootState>(({ auth }) => auth) as AuthState;
 
-  const [quantity, setQuantity] = useState(itemInCart?.quantity || 0)
+  const { cartItems: retailerCartItems } = useSelector<RootState>(
+    ({ retailer }) => retailer
+  ) as RetailerState;
+
+  const { cartItems: distributorCartItems } = useSelector<RootState>(
+    ({ distributor }) => distributor
+  ) as DistributorState;
+
+  const cartItems =
+    type === "retailer" ? retailerCartItems : distributorCartItems;
+  const itemInCart = cartItems?.find((item) => item.id === id);
+
+  const [quantity, setQuantity] = useState(itemInCart?.quantity || 0);
 
   return (
     <div
       className="py-4 w-full min-h-[10.625rem] border border-solid border-grey-light border-0 border-b flex mb-2"
-      onClick={() => navigate(ROUTES.RETAILER.STORE_PRODUCT_FOR(id))}
+      onClick={() =>
+        navigate(
+          type === "retailer"
+            ? ROUTES.RETAILER.STORE_PRODUCT_FOR(id)
+            : ROUTES.DISTRIBUTOR.WAREHOUSE_STORE_PRODUCT_FOR(
+                warehouse as string,
+                id
+              )
+        )
+      }
     >
       {/* <div className="w-[29%] py-4 px-3 h-fit rounded-[4px]"> */}
       <img
@@ -42,7 +66,7 @@ const ProductItem = ({
         alt="product"
         onError={(e) => {
           //@ts-ignore
-          e.target.src = defaultImage
+          e.target.src = defaultImage;
         }}
       />
       {/* </div> */}
@@ -79,7 +103,7 @@ const ProductItem = ({
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductItem
+export default ProductItem;

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { DistributorState, Address, Owner } from "../../../types";
+import { DistributorState, Address, Owner, CartItem } from "../../../types";
 import request from "../../../helpers/request";
 import { RootState } from "../..";
 // import { signin } from '../auth'
@@ -15,11 +15,20 @@ const initialState: DistributorState = {
   cac: null,
   owners: [],
   stepsCompleted: 0,
+  saleStepsCompleted: 0,
   loading: false,
   warehouseStamp: null,
   warehouses: [],
   warehouse: null,
   order: null,
+  cartItems: [],
+  cartId: null,
+  retailer: null,
+  orderType: "delivery",
+  orderId: null,
+  accountDetails: null,
+  coupons: [],
+  couponAmount: 0
 };
 
 export const submitDistributor = createAsyncThunk(
@@ -201,12 +210,271 @@ export const confirmOrderPickup = createAsyncThunk(
   }
 );
 
+export const createRetailer = createAsyncThunk(
+  "distributor/createRetailer",
+  async ({
+    onSuccess,
+    ...body
+  }: {
+    phone: string;
+    fname: string;
+    lname: string;
+    onSuccess: () => void;
+  }) => {
+    return await request({
+      url: "/commerce/retailer/details",
+      method: "post",
+      body,
+      user: "distributor",
+      onSuccess,
+    });
+  }
+);
+
+export const findRetailer = createAsyncThunk(
+  "distributor/findRetailer",
+  async (phone: string) => {
+    return await request({
+      url: `/commerce/retailer/${phone}`,
+      method: "get",
+      user: "distributor",
+    });
+  }
+);
+
+export const fetchCart = createAsyncThunk(
+  "distributor/fetchCart",
+  async (_, { getState }) => {
+    const {
+      distributor: { retailer },
+    } = getState() as RootState;
+
+    return await request({
+      url: `/commerce/cart/${retailer?.retailer_id}`,
+      method: "get",
+      user: "distributor",
+    });
+  }
+);
+
+export const addToWarehouseCart = createAsyncThunk(
+  "distributor/addToWarehouseCart",
+  async (
+    { cartItem, onSuccess }: { cartItem: CartItem; onSuccess: () => void },
+    { getState }
+  ) => {
+    const {
+      distributor: { cartItems, retailer },
+    } = getState() as RootState;
+
+    let itemInCart = cartItems?.find((item) => item.id === cartItem.id);
+
+    const line_items = itemInCart
+      ? cartItems?.map((item) =>
+          item.id === cartItem.id
+            ? { quantity: cartItem.quantity, product_id: cartItem.id }
+            : { quantity: item.quantity, product_id: item.id }
+        )
+      : [
+          ...(cartItems || []).map((item) => ({
+            quantity: item.quantity,
+            product_id: item.id,
+          })),
+          { quantity: cartItem.quantity, product_id: cartItem.id },
+        ];
+
+    return await request({
+      url: "/commerce/cart",
+      method: "post",
+      body: { line_items, retailer_id: retailer?.retailer_id },
+      user: "distributor",
+      onSuccess,
+    });
+  }
+);
+
+export const removeFromWarehouseCart = createAsyncThunk(
+  "distributor/removeFromWarehouseCart",
+  async (
+    {
+      productId: product_id,
+      onSuccess,
+    }: { productId: string; onSuccess: () => void },
+    { getState }
+  ) => {
+    const {
+      distributor: { cartId: cart_id, retailer },
+    } = getState() as RootState;
+
+    return await request({
+      url: "/commerce/remove-cart-item",
+      method: "put",
+      body: {
+        cart_id,
+        product_id,
+        retailer_id: retailer?.retailer_id,
+      },
+      user: "distributor",
+      onSuccess,
+    });
+  }
+);
+
+export const placeOrder = createAsyncThunk(
+  "distributor/placeOrder",
+  async (
+    order: {
+      location?: { latitude: number; longitude: number };
+      delivery_instructions?: string;
+      delivery_options: number;
+      pickup_time?: string;
+      delivery_time?: string;
+    },
+    { getState }
+  ) => {
+    const {
+      distributor: { cartId: cart_id, retailer },
+    } = getState() as RootState;
+
+    return await request({
+      url: "/commerce/order",
+      method: "post",
+      body: {
+        ...order,
+        retailer_id: retailer?.retailer_id,
+        cart_id,
+      },
+      user: "distributor",
+    });
+  }
+);
+
+export const completeOrder = createAsyncThunk(
+  "distributor/completeOrder",
+  async (body: {
+    order_doc_id: string;
+    payment_option: number;
+    retailer_id: string;
+  }) => {
+    return await request({
+      url: "/commerce/complete",
+      method: "post",
+      body,
+      user: "distributor",
+    });
+  }
+);
+
+export const fetchAccountDetails = createAsyncThunk(
+  "distributor/fetchAccountDetails",
+  async (body: { order_doc_id: string }) => {
+    return await request({
+      url: "/commerce/pay-warehouse",
+      method: "post",
+      body,
+      user: "distributor",
+    });
+  }
+);
+
+export const verifyPayment = createAsyncThunk(
+  "distributor/verifyPayment",
+  async (
+    {
+      order_doc_id,
+      onSuccess,
+    }: {
+      order_doc_id: string;
+      onSuccess: () => void;
+    },
+    { getState }
+  ) => {
+    const {
+      distributor: { retailer },
+    } = getState() as RootState;
+
+    return await request({
+      url: "/commerce/verify-txn",
+      method: "post",
+      body: { order_doc_id, retailer_id: retailer?.retailer_id },
+      user: "distributor",
+      onSuccess,
+    });
+  }
+);
+
+export const createCoupon = createAsyncThunk(
+  "distributor/createCoupon",
+  async ({
+    onSuccess,
+    ...body
+  }: {
+    warehouse_id: string;
+    amount: number;
+    onSuccess?: () => void;
+  }) => {
+    return await request({
+      url: "/coupon/create",
+      method: "post",
+      body,
+      user: "distributor",
+      onSuccess,
+    });
+  }
+);
+
+export const applyCoupon = createAsyncThunk(
+  "distributor/applyCoupon",
+  async (
+    {
+      onSuccess,
+      ...body
+    }: {
+      warehouse_id: string;
+      coupon: string;
+      amount: number;
+      onSuccess?: () => void;
+    },
+    { getState }
+  ) => {
+    const {
+      distributor: { retailer, cartId },
+    } = getState() as RootState;
+
+    return await request({
+      url: "/coupon/apply",
+      method: "post",
+      body: {
+        ...body,
+        cart_id: cartId,
+        retailer_id: retailer?.retailer_id,
+      },
+      user: "distributor",
+      onSuccess,
+    });
+  }
+);
+
+export const fetchCoupons = createAsyncThunk(
+  "distributor/fetchCoupons",
+  async () => {
+    return await request({
+      url: `/coupon/retrieve`,
+      method: "get",
+      user: "distributor",
+    });
+  }
+);
+
 export const distributorSlice = createSlice({
   name: "distributor",
   initialState,
   reducers: {
     completeStep: (state, { payload }) => {
       state.stepsCompleted = payload;
+    },
+    completeSaleStep: (state, { payload }) => {
+      state.saleStepsCompleted = payload;
     },
     updateDistributor: (state, { payload }: { payload: DistributorState }) => {
       for (const item in payload) {
@@ -225,6 +493,12 @@ export const distributorSlice = createSlice({
     resetWarehouseStamp: (state) => {
       state.warehouseStamp = null;
     },
+    clearCart: (state) => {
+      state.cartItems = [];
+      state.cartId = null;
+      state.retailer = null;
+      state.saleStepsCompleted = 0;
+    },
   },
   extraReducers(builder) {
     builder
@@ -232,6 +506,15 @@ export const distributorSlice = createSlice({
       //   if (step > 0) state.stepsCompleted = 3
       // })
       .addMatcher(isPendingAction("distributor"), (state, action) => {
+        switch (action.type) {
+          case "distributor/addToWarehouseCart/pending":
+            state.warehouseStamp = action.meta.arg.cartItem.id;
+            break;
+          case "distributor/removeFromWarehouseCart/pending":
+            state.warehouseStamp = action.meta.arg.productId;
+            break;
+        }
+
         state.loading = true;
       })
       .addMatcher(isRejectedAction("distributor"), (state, action) => {
@@ -267,8 +550,71 @@ export const distributorSlice = createSlice({
             state.order = action.payload.data;
             state.warehouseStamp = new Date().getTime();
             break;
+          case "distributor/createRetailer/fulfilled":
+            state.retailer = action.payload.data;
+            break;
+          case "distributor/findRetailer/fulfilled":
+            state.retailer = action.payload.data;
+            break;
+          case "distributor/fetchCart/fulfilled":
+            state.cartItems =
+              action.payload.cart.line_items?.map((item: any) => ({
+                id: item.product_id,
+                quantity: item.quantity,
+                price: item.price,
+                name: item.name,
+                image: item.images[0],
+              })) || [];
+            state.cartId = action.payload.cart._id || null;
+            break;
+          case "distributor/addToWarehouseCart/fulfilled":
+            let itemInCart = state.cartItems?.find(
+              (item) => item.id === action.meta.arg.cartItem.id
+            );
+            state.cartItems = itemInCart
+              ? state.cartItems?.map((item) =>
+                  item.id === action.meta.arg.cartItem.id
+                    ? action.meta.arg.cartItem
+                    : item
+                )
+              : [...(state.cartItems || []), action.meta.arg.cartItem];
+            state.cartId = action.payload.cart_id;
+            break;
+          case "distributor/removeFromWarehouseCart/fulfilled":
+            state.cartItems = state.cartItems?.filter(
+              (item) => item.id !== action.meta.arg.productId
+            );
+            break;
+          case "distributor/placeOrder/fulfilled":
+            state.orderId = action.payload.id;
+            state.warehouseStamp = action.payload.id;
+            state.orderType =
+              action.meta.arg.delivery_options === 1 ? "delivery" : "pickup";
+            break;
+          case "distributor/completeOrder/fulfilled":
+            state.warehouseStamp = new Date().getTime();
+            state.cartItems = [];
+            state.cartId = null;
+            state.retailer = null;
+            state.saleStepsCompleted = 0;
+            state.couponAmount = 0;
+            break;
           case "distributor/fetchWarehouseOrders/fulfilled":
             state.orders = action.payload.data;
+            break;
+          case "distributor/verifyPayment/fulfilled":
+            state.cartItems = [];
+            state.cartId = null;
+            state.couponAmount = 0
+            break;
+          case "distributor/fetchAccountDetails/fulfilled":
+            state.accountDetails = action.payload.data;
+            break;
+          case "distributor/fetchCoupons/fulfilled":
+            state.coupons = action.payload.data.coupon_data;
+            break;
+          case "distributor/applyCoupon/fulfilled":
+            state.couponAmount = action.payload.data.coupon_amount;
             break;
         }
 
@@ -279,10 +625,12 @@ export const distributorSlice = createSlice({
 
 export const {
   completeStep,
+  completeSaleStep,
   updateDistributor,
   addOwner,
   removeOwner,
   resetWarehouseStamp,
+  clearCart,
 } = distributorSlice.actions;
 
 export default distributorSlice.reducer;

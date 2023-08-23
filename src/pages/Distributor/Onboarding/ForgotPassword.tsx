@@ -31,7 +31,7 @@ const ForgotPassword = ({ user }: { user: UserType }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(requestPasswordReset({ email, user: "distributor", type: user }));
+    dispatch(requestPasswordReset({ email, user, type: user }));
   };
 
   useEffect(() => {

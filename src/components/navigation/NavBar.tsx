@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 
 import hamburger from "../../assets/images/hamburger.svg";
 import close from "../../assets/images/close.svg";
@@ -16,7 +16,12 @@ import walletIconSelected from "../../assets/images/wallet-selected.svg";
 
 import BackButton from "../forms/BackButton";
 
-import { AppLayoutProps, RetailerState, AuthContextType } from "../../types";
+import {
+  AppLayoutProps,
+  RetailerState,
+  AuthContextType,
+  DistributorState,
+} from "../../types";
 import { RootState } from "../../store";
 import * as ROUTES from "../../routes";
 import { useAuth } from "../../hooks/useAuth";
@@ -39,14 +44,23 @@ const NavBar = ({
 }: AppLayoutProps) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { warehouse } = useParams();
 
-  const { cartItems } = useSelector<RootState>(
+  const { cartItems: retailerCartItems } = useSelector<RootState>(
     ({ retailer }) => retailer
   ) as RetailerState;
+
+  const { cartItems: distributorCartItems } = useSelector<RootState>(
+    ({ distributor }) => distributor
+  ) as DistributorState;
 
   const { user } = useAuth() as AuthContextType;
   const userType =
     user?.type === "warehouse" ? "DISTRIBUTOR" : user?.type.toUpperCase();
+  const cartItems =
+    user?.type === "retailer"
+      ? retailerCartItems
+      : (distributorCartItems as any[]);
 
   return (
     <section className="sticky top-0 left-0 right-0 bg-white z-40">
@@ -90,7 +104,15 @@ const NavBar = ({
           {cart ? (
             <div
               className="flex items-center justify-center rounded-full w-[2rem] h-[2rem] ml-7 relative"
-              onClick={() => navigate(ROUTES.RETAILER.CART)}
+              onClick={() =>
+                navigate(
+                  user?.type === "retailer"
+                    ? ROUTES.RETAILER.CART
+                    : ROUTES.DISTRIBUTOR.WAREHOUSE_CART_FOR(
+                        warehouse as string
+                      )
+                )
+              }
             >
               <img
                 src={cartIcon}
