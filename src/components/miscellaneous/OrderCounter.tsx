@@ -34,6 +34,8 @@ const OrderCounter = ({
   image,
   quantity,
   setQuantity,
+  discountPrice,
+  discountQuantity,
 }: OrderCounterProps) => {
   const override: CSSProperties = {
     borderColor: "#E34B31",
@@ -56,8 +58,10 @@ const OrderCounter = ({
   const loading = type === "retailer" ? retailerLoading : distributorLoading;
   const stamp = type === "retailer" ? retailerStamp : warehouseStamp;
   const addItemToCart = type === "retailer" ? addToCart : addToWarehouseCart;
-  const removeItemFromCart = type === "retailer" ? removeFromCart : removeFromWarehouseCart;
-  const clearStamp = type === "retailer" ? clearRetailerStamp : resetWarehouseStamp;
+  const removeItemFromCart =
+    type === "retailer" ? removeFromCart : removeFromWarehouseCart;
+  const clearStamp =
+    type === "retailer" ? clearRetailerStamp : resetWarehouseStamp;
 
   useEffect(() => {
     return () => {
@@ -103,6 +107,8 @@ const OrderCounter = ({
                         name,
                         image,
                         minOrder,
+                        discountPrice,
+                        discountQuantity,
                       },
                       onSuccess: () =>
                         setQuantity((quantity: number) => quantity - minOrder),
@@ -110,9 +116,7 @@ const OrderCounter = ({
                   );
                 }
               }}
-              disabled={
-                quantity <= minOrder || (loading && stamp === id)
-              }
+              disabled={quantity <= minOrder || (loading && stamp === id)}
             >
               <img src={reduce} alt="reduce" />
             </button>
@@ -149,6 +153,8 @@ const OrderCounter = ({
                     name,
                     image,
                     minOrder,
+                    discountPrice,
+                    discountQuantity,
                   },
                   onSuccess: () => {},
                 })
@@ -169,6 +175,8 @@ const OrderCounter = ({
                 name,
                 image,
                 minOrder,
+                discountPrice,
+                discountQuantity,
               },
               onSuccess: () =>
                 setQuantity((quantity: number) => Number(quantity) + minOrder),

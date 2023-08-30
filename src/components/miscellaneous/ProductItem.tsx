@@ -22,8 +22,10 @@ const ProductItem = ({
   name,
   price,
   minOrder,
-  unit = "carton",
+  unit = "unit",
   id,
+  discountQuantity,
+  discountPrice,
 }: ProductItemProps) => {
   const navigate = useNavigate();
 
@@ -71,7 +73,7 @@ const ProductItem = ({
       />
       {/* </div> */}
       <div className="w-full flex flex-col pl-4">
-        {discount ? (
+        {discountPrice && discountQuantity ? (
           <div className="mb-1">
             <Status
               className="bg-green-light text-green rounded-[6px] px-[0.375rem] py-[0.125rem] w-auto"
@@ -88,15 +90,28 @@ const ProductItem = ({
             (Per {unit})
           </span>
         </p>
-        <p className="text-[0.625rem] leading-[0.875rem] text-black-100 capitalize mb-2">
-          Min Order ({minOrder} {unit}s)
+        <p
+          className={`text-[0.625rem] leading-[0.875rem] text-black-100 capitalize ${
+            discountQuantity ? "" : "mb-2"
+          }`}
+        >
+          Min Order ({minOrder} {unit}
+          {minOrder > 1 ? "s" : ""})
         </p>
+        {discountPrice && discountQuantity ? (
+          <p className="text-[0.625rem] leading-[0.875rem] text-black-100 capitalize mb-2">
+            Discount Order ({discountQuantity} {unit}
+            {discountQuantity > 1 ? "s" : ""})
+          </p>
+        ) : null}
         <OrderCounter
           minOrder={minOrder}
           className="mt-auto"
           id={id}
           name={name}
           price={price}
+          discountPrice={discountPrice}
+          discountQuantity={discountQuantity}
           image={image}
           quantity={quantity}
           setQuantity={setQuantity}

@@ -298,6 +298,8 @@ export const retailerSlice = createSlice({
                   price: item.price,
                   name: item.name,
                   image: item.images[0],
+                  discountPrice: item.discount_price,
+                  discountQuantity: item.discount_qty,
                 })) || [];
               state.cartId = payload.cart._id || null;
               break;

@@ -59,6 +59,9 @@ const WarehouseProduct = ({
   const [discountedPrice, setDiscountedPrice] = useState(
     viewedProduct?.discount_price || 0
   );
+  const [discountedQuantity, setDiscountedQuantity] = useState(
+    viewedProduct?.discount_qty || 0
+  );
   const [costPerItem, setCostPerItem] = useState(
     viewedProduct?.cost_per_item || 0
   );
@@ -101,6 +104,7 @@ const WarehouseProduct = ({
       setDescription(option.description);
       setPrice(option.price);
       setDiscountedPrice(option.discount_price);
+      setDiscountedQuantity(option.discount_qty);
       setCostPerItem(option.cost_per_item);
       setQuantity(option.quantity);
       setMinQuantity(option.min_quantity);
@@ -126,6 +130,7 @@ const WarehouseProduct = ({
             description,
             price,
             ...(discountedPrice && { discount_price: discountedPrice }),
+            ...(discountedQuantity && { discount_qty: discountedQuantity }),
             cost_per_item: costPerItem,
             ...(minQuantity && { min_quantity: +minQuantity }),
             quantity,
@@ -147,6 +152,7 @@ const WarehouseProduct = ({
             description,
             price,
             ...(discountedPrice && { discount_price: discountedPrice }),
+            ...(discountedQuantity && { discount_qty: discountedQuantity }),
             cost_per_item: costPerItem,
             sku: product.sku as string,
             min_quantity: +minQuantity,
@@ -177,7 +183,6 @@ const WarehouseProduct = ({
       ].every((data) => !!data),
     [name, price, costPerItem, quantity, weightValue, category, manufacturer]
   );
-  console.log({name, price, costPerItem, quantity, weightValue, category, manufacturer, canSubmit})
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -203,6 +208,7 @@ const WarehouseProduct = ({
       setDescription(viewedProduct.description);
       setPrice(viewedProduct.price);
       setDiscountedPrice(viewedProduct.discount_price || 0);
+      setDiscountedQuantity(viewedProduct.discount_qty || 0);
       setCostPerItem(viewedProduct.cost_per_item);
       setTrackQuantity(viewedProduct?.trackQuantity || true);
       setQuantity(viewedProduct.quantity);
@@ -378,6 +384,15 @@ const WarehouseProduct = ({
                 onChange={setMinQuantity}
                 type="number"
                 placeholder="Enter minimum order quantity"
+              />
+            </div>
+            <div className="mb-4">
+              <Input
+                label="Minimum discounted quantity"
+                value={discountedQuantity}
+                onChange={setDiscountedQuantity}
+                type="number"
+                placeholder="Enter minimum discounted quantity"
               />
             </div>
             <div className="mb-4">
