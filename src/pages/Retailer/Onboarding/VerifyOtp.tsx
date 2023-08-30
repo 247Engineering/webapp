@@ -84,7 +84,7 @@ const VerifyOtp = () => {
               label="OTP (4 Digits)"
               value={otp}
               onChange={setOtp}
-              type="text"
+              type="password"
               placeholder="Please enter your OTP"
             />
           </div>

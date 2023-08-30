@@ -86,24 +86,45 @@ const RetailerShopItem = () => {
               </>
             ) : null}
           </div>
-          <div className="mb-2">
-            <Status
-              className="bg-green-light text-green rounded-[10px] px-2 py-1"
-              text={`Save 30%`}
-            />
-          </div>
+          {viewedProduct?.discount_qty ? (
+            <div className="mb-2">
+              <Status
+                className="bg-green-light text-green rounded-[10px] px-2 py-1"
+                text={`Save ${
+                  viewedProduct.discount_price
+                    ? Math.round(
+                        ((viewedProduct.price - viewedProduct.discount_price) /
+                          viewedProduct.price) *
+                          100
+                      )
+                    : undefined
+                }%`}
+              />
+            </div>
+          ) : null}
           <p className="font-[700] text-[1.25rem] leading-[1.75rem] mb-2 capitalize">
             {viewedProduct?.name}
           </p>
           <p className="flex items-center text-[1.25rem] leading-[1.75rem] mb-1">
-            N{viewedProduct?.price}
+            N{viewedProduct?.price.toLocaleString()}
             <span className="capitalize text-[0.75rem] leading-[1rem] text-black-100 ml-2">
-              (Per carton)
+              (Per unit)
             </span>
           </p>
-          <p className="text-[0.75rem] leading-[1rem] text-black-100 capitalize mb-4">
-            Min Order (10 cartons)
+          <p
+            className={`text-[0.75rem] leading-[1rem] text-black-100 capitalize ${
+              viewedProduct?.discount_qty ? "mb-1" : "mb-4"
+            }`}
+          >
+            Min Order ({viewedProduct?.min_quantity} unit
+            {viewedProduct?.min_quantity > 1 ? "s" : ""})
           </p>
+          {viewedProduct?.discount_qty ? (
+            <p className="text-[0.75rem] leading-[1rem] text-black-100 capitalize mb-4">
+              Discount Order ({viewedProduct?.discount_qty} unit
+              {viewedProduct?.discount_qty > 1 ? "s" : ""})
+            </p>
+          ) : null}
           <span className="mb-2 font-[700] text-[0.75rem] leading-[1rem]">
             Quantity
           </span>
@@ -116,6 +137,8 @@ const RetailerShopItem = () => {
             image={viewedProduct?.images[0]}
             quantity={quantity}
             setQuantity={setQuantity}
+            discountPrice={viewedProduct?.discount_price}
+            discountQuantity={viewedProduct?.discount_qty}
           />
           <span className="font-[700] text-[0.75rem] leading-[1rem]">
             Description
@@ -138,6 +161,8 @@ const RetailerShopItem = () => {
                       name: viewedProduct?.name,
                       image: viewedProduct?.images[0],
                       minOrder: viewedProduct?.min_quantity || 10,
+                      discountPrice: viewedProduct?.discount_price,
+                      discountQuantity: viewedProduct?.discount_qty,
                     },
                     onSuccess: () =>
                       setQuantity((quantity: number) => quantity + 10),

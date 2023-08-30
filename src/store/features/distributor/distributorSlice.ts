@@ -28,7 +28,7 @@ const initialState: DistributorState = {
   orderId: null,
   accountDetails: null,
   coupons: [],
-  couponAmount: 0
+  couponAmount: 0,
 };
 
 export const submitDistributor = createAsyncThunk(
@@ -564,6 +564,8 @@ export const distributorSlice = createSlice({
                 price: item.price,
                 name: item.name,
                 image: item.images[0],
+                discountPrice: item.discount_price,
+                discountQuantity: item.discount_qty,
               })) || [];
             state.cartId = action.payload.cart._id || null;
             break;
@@ -605,7 +607,7 @@ export const distributorSlice = createSlice({
           case "distributor/verifyPayment/fulfilled":
             state.cartItems = [];
             state.cartId = null;
-            state.couponAmount = 0
+            state.couponAmount = 0;
             break;
           case "distributor/fetchAccountDetails/fulfilled":
             state.accountDetails = action.payload.data;

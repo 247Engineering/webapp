@@ -24,7 +24,18 @@ const OrderSummary = ({
   const navigate = useNavigate();
 
   const total = useMemo(
-    () => cartItems.reduce((acc, curr) => acc + curr.quantity * curr.price, 0),
+    () =>
+      cartItems.reduce(
+        (acc, curr) =>
+          acc +
+          curr.quantity *
+            (curr.discountQuantity
+              ? curr.quantity >= curr.discountQuantity
+                ? (curr.discountPrice as number)
+                : curr.price
+              : curr.price),
+        0
+      ),
     [cartItems]
   );
 
@@ -55,9 +66,18 @@ const OrderSummary = ({
             <span className="font-[700] h-[2rem] text-ellipsis">
               {item.name}
             </span>
-            <span className="text-black-100">{item.quantity} Cartons</span>
+            <span className="text-black-100">
+              {item.quantity} Unit{item.quantity > 1 ? "s" : ""}
+            </span>
           </div>
-          <span className="">N {item.price.toLocaleString()}</span>
+          <span className="">
+            N{" "}
+            {item[
+              item.discountQuantity && item.quantity >= item.discountQuantity
+                ? "discountPrice"
+                : "price"
+            ]?.toLocaleString()}
+          </span>
         </div>
       ))}
 

@@ -309,6 +309,8 @@ export interface ProductItemProps {
   minOrder: number;
   unit?: string;
   orderAmount?: number;
+  discountQuantity?: number;
+  discountPrice?: number;
 }
 
 export interface OrderCounterProps {
@@ -321,6 +323,8 @@ export interface OrderCounterProps {
   image: string;
   quantity: number;
   setQuantity: (value: any) => void;
+  discountQuantity: number | undefined;
+  discountPrice: number | undefined;
 }
 
 export interface RetailerState {
@@ -346,6 +350,8 @@ export type CartItem = {
   price: number;
   name: string;
   image: string;
+  discountPrice: number | undefined;
+  discountQuantity: number | undefined;
 };
 
 export type DeliveryOptions = "priority" | "standard" | "schedule";

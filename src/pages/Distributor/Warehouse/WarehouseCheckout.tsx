@@ -325,7 +325,14 @@ const WarehouseCheckout = () => {
                     coupon,
                     amount:
                       (cartItems || [])?.reduce(
-                        (acc, curr) => acc + curr.quantity * curr.price,
+                        (acc, curr) =>
+            acc +
+            curr.quantity *
+              (curr.discountQuantity
+                ? curr.quantity >= curr.discountQuantity
+                  ? (curr.discountPrice as number)
+                  : curr.price
+                : curr.price),
                         0
                       ) +
                       (type === "delivery" ? deliveryFee : 0) +
@@ -352,7 +359,14 @@ const WarehouseCheckout = () => {
                 N
                 {(
                   (cartItems || [])?.reduce(
-                    (acc, curr) => acc + curr.quantity * curr.price,
+                    (acc, curr) =>
+            acc +
+            curr.quantity *
+              (curr.discountQuantity
+                ? curr.quantity >= curr.discountQuantity
+                  ? (curr.discountPrice as number)
+                  : curr.price
+                : curr.price),
                     0
                   ) +
                   (type === "delivery" ? deliveryFee : 0) +

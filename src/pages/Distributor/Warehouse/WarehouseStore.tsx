@@ -90,6 +90,8 @@ const WarehouseStore = () => {
                     )
                   : undefined
               }
+              discountPrice={product.discount_price}
+              discountQuantity={product.discount_qty}
             />
           ))}
         </section>

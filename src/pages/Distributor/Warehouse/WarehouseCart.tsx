@@ -40,6 +40,8 @@ const WarehouseCart = () => {
               name={item.name}
               price={item.price}
               minOrder={10}
+              discountPrice={item.discountPrice}
+              discountQuantity={item.discountQuantity}
             />
           ))}
           <div className="p-4 fixed bottom-0 left-0 right-0 bg-white shadow-sm-alt">
@@ -48,7 +50,14 @@ const WarehouseCart = () => {
               <span className="font-[700] text-[1.25rem] leading-[1.75rem]">
                 N{" "}
                 {cartItems
-                  ?.reduce((acc, curr) => acc + curr.quantity * curr.price, 0)
+                  ?.reduce((acc, curr) =>
+            acc +
+            curr.quantity *
+              (curr.discountQuantity
+                ? curr.quantity >= curr.discountQuantity
+                  ? (curr.discountPrice as number)
+                  : curr.price
+                : curr.price), 0)
                   .toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,

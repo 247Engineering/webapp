@@ -33,7 +33,14 @@ const RetailerTransferPayment = () => {
   const amount = useMemo(
     () =>
       (
-        cartItems.reduce((acc, curr) => acc + curr.quantity * curr.price, 0) +
+        cartItems.reduce((acc, curr) =>
+        acc +
+        curr.quantity *
+          (curr.discountQuantity
+            ? curr.quantity >= curr.discountQuantity
+              ? (curr.discountPrice as number)
+              : curr.price
+            : curr.price), 0) +
         (orderType === "delivery" ? deliveryFee : 0) +
         serviceFee
       ).toLocaleString(undefined, {
