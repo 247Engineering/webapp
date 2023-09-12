@@ -19,7 +19,7 @@ import * as ROUTES from "../../../routes";
 const paymentOptionMap = {
   cash: 0,
   card: 1,
-  transfer: 2,
+  transfer: 1,
 };
 
 const RetailerPayment = () => {

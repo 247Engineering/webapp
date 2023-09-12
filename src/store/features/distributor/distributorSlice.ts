@@ -29,6 +29,7 @@ const initialState: DistributorState = {
   accountDetails: null,
   coupons: [],
   couponAmount: 0,
+  splitPayment: false,
 };
 
 export const submitDistributor = createAsyncThunk(
@@ -383,9 +384,11 @@ export const verifyPayment = createAsyncThunk(
     {
       order_doc_id,
       onSuccess,
+      split_amount,
     }: {
       order_doc_id: string;
       onSuccess: () => void;
+      split_amount?: number;
     },
     { getState }
   ) => {
@@ -396,7 +399,7 @@ export const verifyPayment = createAsyncThunk(
     return await request({
       url: "/commerce/verify-txn",
       method: "post",
-      body: { order_doc_id, retailer_id: retailer?.retailer_id },
+      body: { order_doc_id, retailer_id: retailer?.retailer_id, split_amount },
       user: "distributor",
       onSuccess,
     });
@@ -498,6 +501,9 @@ export const distributorSlice = createSlice({
       state.cartId = null;
       state.retailer = null;
       state.saleStepsCompleted = 0;
+    },
+    updateSplitPayment: (state, { payload }) => {
+      state.splitPayment = payload;
     },
   },
   extraReducers(builder) {
@@ -633,6 +639,7 @@ export const {
   removeOwner,
   resetWarehouseStamp,
   clearCart,
+  updateSplitPayment,
 } = distributorSlice.actions;
 
 export default distributorSlice.reducer;

@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -7,6 +7,7 @@ import logo from "../../../assets/images/24.svg";
 import AppLayout from "../../../components/layouts/AppLayout";
 import ButtonSubmit from "../../../components/forms/ButtonSubmit";
 import Loader from "../../../components/miscellaneous/Loader";
+import Input from "../../../components/forms/Input";
 
 import { DistributorState } from "../../../types";
 import { AppDispatch, RootState } from "../../../store";
@@ -22,36 +23,44 @@ const WarehouseTransferPayment = () => {
   const { order, warehouse } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { cartItems, loading, accountDetails, orderType, couponAmount } =
-    useSelector<RootState>(
-      ({ distributor }) => distributor
-    ) as DistributorState;
+  const {
+    cartItems,
+    loading,
+    accountDetails,
+    orderType,
+    couponAmount,
+    splitPayment,
+  } = useSelector<RootState>(
+    ({ distributor }) => distributor
+  ) as DistributorState;
 
   const deliveryFee = 0;
   const serviceFee = 0;
 
+  const [cashPayment, setCashPayment] = useState(0);
+
   const amount = useMemo(
     () =>
-      (
-        (cartItems || []).reduce(
-          (acc, curr) =>
-            acc +
-            curr.quantity *
-              (curr.discountQuantity
-                ? curr.quantity >= curr.discountQuantity
-                  ? (curr.discountPrice as number)
-                  : curr.price
-                : curr.price),
-          0
-        ) +
-        (orderType === "delivery" ? deliveryFee : 0) +
-        serviceFee -
-        (couponAmount || 0)
-      ).toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }),
+      (cartItems || []).reduce(
+        (acc, curr) =>
+          acc +
+          curr.quantity *
+            (curr.discountQuantity
+              ? curr.quantity >= curr.discountQuantity
+                ? (curr.discountPrice as number)
+                : curr.price
+              : curr.price),
+        0
+      ) +
+      (orderType === "delivery" ? deliveryFee : 0) +
+      serviceFee -
+      (couponAmount || 0),
     [cartItems, deliveryFee, serviceFee, orderType, couponAmount]
+  );
+
+  const transferPayment = useMemo(
+    () => (amount as any) - cashPayment,
+    [amount, cashPayment]
   );
 
   const handleSubmit = () => {
@@ -61,6 +70,7 @@ const WarehouseTransferPayment = () => {
         onSuccess: () => {
           navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_ORDERS);
         },
+        ...(splitPayment && { split_amount: Number(cashPayment) }),
       })
     );
   };
@@ -75,7 +85,7 @@ const WarehouseTransferPayment = () => {
         cart
         // hideLogo
         // hideName
-        secondaryNav="Make Payment"
+        secondaryNav={splitPayment ? "Make Split Payment" : "Make Payment"}
         secondaryNavBack="Checkout"
         back={ROUTES.DISTRIBUTOR.WAREHOUSE_PAYMENT_FOR(
           warehouse as string,
@@ -84,11 +94,36 @@ const WarehouseTransferPayment = () => {
       >
         {loading && !accountDetails ? <Loader /> : null}
         <section>
+          {splitPayment ? (
+            <div className="mb-4">
+              <h5 className="font-[700] text-[1.25rem] leading-[1.75rem]">
+                Cash amount
+              </h5>
+              <div className="max-w-[12.5rem]">
+                <Input
+                  value={cashPayment}
+                  onChange={(cashAmount) => {
+                    if (cashAmount >= amount) return;
+                    setCashPayment(cashAmount);
+                  }}
+                  type="number"
+                  prefix="N "
+                />
+              </div>
+            </div>
+          ) : null}
           <div>
             <div className="flex justify-between">
               <div>
                 <h5 className="font-[700] text-[1.25rem] leading-[1.75rem] mb-1">
-                  N{amount}
+                  N
+                  {(splitPayment ? transferPayment : amount).toLocaleString(
+                    undefined,
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }
+                  )}
                 </h5>
                 <p className="text-[0.875rem] leading-[1.25rem]">
                   Pay to: 24Seven Limited
@@ -103,7 +138,16 @@ const WarehouseTransferPayment = () => {
             <div className="font-[700] text-[0.75rem] leading-[1rem]">
               <div className="pb-4 mb-4 flex justify-between items-center border border-solid border-grey-light-100 border-0 border-b">
                 <span>Amount</span>
-                <span>N{amount}</span>
+                <span>
+                  N
+                  {(splitPayment ? transferPayment : amount).toLocaleString(
+                    undefined,
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }
+                  )}
+                </span>
               </div>
               <div className="pb-4 mb-4 flex justify-between items-center border border-solid border-grey-light-100 border-0 border-b">
                 <span>Bank</span>
@@ -124,7 +168,11 @@ const WarehouseTransferPayment = () => {
             <div className="mb-6 flex items-center justify-between">
               <span className="text-[1rem] leading-[1.5rem]">Total</span>
               <span className="font-[700] text-[1.25rem] leading-[1.75rem]">
-                N{amount}
+                N
+                {amount.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
               </span>
             </div>
             <ButtonSubmit

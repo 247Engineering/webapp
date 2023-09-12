@@ -13,13 +13,15 @@ import { AppDispatch, RootState } from "../../../store";
 import {
   completeOrder,
   resetWarehouseStamp,
+  updateSplitPayment,
 } from "../../../store/features/distributor";
 import * as ROUTES from "../../../routes";
 
 const paymentOptionMap = {
   cash: 0,
   card: 1,
-  transfer: 2,
+  transfer: 1,
+  split: 2,
 };
 
 const WarehousePayment = () => {
@@ -48,7 +50,8 @@ const WarehousePayment = () => {
   // const [selectedCard, setSelectedCard] = useState('mastercard')
 
   const handleSubmit = () => {
-    if (paymentOption === "transfer") {
+    if (["transfer", "split"].includes(paymentOption)) {
+      if (paymentOption === "split") dispatch(updateSplitPayment(true));
       navigate(
         ROUTES.DISTRIBUTOR.WAREHOUSE_TRANSFER_PAYMENT_FOR(
           warehouse as string,
@@ -129,7 +132,7 @@ const WarehousePayment = () => {
             id="transfer"
             name="payment"
             value="transfer"
-            text="Bank Transfer"
+            text="Bank transfer"
             checked={paymentOption === "transfer"}
             onChange={(value) => setPaymentOption(value)}
             option="transfer"
@@ -143,6 +146,16 @@ const WarehousePayment = () => {
             checked={paymentOption === "cash"}
             onChange={(value) => setPaymentOption(value)}
             option="cash"
+            className="mb-2"
+          />
+          <PaymentOptionItem
+            id="split"
+            name="payment"
+            value="split"
+            text="Split payment"
+            checked={paymentOption === "split"}
+            onChange={(value) => setPaymentOption(value)}
+            option="split"
             className="mb-40"
           />
           <div className="p-4 fixed bottom-0 left-0 right-0 bg-white shadow-sm-alt">
@@ -153,13 +166,13 @@ const WarehousePayment = () => {
                 {(
                   (cartItems || []).reduce(
                     (acc, curr) =>
-            acc +
-            curr.quantity *
-              (curr.discountQuantity
-                ? curr.quantity >= curr.discountQuantity
-                  ? (curr.discountPrice as number)
-                  : curr.price
-                : curr.price),
+                      acc +
+                      curr.quantity *
+                        (curr.discountQuantity
+                          ? curr.quantity >= curr.discountQuantity
+                            ? (curr.discountPrice as number)
+                            : curr.price
+                          : curr.price),
                     0
                   ) +
                   (orderType === "delivery" ? deliveryFee : 0) +
