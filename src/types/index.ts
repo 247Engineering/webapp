@@ -205,7 +205,8 @@ export interface DistributorState {
   orderId?: string | null;
   accountDetails?: any;
   coupons?: any[];
-  couponAmount?: number
+  couponAmount?: number;
+  splitPayment?: boolean;
 }
 
 export interface AppLayoutProps {

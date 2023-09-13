@@ -15,6 +15,7 @@ const paymentOptionMap = {
   cash,
   transfer,
   card,
+  split: transfer
 }
 
 const PaymentOption = ({
@@ -47,7 +48,7 @@ const PaymentOption = ({
           <img
             src={
               paymentOptionMap[
-                option as 'mastercard' | 'visa' | 'cash' | 'transfer' | 'card'
+                option as 'mastercard' | 'visa' | 'cash' | 'transfer' | 'card' | 'split'
               ]
             }
             alt={`${option} payment option`}
