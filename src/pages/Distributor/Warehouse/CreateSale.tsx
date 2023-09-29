@@ -1,27 +1,40 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import AppLayout from "../../../components/layouts/AppLayout";
 import AccountProgressStep from "../../../components/miscellaneous/AccountProgressStep";
 import ProgressBar from "../../../components/miscellaneous/ProgressBar";
+import Loader from "../../../components/miscellaneous/Loader";
 
-import { RootState } from "../../../store";
+import { RootState, AppDispatch } from "../../../store";
+import { DistributorState } from "../../../types";
+import { fetchCart } from "../../../store/features/distributor";
 import * as ROUTES from "../../../routes";
 
 const CreateSale = () => {
   const navigate = useNavigate();
 
+  const dispatch = useDispatch<AppDispatch>();
+
   const { warehouse } = useParams();
 
-  const saleStepsCompleted = useSelector<RootState>(
-    ({ distributor }) => distributor.saleStepsCompleted
-  ) as number;
+  const { saleStepsCompleted, previousOrder, retailer, loading } =
+    useSelector<RootState>(
+      ({ distributor }) => distributor
+    ) as DistributorState;
+
+  useEffect(() => {
+    if (retailer) {
+      dispatch(fetchCart(true));
+    }
+  }, [dispatch, retailer]);
 
   return (
     <>
       <AppLayout>
+        {loading ? <Loader /> : null}
         <header>
           <h1 className="h1 mb-2 text-black">Welcome!</h1>
           <p className="p text-black-100">
@@ -29,11 +42,14 @@ const CreateSale = () => {
           </p>
         </header>
         <section className="mt-8">
-          <ProgressBar step={Math.round(saleStepsCompleted)} totalSteps={2} />
+          <ProgressBar
+            step={Math.round(saleStepsCompleted as number)}
+            totalSteps={2}
+          />
           <AccountProgressStep
             progress={
-              saleStepsCompleted < 1
-                ? saleStepsCompleted < 0.5
+              (saleStepsCompleted as number) < 1
+                ? (saleStepsCompleted as number) < 0.5
                   ? "none"
                   : "started"
                 : "done"
@@ -50,8 +66,8 @@ const CreateSale = () => {
           />
           <AccountProgressStep
             progress={
-              saleStepsCompleted < 2
-                ? saleStepsCompleted < 1.5
+              (saleStepsCompleted as number) < 2
+                ? (saleStepsCompleted as number) < 1.5
                   ? "none"
                   : "started"
                 : "done"
@@ -59,8 +75,8 @@ const CreateSale = () => {
             title="Create order"
             text="Create Order"
             onClick={() => {
-              if (saleStepsCompleted < 1) {
-                toast.error("Enter retailer information first")
+              if ((saleStepsCompleted as number) < 1) {
+                toast.error("Enter retailer information first");
               } else {
                 navigate(
                   ROUTES.DISTRIBUTOR.WAREHOUSE_STORE_FOR(warehouse as string)
@@ -68,22 +84,21 @@ const CreateSale = () => {
               }
             }}
           />
-          {/* <AccountProgressStep
-            progress={
-              saleStepsCompleted < 3
-                ? saleStepsCompleted < 2.5
-                  ? "none"
-                  : "started"
-                : "done"
-            }
-            title="Create sale"
-            text="Create Sale"
-            onClick={() => {
-              navigate(
-                ROUTES.DISTRIBUTOR.WAREHOUSE_STORE_FOR(warehouse as string)
-              );
-            }}
-          /> */}
+          {previousOrder?.length ? (
+            <AccountProgressStep
+              progress="started"
+              title="View last orders"
+              text="View Last Orders"
+              onClick={() =>
+                navigate(
+                  ROUTES.DISTRIBUTOR.RETAILER_ORDERS_FOR(
+                    warehouse as string,
+                    retailer?.retailer_id
+                  )
+                )
+              }
+            />
+          ) : null}
         </section>
       </AppLayout>
     </>

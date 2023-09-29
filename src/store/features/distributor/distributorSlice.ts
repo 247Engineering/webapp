@@ -30,6 +30,8 @@ const initialState: DistributorState = {
   coupons: [],
   couponAmount: 0,
   splitPayment: false,
+  previousOrder: [],
+  previousOrderId: null,
 };
 
 export const submitDistributor = createAsyncThunk(
@@ -175,6 +177,17 @@ export const fetchWarehouseOrder = createAsyncThunk(
   }
 );
 
+export const fetchWarehouseRetailerOrder = createAsyncThunk(
+  "distributor/fetchWarehouseRetailerOrder",
+  async ({ retailer, warehouse }: { retailer: string; warehouse: string }) => {
+    return await request({
+      url: `/warehouse/retailer/orders/${retailer}/${warehouse}`,
+      method: "get",
+      user: "distributor",
+    });
+  }
+);
+
 export const updateWarehouseOrder = createAsyncThunk(
   "distributor/updateWarehouseOrder",
   async ({
@@ -245,13 +258,15 @@ export const findRetailer = createAsyncThunk(
 
 export const fetchCart = createAsyncThunk(
   "distributor/fetchCart",
-  async (_, { getState }) => {
+  async (lastOrder: boolean, { getState }) => {
     const {
       distributor: { retailer },
     } = getState() as RootState;
 
     return await request({
-      url: `/commerce/cart/${retailer?.retailer_id}`,
+      url: `/commerce/cart/${retailer?.retailer_id}${
+        lastOrder ? "?data=last" : ""
+      }`,
       method: "get",
       user: "distributor",
     });
@@ -469,6 +484,27 @@ export const fetchCoupons = createAsyncThunk(
   }
 );
 
+export const reorderItems = createAsyncThunk(
+  "distributor/reorderItems",
+  async ({
+    onSuccess,
+    order_doc_id,
+  }: {
+    order_doc_id: string;
+    onSuccess?: () => void;
+  }) => {
+    return await request({
+      url: "/commerce/reorder",
+      method: "post",
+      body: {
+        order_doc_id,
+      },
+      user: "distributor",
+      onSuccess,
+    });
+  }
+);
+
 export const distributorSlice = createSlice({
   name: "distributor",
   initialState,
@@ -500,6 +536,8 @@ export const distributorSlice = createSlice({
       state.cartItems = [];
       state.cartId = null;
       state.retailer = null;
+      state.previousOrder = [];
+      state.previousOrderId = null;
       state.saleStepsCompleted = 0;
     },
     updateSplitPayment: (state, { payload }) => {
@@ -563,7 +601,7 @@ export const distributorSlice = createSlice({
             state.retailer = action.payload.data;
             break;
           case "distributor/fetchCart/fulfilled":
-            state.cartItems =
+            let cartItems =
               action.payload.cart.line_items?.map((item: any) => ({
                 id: item.product_id,
                 quantity: item.quantity,
@@ -573,7 +611,14 @@ export const distributorSlice = createSlice({
                 discountPrice: item.discount_price,
                 discountQuantity: item.discount_qty,
               })) || [];
-            state.cartId = action.payload.cart._id || null;
+
+            if (action.meta.arg) {
+              state.previousOrder = cartItems;
+              state.previousOrderId = action.payload.cart.order_doc_id;
+            } else {
+              state.cartItems = cartItems;
+              state.cartId = action.payload.cart._id;
+            }
             break;
           case "distributor/addToWarehouseCart/fulfilled":
             let itemInCart = state.cartItems?.find(
@@ -603,6 +648,8 @@ export const distributorSlice = createSlice({
             state.warehouseStamp = new Date().getTime();
             state.cartItems = [];
             state.cartId = null;
+            state.previousOrder = [];
+            state.previousOrderId = null;
             state.retailer = null;
             state.saleStepsCompleted = 0;
             state.couponAmount = 0;
@@ -610,9 +657,14 @@ export const distributorSlice = createSlice({
           case "distributor/fetchWarehouseOrders/fulfilled":
             state.orders = action.payload.data;
             break;
+          case "distributor/fetchWarehouseRetailerOrder/fulfilled":
+            state.orders = action.payload.data;
+            break;
           case "distributor/verifyPayment/fulfilled":
             state.cartItems = [];
             state.cartId = null;
+            state.previousOrder = [];
+            state.previousOrderId = null;
             state.couponAmount = 0;
             break;
           case "distributor/fetchAccountDetails/fulfilled":
@@ -623,6 +675,19 @@ export const distributorSlice = createSlice({
             break;
           case "distributor/applyCoupon/fulfilled":
             state.couponAmount = action.payload.data.coupon_amount;
+            break;
+          case "distributor/reorderItems/fulfilled":
+            state.cartId = action.payload.cart_id;
+            state.cartItems =
+              action.payload.line_items?.map((item: any) => ({
+                id: item.product_id,
+                quantity: item.quantity,
+                price: item.price,
+                name: item.name,
+                image: item.images[0],
+                discountPrice: item.discount_price,
+                discountQuantity: item.discount_qty,
+              })) || [];
             break;
         }
 

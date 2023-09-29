@@ -20,6 +20,8 @@ const initialState: RetailerState = {
   deliveryFee: 0,
   serviceFee: 0,
   orderType: "delivery",
+  previousOrder: [],
+  previousOrderId: null,
 };
 
 export const addBusinessInfo = createAsyncThunk(
@@ -61,13 +63,16 @@ export const getDeliveryFee = createAsyncThunk(
   }
 );
 
-export const fetchCart = createAsyncThunk("retailer/fetchCart", async () => {
-  return await request({
-    url: "/commerce/get-cart",
-    method: "get",
-    user: "retailer",
-  });
-});
+export const fetchCart = createAsyncThunk(
+  "retailer/fetchCart",
+  async (lastOrder?: boolean) => {
+    return await request({
+      url: `/commerce/get-cart${lastOrder ? "?data=last" : ""}`,
+      method: "get",
+      user: "retailer",
+    });
+  }
+);
 
 export const addToCart = createAsyncThunk(
   "retailer/addToCart",
@@ -226,6 +231,27 @@ export const verifyPayment = createAsyncThunk(
   }
 );
 
+export const reorderItems = createAsyncThunk(
+  "distributor/reorderItems",
+  async ({
+    onSuccess,
+    order_doc_id,
+  }: {
+    order_doc_id: string;
+    onSuccess?: () => void;
+  }) => {
+    return await request({
+      url: "/commerce/reorder",
+      method: "post",
+      body: {
+        order_doc_id,
+      },
+      user: "retailer",
+      onSuccess,
+    });
+  }
+);
+
 export const retailerSlice = createSlice({
   name: "retailer",
   initialState,
@@ -236,6 +262,9 @@ export const retailerSlice = createSlice({
     },
     clearCart: (state) => {
       state.cartItems = [];
+      state.cartId = null;
+      state.previousOrder = [];
+      state.previousOrderId = null;
     },
   },
   extraReducers(builder) {
@@ -291,7 +320,7 @@ export const retailerSlice = createSlice({
               );
               break;
             case "retailer/fetchCart/fulfilled":
-              state.cartItems =
+              let cartItems =
                 payload.cart.line_items?.map((item: any) => ({
                   id: item.product_id,
                   quantity: item.quantity,
@@ -301,7 +330,14 @@ export const retailerSlice = createSlice({
                   discountPrice: item.discount_price,
                   discountQuantity: item.discount_qty,
                 })) || [];
-              state.cartId = payload.cart._id || null;
+
+              if (arg) {
+                state.previousOrder = cartItems;
+                state.previousOrderId = payload.cart.order_doc_id;
+              } else {
+                state.cartItems = cartItems;
+                state.cartId = payload.cart._id;
+              }
               break;
             case "retailer/placeOrder/fulfilled":
               state.orderId = payload.id;
@@ -332,6 +368,19 @@ export const retailerSlice = createSlice({
               state.accountDetails =
                 payload.accountDetails || payload.accoutDetails;
               break;
+            case "retailer/reorderItems/fulfilled":
+              state.cartId = payload.cart_id;
+              state.cartItems =
+                payload.line_items?.map((item: any) => ({
+                  id: item.product_id,
+                  quantity: item.quantity,
+                  price: item.price,
+                  name: item.name,
+                  image: item.images[0],
+                  discountPrice: item.discount_price,
+                  discountQuantity: item.discount_qty,
+                })) || [];
+              break;
           }
 
           state.loading = false;
@@ -340,6 +389,7 @@ export const retailerSlice = createSlice({
   },
 });
 
-export const { reset, clearRetailerStamp, clearCart } = retailerSlice.actions;
+export const { reset, clearRetailerStamp, clearCart } =
+  retailerSlice.actions;
 
 export default retailerSlice.reducer;

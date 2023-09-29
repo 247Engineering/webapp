@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: any) => {
           navigate(ROUTES.DISTRIBUTOR.WAREHOUSES);
           break;
         case "retailer":
-          dispatch(fetchCart());
+          dispatch(fetchCart(false));
           navigate(retailerStep[step as 1 | 2], { replace: true });
           break;
         case "logistics":

@@ -207,6 +207,8 @@ export interface DistributorState {
   coupons?: any[];
   couponAmount?: number;
   splitPayment?: boolean;
+  previousOrder?: any[];
+  previousOrderId?: string | null;
 }
 
 export interface AppLayoutProps {
@@ -342,6 +344,8 @@ export interface RetailerState {
   accountDetails: any;
   deliveryFee: number;
   serviceFee: number;
+  previousOrder?: any[];
+  previousOrderId?: string | null;
 }
 
 export type CartItem = {
