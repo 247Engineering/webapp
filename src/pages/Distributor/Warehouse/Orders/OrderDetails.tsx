@@ -18,6 +18,7 @@ import {
   fetchWarehouseOrder,
   updateWarehouseOrder,
   resetWarehouseStamp,
+  reorderItems
 } from "../../../../store/features/distributor";
 import { AppDispatch, RootState } from "../../../../store";
 import { DistributorState, OrderStatus } from "../../../../types";
@@ -25,12 +26,24 @@ import * as ROUTES from "../../../../routes";
 
 const OrderDetails = () => {
   const navigate = useNavigate();
+
   const { warehouse, order: orderId } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { order, loading } = useSelector<RootState>(
+
+  const { order, loading, retailer } = useSelector<RootState>(
     ({ distributor }) => distributor
   ) as DistributorState;
+
+  const repeatOrder = () => {
+    dispatch(
+      reorderItems({
+        order_doc_id: order.id,
+        onSuccess: () =>
+          navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_CART_FOR(warehouse as string)),
+      })
+    );
+  };
 
   useEffect(() => {
     dispatch(
@@ -222,6 +235,14 @@ const OrderDetails = () => {
                       })
                     )
               }
+            />
+          ) : null}
+          {retailer ? (
+            <ButtonSubmit
+              loading={loading}
+              disabled={loading}
+              text="Repeat Last Order"
+              onClick={repeatOrder}
             />
           ) : null}
         </section>

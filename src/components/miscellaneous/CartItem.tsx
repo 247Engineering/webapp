@@ -28,14 +28,6 @@ const CartItem = ({
 
   const cartItems = type === "retailer" ? retailerItems : distributorItems;
   const itemInCart = cartItems?.find((item) => item.id === id);
-  console.log({
-    itemInCart,
-    id,
-    cartItems,
-    retailerItems,
-    distributorItems,
-    type,
-  });
 
   const [quantity, setQuantity] = useState(itemInCart?.quantity || 0);
 

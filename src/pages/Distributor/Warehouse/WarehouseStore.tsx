@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import searchIcon from "../../../assets/images/input-search.svg";
 
@@ -11,9 +11,12 @@ import Loader from "../../../components/miscellaneous/Loader";
 import { AppDispatch, RootState } from "../../../store";
 import { DistributorState, ProductState } from "../../../types";
 import { searchProducts, fetchProducts } from "../../../store/features/product";
-import { fetchCart } from "../../../store/features/distributor";
+import { fetchCart, reorderItems } from "../../../store/features/distributor";
+import * as ROUTES from "../../../routes";
 
 const WarehouseStore = () => {
+  const navigate = useNavigate();
+
   const dispatch = useDispatch<AppDispatch>();
 
   const { warehouse } = useParams();
@@ -22,7 +25,7 @@ const WarehouseStore = () => {
     ({ product }) => product
   ) as ProductState;
 
-  const { warehouses } = useSelector<RootState>(
+  const { warehouses, previousOrder, previousOrderId } = useSelector<RootState>(
     ({ distributor }) => distributor
   ) as DistributorState;
 
@@ -32,6 +35,16 @@ const WarehouseStore = () => {
     () => warehouses?.find((w) => w._id === warehouse),
     [warehouses, warehouse]
   );
+
+  const repeatOrder = () => {
+    dispatch(
+      reorderItems({
+        order_doc_id: previousOrderId as string,
+        onSuccess: () =>
+          navigate(ROUTES.DISTRIBUTOR.WAREHOUSE_CART_FOR(warehouse as string)),
+      })
+    );
+  };
 
   const debounceTimer = useRef<any>(null);
 
@@ -47,7 +60,11 @@ const WarehouseStore = () => {
   }, [dispatch, search, warehouse]);
 
   useEffect(() => {
-    dispatch(fetchCart());
+    dispatch(fetchCart(false));
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchCart(true));
   }, [dispatch]);
 
   return (
@@ -59,7 +76,11 @@ const WarehouseStore = () => {
         hideLogo
       >
         {loading ? <Loader /> : null}
-        <div className="relative mt-[-1.5rem] mb-10">
+        <div
+          className={`relative mt-[-1.5rem] ${
+            previousOrder?.length ? "mb-1" : "mb-10"
+          }`}
+        >
           <input
             className="w-full p-[0.625rem] pl-[2.25rem] flex items-center justify-center p text-black-100 rounded-[8px] border border-solid border-grey-light"
             placeholder="Search products"
@@ -72,6 +93,14 @@ const WarehouseStore = () => {
             className="w-[0.911rem] h-[0.911rem] absolute top-[15px] left-[11.5px]"
           />
         </div>
+        {previousOrder?.length ? (
+          <button
+            className="button bg-orange text-white mb-4 mt-4"
+            onClick={repeatOrder}
+          >
+            Repeat Last Order
+          </button>
+        ) : null}
         <section className="mr-[-1rem]">
           {products.map((product) => (
             <ProductItem

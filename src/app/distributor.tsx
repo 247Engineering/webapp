@@ -17,6 +17,7 @@ import WarehouseProducts from "../pages/Distributor/Warehouse/WarehouseProducts"
 import AddWarehouseProduct from "../pages/Distributor/Warehouse/AddWarehouseProduct";
 import WarehouseDetails from "../pages/Distributor/Warehouse/WarehouseDetails";
 import WarehouseOrders from "../pages/Distributor/Warehouse/Orders/Orders";
+import RetailerOrders from "../pages/Distributor/Warehouse/Orders/RetailerOrders";
 import WarehouseOrderDetails from "../pages/Distributor/Warehouse/Orders/OrderDetails";
 import ConfirmPickup from "../pages/Distributor/Warehouse/ConfirmPickup";
 import CreateSale from "../pages/Distributor/Warehouse/CreateSale";
@@ -134,6 +135,10 @@ export const authedDistributorRoutes = [
   {
     path: ROUTES.DISTRIBUTOR.WAREHOUSE_ORDERS,
     element: <WarehouseOrders />,
+  },
+  {
+    path: ROUTES.DISTRIBUTOR.RETAILER_ORDERS,
+    element: <RetailerOrders />,
   },
   {
     path: ROUTES.DISTRIBUTOR.WAREHOUSE_ORDER,

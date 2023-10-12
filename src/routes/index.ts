@@ -58,6 +58,9 @@ export const DISTRIBUTOR = {
   WAREHOUSE_DETAILS_FOR: (warehouse: string) =>
     `/distributor/warehouses/${warehouse}`,
   WAREHOUSE_ORDERS: "/distributor/warehouses/orders",
+  RETAILER_ORDERS: "/distributor/warehouses/:warehouse/retailers/:retailer/orders",
+  RETAILER_ORDERS_FOR: (warehouse: string, retailer: string) =>
+    `/distributor/warehouses/${warehouse}/retailers/${retailer}/orders`,
   WAREHOUSE_ORDER: "/distributor/warehouses/:warehouse/orders/:order",
   WAREHOUSE_ORDER_FOR: (warehouse: string, order: string) =>
     `/distributor/warehouses/${warehouse}/orders/${order}`,
